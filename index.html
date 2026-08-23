@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Centre de Control Orbital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-0:#04060a;
+    --bg-1:#0a0f16;
+    --panel:#10161f;
+    --panel-2:#0c1119;
+    --bezel:#1e2731;
+    --bezel-hi:#2c3a48;
+    --turquoise:#2fd9c4;
+    --turquoise-dim:rgba(47,217,196,.22);
+    --lume:#e9dfc2;
+    --lume-dim:#9a927a;
+    --text:#d7dee6;
+    --text-dim:#6f7c8c;
+    --red:#ff5b4d;
+    --amber:#ffb454;
+    --lcd:#8fae86;
+    --lcd-dark:#3a4a3a;
+    --font-d:'Oswald',sans-serif;
+    --font-m:'Share Tech Mono',monospace;
+    --radius:14px;
+  }
+
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{
+    margin:0; padding:0;
+    background:
+      radial-gradient(ellipse at 30% -10%, #0d1b22 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 110%, #150d22 0%, transparent 50%),
+      var(--bg-0);
+    color:var(--text);
+    font-family:var(--font-d);
+    min-height:100dvh;
+    overflow-x:hidden;
+  }
+
+  .stars{
+    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.55;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
+      radial-gradient(1px 1px at 70% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 80%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 85% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 10%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 10% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 85%, #fff, transparent),
+      radial-gradient(1px 1px at 30% 50%, #fff, transparent);
+    background-size:100% 100%;
+  }
+
+  header{
+    position:relative; z-index:1;
+    padding:calc(env(safe-area-inset-top,0px) + 18px) 20px 6px;
+    text-align:center;
+  }
+  header .eyebrow{
+    font-family:var(--font-m); letter-spacing:.35em; font-size:10px;
+    color:var(--turquoise); text-transform:uppercase; opacity:.85;
+  }
+  header h1{
+    margin:4px 0 2px; font-weight:600; letter-spacing:.06em;
+    font-size:clamp(20px,4vw,30px); color:var(--lume);
+  }
+  header .sub{
+    font-family:var(--font-m); font-size:11px; color:var(--text-dim);
+    letter-spacing:.08em;
+  }
+
+  .dashboard{
+    position:relative; z-index:1;
+    max-width:1180px; margin:0 auto;
+    padding:16px 16px calc(env(safe-area-inset-bottom,0px) + 24px);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    grid-template-areas:
+      "earth moon"
+      "instruments instruments";
+    gap:16px;
+  }
+
+  .globe-panel{
+    background:linear-gradient(160deg,var(--panel),var(--panel-2));
+    border:1px solid var(--bezel);
+    border-radius:var(--radius);
+    padding:14px 14px 16px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.35);
+    display:flex; flex-direction:column; align-items:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .globe-panel::before{
+    content:""; position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0px, transparent 1px, transparent 3px),
+      repeating-linear-gradient(90deg, rgba(255,255,255,.015) 0px, transparent 1px, transparent 3px);
+    pointer-events:none;
+  }
+  #earth-panel{grid-area:earth;}
+  #moon-panel{grid-area:moon;}
+
+  .globe-panel .canvas-wrap{
+    position:relative;
+    width:100%; aspect-ratio:1/1; max-width:340px;
+    border-radius:50%;
+    box-shadow:
+      0 0 0 2px var(--bezel-hi),
+      0 0 0 8px var(--panel-2),
+      0 0 26px 4px var(--turquoise-dim),
+      inset 0 0 40px rgba(0,0,0,.6);
+    overflow:hidden;
+    background:#000;
+  }
+  .globe-panel canvas{width:100%!important; height:100%!important; display:block;}
+
+  .globe-caption{
+    margin-top:14px; text-align:center; z-index:2;
+  }
+  .globe-caption .title{
+    font-size:12px; letter-spacing:.25em; color:var(--turquoise);
+    font-family:var(--font-m); text-transform:uppercase;
+  }
+  .globe-caption .status{
+    margin-top:4px; font-size:15px; color:var(--lume); font-weight:500;
+    letter-spacing:.03em;
+  }
+  .globe-caption .meta{
+    margin-top:2px; font-size:10.5px; color:var(--text-dim);
+    font-family:var(--font-m); letter-spacing:.06em;
+  }
+
+  .instruments{
+    grid-area:instruments;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+
+  .gauge{
+    background:linear-gradient(160deg,var(--panel),var(--panel-2));
+    border:1px solid var(--bezel);
+    border-radius:var(--radius);
+    padding:12px 10px 14px;
+    box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 8px 22px rgba(0,0,0,.32);
+    display:flex; flex-direction:column; align-items:center;
+    position:relative;
+  }
+  .gauge .g-label{
+    font-family:var(--font-m); font-size:10px; letter-spacing:.22em;
+    color:var(--text-dim); text-transform:uppercase; margin-bottom:6px;
+  }
+  /* Rellotge tipus LCD Casio + indicadors digitals (mateixa família visual) */
+  .clock-face, .digi-face{
+    width:100%;
+    background:linear-gradient(180deg,#2c3830,#1c251f);
+    border-radius:8px;
+    border:1px solid #06110a;
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.04);
+    padding:14px 8px 12px;
+    display:flex; flex-direction:column; align-items:center;
+    margin-top:2px;
+  }
+  .clock-face .lcd-time{
+    font-family:var(--font-m); font-size:clamp(22px,5.5vw,30px);
+    color:var(--lcd); letter-spacing:.06em;
+    text-shadow:0 0 6px rgba(143,174,134,.6);
+    line-height:1;
+  }
+  .clock-face .lcd-time .blink{opacity:1; transition:opacity .15s;}
+  .clock-face .lcd-date{
+    margin-top:6px; font-family:var(--font-m); font-size:11px;
+    color:var(--lcd); opacity:.85; letter-spacing:.14em; text-transform:uppercase;
+  }
+  .clock-face .lcd-tag{
+    margin-top:8px; font-family:var(--font-m); font-size:8.5px;
+    color:var(--lcd-dark); letter-spacing:.2em; text-transform:uppercase;
+  }
+
+  .digi-face .digi-value{
+    font-family:var(--font-m); font-size:clamp(24px,6vw,32px);
+    color:var(--lcd); letter-spacing:.02em; line-height:1;
+    text-shadow:0 0 6px rgba(143,174,134,.6);
+  }
+  .digi-face .digi-unit{
+    font-size:13px; margin-left:4px; opacity:.75;
+  }
+  .digi-face .digi-bar{
+    margin-top:12px; width:100%; display:flex; gap:2px; height:9px;
+  }
+  .digi-face .digi-seg{
+    flex:1; background:#22301f; border-radius:1px; transition:background .3s;
+  }
+  .digi-face .digi-seg.active{
+    background:var(--seg-color, var(--turquoise));
+    box-shadow:0 0 4px var(--seg-color, var(--turquoise));
+  }
+  .digi-face .digi-range{
+    margin-top:7px; font-family:var(--font-m); font-size:9px;
+    color:var(--lcd-dark); letter-spacing:.1em;
+  }
+
+  footer{
+    position:relative; z-index:1; text-align:center;
+    padding:6px 16px calc(env(safe-area-inset-bottom,0px) + 14px);
+    font-family:var(--font-m); font-size:10px; color:var(--text-dim);
+    letter-spacing:.08em;
+  }
+  footer .dot{color:var(--turquoise);}
+
+  @media (max-width:760px){
+    .dashboard{
+      grid-template-columns:1fr;
+      grid-template-areas:
+        "earth"
+        "moon"
+        "instruments";
+      gap:14px;
+    }
+    .instruments{grid-template-columns:1fr 1fr;}
+    .globe-panel .canvas-wrap{max-width:280px;}
+  }
+
+  @media (max-width:430px){
+    header{padding:calc(env(safe-area-inset-top,0px) + 12px) 12px 4px;}
+    header h1{font-size:18px;}
+    header .sub{font-size:10px;}
+
+    .dashboard{padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 16px); gap:10px;}
+
+    .globe-panel{padding:10px 10px 12px;}
+    .globe-panel .canvas-wrap{max-width:190px;}
+    .globe-caption{margin-top:8px;}
+    .globe-caption .title{font-size:10px; letter-spacing:.18em;}
+    .globe-caption .status{font-size:13px;}
+    .globe-caption .meta{font-size:9.5px;}
+
+    .instruments{gap:10px;}
+    .gauge{padding:9px 7px 10px;}
+    .gauge .g-label{font-size:8.5px; letter-spacing:.16em; margin-bottom:4px;}
+
+    .clock-face, .digi-face{padding:10px 6px 9px;}
+    .clock-face .lcd-time{font-size:19px;}
+    .clock-face .lcd-date{font-size:9px; margin-top:4px;}
+    .clock-face .lcd-tag{font-size:7px; margin-top:5px;}
+    .digi-face .digi-value{font-size:20px;}
+    .digi-face .digi-unit{font-size:11px;}
+    .digi-face .digi-bar{margin-top:8px; height:7px;}
+    .digi-face .digi-range{font-size:8px; margin-top:5px;}
+
+    footer{font-size:9px; padding:4px 10px calc(env(safe-area-inset-bottom,0px) + 12px);}
+  }
+</style>
+</head>
+<body>
+<div class="stars"></div>
+
+<header>
+  <div class="eyebrow">Xarxa d'observació · Barcelona</div>
+  <h1>Centre de Control Orbital</h1>
+  <div class="sub" id="header-clock">— : — : —</div>
+</header>
+
+<div class="dashboard">
+
+  <div class="globe-panel" id="earth-panel">
+    <div class="canvas-wrap"><canvas id="earthCanvas"></canvas></div>
+    <div class="globe-caption">
+      <div class="title">Terra · Vertical sobre Barcelona</div>
+      <div class="status" id="earth-status">calculant llum solar…</div>
+      <div class="meta" id="earth-meta">41.39° N · 2.17° E</div>
+    </div>
+  </div>
+
+  <div class="globe-panel" id="moon-panel">
+    <div class="canvas-wrap"><canvas id="moonCanvas"></canvas></div>
+    <div class="globe-caption">
+      <div class="title">Lluna · Fase actual</div>
+      <div class="status" id="moon-status">calculant fase…</div>
+      <div class="meta" id="moon-meta">il·luminació —%</div>
+    </div>
+  </div>
+
+  <div class="instruments">
+
+    <div class="gauge" id="gauge-clock">
+      <div class="g-label">Hora local</div>
+      <div class="clock-face">
+        <div class="lcd-time" id="lcd-time">--:--<span class="blink">:</span>--</div>
+        <div class="lcd-date" id="lcd-date">--- -- ---</div>
+        <div class="lcd-tag">Quars · Centre de Control</div>
+      </div>
+    </div>
+
+    <div class="gauge" id="gauge-temp">
+      <div class="g-label">Temperatura</div>
+      <div class="digi-face">
+        <div class="digi-value"><span id="val-temp">--</span><span class="digi-unit">°C</span></div>
+        <div class="digi-bar" id="bar-temp"></div>
+        <div class="digi-range" id="range-temp">— — —</div>
+      </div>
+    </div>
+
+    <div class="gauge" id="gauge-alt">
+      <div class="g-label">Altitud</div>
+      <div class="digi-face">
+        <div class="digi-value"><span id="val-alt">--</span><span class="digi-unit">m</span></div>
+        <div class="digi-bar" id="bar-alt"></div>
+        <div class="digi-range" id="range-alt">— — —</div>
+      </div>
+    </div>
+
+    <div class="gauge" id="gauge-hum">
+      <div class="g-label">Humitat relativa</div>
+      <div class="digi-face">
+        <div class="digi-value"><span id="val-hum">--</span><span class="digi-unit">%</span></div>
+        <div class="digi-bar" id="bar-hum"></div>
+        <div class="digi-range" id="range-hum">— — —</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <span id="loc-status">localitzant posició…</span>
+  <span class="dot"> · </span>
+  <span id="update-status">dades no actualitzades</span>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ============================================================
+   UTILITATS ASTRONÒMIQUES
+   ============================================================ */
+
+// Punt subsolar (lat/lon on el Sol és al zenit) — fórmula de baixa
+// precisió basada en efemèrides solars simplificades (NOAA/Meeus).
+function getSubsolarPoint(date){
+  const rad = Math.PI/180;
+  const J2000 = Date.UTC(2000,0,1,12,0,0);
+  const d = (date.getTime() - J2000) / 86400000; // dies des de J2000.0
+
+  const meanLon = (280.460 + 0.9856474*d) % 360;
+  const meanAnom = ((357.528 + 0.9856003*d) % 360) * rad;
+  const eclLon = (meanLon + 1.915*Math.sin(meanAnom) + 0.020*Math.sin(2*meanAnom)) * rad;
+  const obliquity = (23.439 - 0.0000004*d) * rad;
+
+  const decl = Math.asin(Math.sin(obliquity) * Math.sin(eclLon)) / rad;
+
+  let ra = Math.atan2(Math.cos(obliquity)*Math.sin(eclLon), Math.cos(eclLon)) / rad;
+  ra = ((ra % 360) + 360) % 360;
+
+  const gmst = (280.46061837 + 360.98564736629*d) % 360;
+  let lon = ra - gmst;
+  lon = ((lon + 180) % 360 + 360) % 360 - 180;
+
+  return { lat: decl, lon: lon };
+}
+
+// Fase lunar a partir del cicle sinòdic (29.53058867 dies)
+function getMoonPhase(date){
+  const synodic = 29.530588861;
+  const knownNewMoon = Date.UTC(2000,0,6,18,14,0);
+  let days = (date.getTime() - knownNewMoon) / 86400000;
+  let phase = (days % synodic) / synodic;
+  if(phase < 0) phase += 1;
+  const illumination = (1 - Math.cos(2*Math.PI*phase)) / 2;
+
+  let name;
+  if(phase < 0.02 || phase > 0.98) name = 'Lluna nova';
+  else if(phase < 0.24) name = 'Lluna creixent';
+  else if(phase < 0.26) name = 'Quart creixent';
+  else if(phase < 0.49) name = 'Gibosa creixent';
+  else if(phase < 0.51) name = 'Lluna plena';
+  else if(phase < 0.74) name = 'Gibosa minvant';
+  else if(phase < 0.76) name = 'Quart minvant';
+  else name = 'Lluna minvant';
+
+  return { phase, illumination, name };
+}
+
+function latLonToVector3(lat, lon, radius){
+  const phi = (90 - lat) * (Math.PI/180);
+  const theta = (lon + 180) * (Math.PI/180);
+  const x = -radius * Math.sin(phi) * Math.cos(theta);
+  const z =  radius * Math.sin(phi) * Math.sin(theta);
+  const y =  radius * Math.cos(phi);
+  return new THREE.Vector3(x, y, z);
+}
+
+const BARCELONA = { lat: 41.3874, lon: 2.1686 };
+
+/* ============================================================
+   ESCENA — TERRA
+   ============================================================ */
+
+const earthCanvas = document.getElementById('earthCanvas');
+const earthRenderer = new THREE.WebGLRenderer({ canvas: earthCanvas, antialias:true, alpha:true });
+const earthScene = new THREE.Scene();
+const earthCamera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+
+const EARTH_R = 2;
+const camPos = latLonToVector3(BARCELONA.lat, BARCELONA.lon, EARTH_R * 5.1);
+earthCamera.position.copy(camPos);
+earthCamera.lookAt(0,0,0);
+
+const loader = new THREE.TextureLoader();
+loader.crossOrigin = 'anonymous';
+const dayTex = loader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
+const nightTex = loader.load('https://threejs.org/examples/textures/planets/earth_lights_2048.png');
+
+const earthUniforms = {
+  dayTexture: { value: dayTex },
+  nightTexture: { value: nightTex },
+  sunDirection: { value: new THREE.Vector3(1,0,0) }
+};
+
+const earthMaterial = new THREE.ShaderMaterial({
+  uniforms: earthUniforms,
+  vertexShader: `
+    varying vec3 vWorldNormal;
+    varying vec2 vUv;
+    void main(){
+      vWorldNormal = normalize(mat3(modelMatrix) * normal);
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+    }
+  `,
+  fragmentShader: `
+    uniform sampler2D dayTexture;
+    uniform sampler2D nightTexture;
+    uniform vec3 sunDirection;
+    varying vec3 vWorldNormal;
+    varying vec2 vUv;
+    void main(){
+      float intensity = dot(normalize(vWorldNormal), normalize(sunDirection));
+      float mixFactor = smoothstep(-0.18, 0.18, intensity);
+      vec4 dayColor = texture2D(dayTexture, vUv);
+      vec4 nightColor = texture2D(nightTexture, vUv) * 1.3;
+      gl_FragColor = mix(nightColor, dayColor, mixFactor);
+      gl_FragColor.a = 1.0;
+    }
+  `
+});
+
+const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R, 64, 64), earthMaterial);
+earthScene.add(earthMesh);
+
+// Halo atmosfèric subtil (fresnel simple)
+const atmoMat = new THREE.ShaderMaterial({
+  uniforms:{},
+  vertexShader:`
+    varying vec3 vNormal;
+    void main(){
+      vNormal = normalize(normalMatrix * normal);
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+    }
+  `,
+  fragmentShader:`
+    varying vec3 vNormal;
+    void main(){
+      float rim = pow(1.0 - abs(vNormal.z), 3.0);
+      gl_FragColor = vec4(0.25, 0.65, 0.85, rim * 0.55);
+    }
+  `,
+  transparent:true,
+  side: THREE.BackSide,
+  blending: THREE.AdditiveBlending
+});
+const atmoMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R*1.04, 64, 64), atmoMat);
+earthScene.add(atmoMesh);
+
+/* ============================================================
+   ESCENA — LLUNA
+   ============================================================ */
+
+const moonCanvas = document.getElementById('moonCanvas');
+const moonRenderer = new THREE.WebGLRenderer({ canvas: moonCanvas, antialias:true, alpha:true });
+const moonScene = new THREE.Scene();
+const moonCamera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+moonCamera.position.set(0,0, EARTH_R*5.1);
+moonCamera.lookAt(0,0,0);
+
+const moonTex = loader.load('https://threejs.org/examples/textures/planets/moon_1024.jpg');
+const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTex, roughness:1, metalness:0 });
+const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R, 64, 64), moonMaterial);
+moonScene.add(moonMesh);
+
+const moonAmbient = new THREE.AmbientLight(0x1a2233, 0.06);
+moonScene.add(moonAmbient);
+const moonSun = new THREE.DirectionalLight(0xfff2d8, 1.9);
+moonScene.add(moonSun);
+
+/* ============================================================
+   RESIZE
+   ============================================================ */
+
+function resizeRenderer(renderer, camera, canvas){
+  const wrap = canvas.parentElement;
+  const size = wrap.clientWidth;
+  renderer.setSize(size, size, false);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  camera.aspect = 1;
+  camera.updateProjectionMatrix();
+}
+function resizeAll(){
+  resizeRenderer(earthRenderer, earthCamera, earthCanvas);
+  resizeRenderer(moonRenderer, moonCamera, moonCanvas);
+}
+window.addEventListener('resize', resizeAll);
+resizeAll();
+
+/* ============================================================
+   BUCLE D'ACTUALITZACIÓ ASTRONÒMICA
+   ============================================================ */
+
+const CATALAN_DIES = ['DG','DL','DT','DC','DJ','DV','DS'];
+const CATALAN_MESOS = ['GEN','FEB','MAR','ABR','MAI','JUN','JUL','AGO','SET','OCT','NOV','DES'];
+
+function updateAstro(){
+  const now = new Date();
+
+  // --- Terra: terminador dia/nit ---
+  const sub = getSubsolarPoint(now);
+  const sunVec = latLonToVector3(sub.lat, sub.lon, 1).normalize();
+  earthUniforms.sunDirection.value.copy(sunVec);
+
+  const bcnVec = latLonToVector3(BARCELONA.lat, BARCELONA.lon, 1).normalize();
+  const dot = bcnVec.dot(sunVec);
+  let earthStatus;
+  if(dot > 0.06) earthStatus = 'Dia — Barcelona il·luminada';
+  else if(dot < -0.06) earthStatus = 'Nit — Barcelona a les fosques';
+  else earthStatus = 'Crepuscle sobre Barcelona';
+  document.getElementById('earth-status').textContent = earthStatus;
+
+  // --- Lluna: fase ---
+  const moonData = getMoonPhase(now);
+  const angle = moonData.phase * Math.PI * 2;
+  moonSun.position.set(Math.sin(angle) * 6, 0.6, -Math.cos(angle) * 6);
+  document.getElementById('moon-status').textContent = moonData.name;
+  document.getElementById('moon-meta').textContent = 'il·luminació ' + Math.round(moonData.illumination*100) + '%';
+
+  // --- Rellotge LCD ---
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mm = String(now.getMinutes()).padStart(2,'0');
+  const ss = String(now.getSeconds()).padStart(2,'0');
+  const colonOpacity = now.getMilliseconds() < 500 ? 1 : 0.25;
+  document.getElementById('lcd-time').innerHTML = hh + '<span class="blink" style="opacity:'+colonOpacity+'">:</span>' + mm + ':' + ss;
+  const diaSetmana = CATALAN_DIES[now.getDay()];
+  const dia = String(now.getDate()).padStart(2,'0');
+  const mes = CATALAN_MESOS[now.getMonth()];
+  document.getElementById('lcd-date').textContent = diaSetmana + ' ' + dia + ' ' + mes + ' ' + now.getFullYear();
+  document.getElementById('header-clock').textContent = hh + ':' + mm + ':' + ss + ' · ' + dia + ' ' + mes;
+}
+
+function renderLoop(){
+  updateAstro();
+  earthRenderer.render(earthScene, earthCamera);
+  moonRenderer.render(moonScene, moonCamera);
+  requestAnimationFrame(renderLoop);
+}
+requestAnimationFrame(renderLoop);
+
+/* ============================================================
+   INSTRUMENTS DIGITALS (barra de segments LCD)
+   ============================================================ */
+
+const DIGI_SEGMENTS = 16;
+
+function initDigiBar(barId){
+  const bar = document.getElementById(barId);
+  bar.innerHTML = '';
+  for(let i=0; i<DIGI_SEGMENTS; i++){
+    const seg = document.createElement('div');
+    seg.className = 'digi-seg';
+    bar.appendChild(seg);
+  }
+}
+
+function updateDigiBar(barId, min, max, value, color){
+  const bar = document.getElementById(barId);
+  const frac = Math.max(0, Math.min(1, (value - min) / (max - min)));
+  const activeCount = Math.round(frac * DIGI_SEGMENTS);
+  const segs = bar.children;
+  for(let i=0; i<segs.length; i++){
+    if(i < activeCount){
+      segs[i].classList.add('active');
+      segs[i].style.setProperty('--seg-color', color);
+    }else{
+      segs[i].classList.remove('active');
+    }
+  }
+}
+
+/* ============================================================
+   GEOLOCALITZACIÓ + DADES OPEN-METEO
+   ============================================================ */
+
+let currentCoords = { lat: BARCELONA.lat, lon: BARCELONA.lon, source: 'per defecte (Barcelona)' };
+let deviceAltitude = null;
+
+function setLocStatus(text){ document.getElementById('loc-status').textContent = text; }
+function setUpdateStatus(text){ document.getElementById('update-status').textContent = text; }
+
+async function fetchEnvironmentData(){
+  const { lat, lon } = currentCoords;
+  try{
+    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m&timezone=auto`;
+    const weatherRes = await fetch(weatherUrl);
+    const weather = await weatherRes.json();
+    const temp = weather.current?.temperature_2m;
+    const hum = weather.current?.relative_humidity_2m;
+
+    if(typeof temp === 'number'){
+      document.getElementById('val-temp').textContent = temp.toFixed(1);
+      updateDigiBar('bar-temp', -10, 45, temp, '#ff8a5b');
+      document.getElementById('range-temp').textContent = '-10° — 45°C';
+    }
+    if(typeof hum === 'number'){
+      document.getElementById('val-hum').textContent = Math.round(hum);
+      updateDigiBar('bar-hum', 0, 100, hum, '#5bc8ff');
+      document.getElementById('range-hum').textContent = '0 — 100%';
+    }
+
+    let altitude = deviceAltitude;
+    if(altitude === null || altitude === undefined){
+      const elevUrl = `https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`;
+      const elevRes = await fetch(elevUrl);
+      const elevData = await elevRes.json();
+      altitude = elevData.elevation ? elevData.elevation[0] : null;
+    }
+    if(typeof altitude === 'number'){
+      const altMax = Math.max(500, Math.ceil((altitude+200)/100)*100);
+      document.getElementById('val-alt').textContent = Math.round(altitude);
+      updateDigiBar('bar-alt', 0, altMax, altitude, 'var(--turquoise)');
+      document.getElementById('range-alt').textContent = '0 — ' + altMax + ' m';
+    }
+
+    const now = new Date();
+    setUpdateStatus('dades actualitzades ' + now.toLocaleTimeString('ca-ES'));
+  }catch(err){
+    setUpdateStatus('error en carregar dades ambientals');
+  }
+}
+
+function initLocation(){
+  initDigiBar('bar-temp');
+  initDigiBar('bar-alt');
+  initDigiBar('bar-hum');
+  updateDigiBar('bar-temp', -10, 45, 15, '#ff8a5b');
+  updateDigiBar('bar-alt', 0, 1000, 12, 'var(--turquoise)');
+  updateDigiBar('bar-hum', 0, 100, 50, '#5bc8ff');
+  document.getElementById('range-temp').textContent = '-10° — 45°C';
+  document.getElementById('range-alt').textContent = '0 — 1000 m';
+  document.getElementById('range-hum').textContent = '0 — 100%';
+
+  document.getElementById('earth-meta').textContent = BARCELONA.lat.toFixed(2) + '° N · ' + BARCELONA.lon.toFixed(2) + '° E';
+
+  if(!navigator.geolocation){
+    setLocStatus('geolocalització no disponible · ' + currentCoords.source);
+    fetchEnvironmentData();
+    return;
+  }
+
+  setLocStatus('sol·licitant ubicació…');
+  navigator.geolocation.getCurrentPosition(
+    (pos) => {
+      currentCoords = { lat: pos.coords.latitude, lon: pos.coords.longitude, source: 'GPS' };
+      deviceAltitude = (typeof pos.coords.altitude === 'number' && pos.coords.altitude !== null) ? pos.coords.altitude : null;
+      setLocStatus('ubicació: ' + currentCoords.lat.toFixed(3) + ', ' + currentCoords.lon.toFixed(3));
+      document.getElementById('earth-meta').textContent = currentCoords.lat.toFixed(2) + '° · ' + currentCoords.lon.toFixed(2) + '°';
+      fetchEnvironmentData();
+    },
+    (err) => {
+      setLocStatus('ubicació denegada · usant Barcelona per defecte');
+      fetchEnvironmentData();
+    },
+    { enableHighAccuracy:true, timeout:8000 }
+  );
+}
+
+initLocation();
+setInterval(fetchEnvironmentData, 10 * 60 * 1000); // refresc cada 10 min
+</script>
+</body>
+</html>
