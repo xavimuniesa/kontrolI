@@ -9,7 +9,7 @@
 <title>Centre de Control Orbital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg-0:#04060a;
@@ -176,8 +176,17 @@
   .avisos li.cap{color:var(--lcd);}
   @container fin (orientation: portrait){ .p-cal{flex-direction:column;} .cal-dreta{align-items:center; text-align:center;} .avisos li{justify-content:center;} }
 
-  /* Rellotge */
-  .p-rell .disc{background:none; box-shadow:0 0 0 8px var(--panel-2), 0 0 26px 4px rgba(47,217,196,.16);}
+  /* Rellotge Mondaine Stop2Go */
+  .p-rell .disc{background:none; box-shadow:0 0 26px 4px rgba(47,217,196,.16);}
+  .p-rell .disc svg{border-radius:0; overflow:visible;}
+  .mond-ombra{filter:drop-shadow(2px 5px 5px rgba(0,0,0,.35));}
+  .seg-capa{position:absolute; inset:0; pointer-events:none;}
+  .seg-agulla{will-change:transform; animation:stop2go 60s linear infinite; animation-delay:var(--sec-delay,0s);}
+  .seg-ombra{will-change:transform; animation:stop2goOmbra 60s linear infinite; animation-delay:var(--sec-delay,0s);}
+  @keyframes stop2go{0%{transform:rotate(0deg);} 96.6667%{transform:rotate(360deg);} 100%{transform:rotate(360deg);}}
+  @keyframes stop2goOmbra{0%{transform:translate(.667%,1.667%) rotate(0deg);} 96.6667%{transform:translate(.667%,1.667%) rotate(360deg);} 100%{transform:translate(.667%,1.667%) rotate(360deg);}}
+  /* Estació Espacial: fotografia */
+  .disc img{position:absolute; inset:0; width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;}
 
   /* Sol i Lluna */
   .p-sl{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(10px,5cqmin,30px); font-size:clamp(10px,4.4cqmin,16px);}
@@ -264,6 +273,46 @@
   <!-- ===================== FINESTRA 2 · AQUÍ I ARA ===================== -->
   <section class="finestra" id="f2" tabindex="0" aria-roledescription="carrusel" aria-label="Aquí i ara">
     <div class="pista">
+      <article class="pane p-rell" aria-label="Rellotge Mondaine">
+        <div class="disc" id="mondDisc">
+          <svg viewBox="0 0 300 300" role="img" aria-label="Rellotge Mondaine Stop2Go">
+            <defs>
+              <radialGradient id="mDial" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="70%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e2e2e2"/></radialGradient>
+              <linearGradient id="mBisell" x1="15%" y1="8%" x2="88%" y2="95%"><stop offset="0%" stop-color="#6a6a6a"/><stop offset="14%" stop-color="#1c1c1c"/><stop offset="55%" stop-color="#000000"/><stop offset="100%" stop-color="#000000"/></linearGradient>
+              <filter id="mMarcaOmbra" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="1.8" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.4"/></filter>
+            </defs>
+            <circle cx="150" cy="150" r="140" fill="url(#mDial)" stroke="url(#mBisell)" stroke-width="12"/>
+            <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="300" letter-spacing="1.8" fill="#000000" text-anchor="middle">MONDAINE</text>
+            <g transform="translate(150, 110)">
+              <circle cx="0" cy="0" r="6.5" fill="#e30613"/>
+              <rect x="-1.3" y="-4.2" width="2.6" height="8.4" fill="#ffffff"/>
+              <rect x="-4.2" y="-1.3" width="8.4" height="2.6" fill="#ffffff"/>
+              <text x="-8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="end" dominant-baseline="middle" letter-spacing="0.2">Swiss</text>
+              <text x="8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="start" dominant-baseline="middle" letter-spacing="0.2">Watch</text>
+            </g>
+            <g id="mMarques" filter="url(#mMarcaOmbra)"></g>
+            <line id="mHora" class="mond-ombra" x1="150" y1="175" x2="150" y2="68" stroke="#000000" stroke-width="14" stroke-linecap="butt"/>
+            <line id="mMin" class="mond-ombra" x1="150" y1="175" x2="150" y2="26" stroke="#000000" stroke-width="12" stroke-linecap="butt"/>
+          </svg>
+          <div class="seg-capa" id="mSegCapa" aria-hidden="true">
+            <svg class="seg-ombra" viewBox="0 0 300 300">
+              <filter id="mSegDifus" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+              <g filter="url(#mSegDifus)" fill="rgba(0,0,0,0.35)" stroke="rgba(0,0,0,0.35)"><line x1="150" y1="172" x2="150" y2="69" stroke-width="3.5"/><circle cx="150" cy="63" r="9" stroke="none"/></g>
+            </svg>
+            <svg class="seg-agulla" viewBox="0 0 300 300">
+              <line x1="150" y1="172" x2="150" y2="69" stroke="#e30613" stroke-width="3.5" stroke-linecap="butt"/>
+              <circle cx="150" cy="63" r="9" fill="#e30613"/>
+            </svg>
+            <svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="5" fill="#e30613"/></svg>
+          </div>
+        </div>
+        <div class="info">
+          <div class="etq">Rellotge</div>
+          <div class="nom">Mondaine Stop2Go</div>
+          <div class="sub" id="rellSub">—</div>
+        </div>
+      </article>
+
       <article class="pane p-ara" aria-label="Ara">
         <div class="etq">Ara</div>
         <div class="lcd">
@@ -324,14 +373,6 @@
   <!-- ===================== FINESTRA 3 · REPÚBLICA ===================== -->
   <section class="finestra" id="f3" tabindex="0" aria-roledescription="carrusel" aria-label="República">
     <div class="pista">
-      <article class="pane p-rell" aria-label="Rellotge CAPITAINE">
-        <div class="disc" id="rellDisc"></div>
-        <div class="info">
-          <div class="etq">República</div>
-          <div class="nom">Rellotge CAPITAINE</div>
-          <div class="sub" id="rellSub">—</div>
-        </div>
-      </article>
 
       <article class="pane p-sl" aria-label="Sol i Lluna">
         <div class="sl-col">
@@ -638,7 +679,7 @@ COSSOS.forEach(c => {
   const a = document.createElement('article'); a.className = 'pane'; c.el = a;
   if (c.id === 'eei'){
     a.setAttribute('aria-label', 'Estació Espacial Internacional');
-    a.innerHTML = `<div class="disc" role="img" aria-label="Silueta de l'Estació Espacial Internacional">${SVG_EEI()}</div>
+    a.innerHTML = `<div class="disc"><img src="textures/eei.jpg" alt="L'Estació Espacial Internacional sobre la Terra" decoding="async"></div>
       <div class="info"><div class="etq">Satèl·lit artificial</div><div class="nom petit">Estació Espacial</div>
       <dl class="dades"><dt>Distància</dt><dd data-k="dist">—</dd><dt>Alçada</dt><dd data-k="alt">—</dd><dt>Velocitat</dt><dd data-k="vel">—</dd><dt data-k="pasEtq">Pròxim pas</dt><dd data-k="pas">calculant…</dd></dl></div>`;
   } else if (c.id === 'terra'){
@@ -655,25 +696,6 @@ COSSOS.forEach(c => {
   pistaF1.appendChild(a);
 });
 
-function SVG_EEI(){
-  // Silueta esquemàtica de l'EEI: biga principal, quatre parells de panells solars, mòduls i radiadors
-  const panell = (x, y) => `<rect x="${x}" y="${y}" width="9" height="34" fill="url(#eeiPan)" stroke="#c8a24a" stroke-width=".5"/>`;
-  let p = '';
-  [-62, -50, 41, 53].forEach(x => { p += panell(x, -40) + panell(x, 6); });
-  return `<svg viewBox="-75 -75 150 150" aria-hidden="true">
-    <defs><linearGradient id="eeiPan" x1="0" x2="1"><stop offset="0" stop-color="#2a3a5c"/><stop offset=".5" stop-color="#4a5f8a"/><stop offset="1" stop-color="#2a3a5c"/></linearGradient>
-    <radialGradient id="eeiBrill"><stop offset="0" stop-color="rgba(255,250,235,.25)"/><stop offset="1" stop-color="rgba(255,250,235,0)"/></radialGradient></defs>
-    <rect x="-75" y="-75" width="150" height="150" fill="#000"/>
-    <circle r="60" fill="url(#eeiBrill)"/>
-    <rect x="-64" y="-2" width="128" height="4" fill="#cfcfcf"/>
-    ${p}
-    <rect x="-22" y="8" width="14" height="5" fill="#e6e6e6"/><rect x="8" y="8" width="14" height="5" fill="#e6e6e6"/>
-    <rect x="-4" y="-30" width="8" height="62" rx="3" fill="#ededed"/>
-    <rect x="-14" y="-18" width="28" height="7" rx="3" fill="#dcdcdc"/>
-    <rect x="-3" y="32" width="6" height="12" rx="2" fill="#d6d6d6"/>
-    <rect x="-30" y="16" width="10" height="14" fill="#f2f2f2" opacity=".85"/><rect x="20" y="16" width="10" height="14" fill="#f2f2f2" opacity=".85"/>
-  </svg>`;
-}
 
 const PAQ_TEX = 'textures/';
 let gl = null, carregador = null;
@@ -1133,7 +1155,7 @@ function pintaAvisos(){
 /* ==========================================================================
    FINESTRA 3 · REPÚBLICA
    ========================================================================== */
-// --- Rellotge CAPITAINE ---
+// --- Rellotge Mondaine Stop2Go ---
 function faseSVG(f, r){
   // f: fracció del cicle (0 nova, .5 plena). Torna el camí de la part il·luminada.
   const th = 2 * Math.PI * f, rx = Math.abs(Math.cos(th)) * r;
@@ -1143,42 +1165,31 @@ function faseSVG(f, r){
   const sw = f > .75 ? 1 : 0; return `<path d="M0 ${-r} A${r} ${r} 0 0 0 0 ${r} A${rx} ${r} 0 0 ${sw} 0 ${-r}Z"/>`;
 }
 function creaRellotge(){
-  const ROM = ['XII','I','II','III','IIII','V','VI','VII','VIII','IX','X','XI'];
-  let marques = '', nums = '';
-  for (let k = 0; k < 60; k++){
-    const a = k * 6 * RAD, h = k % 5 === 0, r1 = 86, r2 = h ? 79 : 83;
-    marques += `<line x1="${100 + r1 * Math.sin(a)}" y1="${100 - r1 * Math.cos(a)}" x2="${100 + r2 * Math.sin(a)}" y2="${100 - r2 * Math.cos(a)}" stroke="#3b2f22" stroke-width="${h ? 1.6 : .6}"/>`;
+  const g = $('mMarques');
+  for (let i = 0; i < 60; i++){
+    const hora = i % 5 === 0, l = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    l.setAttribute('x1', '150'); l.setAttribute('y1', '22'); l.setAttribute('x2', '150'); l.setAttribute('y2', hora ? '52' : '32');
+    l.setAttribute('stroke', '#000000'); l.setAttribute('stroke-width', hora ? '9.17' : '3.5');
+    l.setAttribute('transform', `rotate(${i * 6} 150 150)`);
+    g.appendChild(l);
   }
-  ROM.forEach((t, k) => { const a = k * 30 * RAD, r = 68; nums += `<text x="${100 + r * Math.sin(a)}" y="${100 - r * Math.cos(a) + 4.2}" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="12" fill="#2a2118">${t}</text>`; });
-  $('rellDisc').innerHTML = `<svg viewBox="0 0 200 200" role="img" aria-label="Rellotge CAPITAINE">
-    <defs>
-      <radialGradient id="rFace" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#fbf6e8"/><stop offset=".6" stop-color="#efe6cc"/><stop offset="1" stop-color="#d9cba4"/></radialGradient>
-      <linearGradient id="rBisell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9a464"/><stop offset=".5" stop-color="#8a6a3c"/><stop offset="1" stop-color="#5e4626"/></linearGradient>
-    </defs>
-    <circle cx="100" cy="100" r="99" fill="url(#rBisell)"/>
-    <circle cx="100" cy="100" r="92" fill="url(#rFace)"/>
-    <circle cx="100" cy="100" r="87" fill="none" stroke="#3b2f22" stroke-width=".5"/>
-    ${marques}${nums}
-    <text x="100" y="62" text-anchor="middle" font-family="Oswald,sans-serif" font-size="7.5" letter-spacing="2.6" fill="#3b2f22">CAPITAINE</text>
-    <g transform="translate(100 136)">
-      <path d="M-17 4 A17 17 0 0 1 17 4 Z" fill="#1b2a4a" stroke="#8a6a3c" stroke-width="1"/>
-      <g transform="translate(0 -3)"><circle r="8.5" fill="#2b3a5a"/><g id="rLluna" fill="#f2e7c4"></g></g>
-    </g>
-    <rect x="128" y="94" width="16" height="12" fill="#fffdf6" stroke="#8a6a3c" stroke-width=".8"/>
-    <text id="rData" x="136" y="103.5" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#2a2118">1</text>
-    <g id="rHora"><path d="M98.6 108 L98.8 100 L99.3 70 L100 56 L100.7 70 L101.2 100 L101.4 108 Z" fill="#1d1712"/><circle cx="100" cy="65" r="4.4" fill="none" stroke="#1d1712" stroke-width="1.7"/></g>
-    <g id="rMin"><path d="M99 112 L99.2 100 L99.6 50 L100 28 L100.4 50 L100.8 100 L101 112 Z" fill="#1d1712"/><circle cx="100" cy="42" r="3.6" fill="none" stroke="#1d1712" stroke-width="1.4"/></g>
-    <g id="rSeg"><line x1="100" y1="118" x2="100" y2="24" stroke="#2b4c8c" stroke-width=".9"/><circle cx="100" cy="100" r="2.4" fill="#2b4c8c"/></g>
-    <circle cx="100" cy="100" r="3.2" fill="#1d1712"/>
-  </svg>`;
 }
+// La segonera fa la volta en 58 s i s'atura 2 s a les 12 (animació CSS); aquí se'n fixa l'inici
+function sincronitzaSegonera(d = new Date()){
+  const capa = $('mSegCapa'), els = capa.querySelectorAll('.seg-agulla, .seg-ombra');
+  capa.style.setProperty('--sec-delay', `${-(d.getSeconds() * 1000 + d.getMilliseconds())}ms`);
+  els.forEach(el => { el.style.animationName = 'none'; }); void capa.offsetWidth;
+  els.forEach(el => { el.style.animationName = ''; });
+}
+let minutRell = -1;
 function mouRellotge(){
-  const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s / 60, h = (d.getHours() % 12) + m / 60;
-  const hH = $('rHora'); if (!hH) return;
-  hH.setAttribute('transform', `rotate(${h * 30} 100 100)`);
-  $('rMin').setAttribute('transform', `rotate(${m * 6} 100 100)`);
-  $('rSeg').setAttribute('transform', `rotate(${s * 6} 100 100)`);
-  $('rData').textContent = d.getDate();
+  const d = new Date(), m = d.getMinutes();
+  if (m === minutRell) return;
+  minutRell = m;
+  // la minutera salta just en començar el minut, com el rellotge de les estacions
+  $('mMin').setAttribute('transform', `rotate(${m * 6} 150 150)`);
+  $('mHora').setAttribute('transform', `rotate(${(d.getHours() % 12) * 30 + m * .5} 150 150)`);
+  sincronitzaSegonera(d);
   $('rellSub').textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][d.getDay()]}, ${d.getDate()} ${/^[aeiou]/.test(MESOS[d.getMonth()]) ? "d'" : 'de '}${MESOS[d.getMonth()]}`;
 }
 
@@ -1232,7 +1243,6 @@ function pintaSolLluna(){
   $('slLlP').textContent = l.pon ? hm(l.pon) : 'avui no';
   $('slFase').textContent = `${nomFase(L.elong)} · ${Math.round(L.illum * 100)}%`;
   $('slLlunaIc').innerHTML = `<circle r="10" fill="#1a2230"/><g fill="#e6e3da">${faseSVG(L.elong / 360, 10)}</g>`;
-  $('rLluna').innerHTML = faseSVG(L.elong / 360, 8.5);
 }
 
 // --- Sant del dia i efemèride (Viquipèdia) ---
@@ -1469,7 +1479,7 @@ setInterval(localitza, 10 * 60e3);
 setInterval(carregaNoticies, 10 * 60e3);
 setInterval(carregaPodcasts, 30 * 60e3);
 setInterval(() => { if (window.satellite) carregaTLE(); }, 6 * 3600e3);
-document.addEventListener('visibilitychange', () => { if (!document.hidden){ refrescaF1(true); pintaSolLluna(); } });
+document.addEventListener('visibilitychange', () => { if (!document.hidden){ minutRell = -1; mouRellotge(); refrescaF1(true); pintaSolLluna(); } });
 
 let tRes = null;
 new ResizeObserver(() => { clearTimeout(tRes); tRes = setTimeout(() => refrescaF1(true), 120); }).observe($('f1'));

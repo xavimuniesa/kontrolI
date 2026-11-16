@@ -9,4 +9,7 @@ mercuri.jpg, mart.jpg, jupiter.jpg, saturn.jpg, ura.jpg, neptu.jpg, lluna.jpg
 terra-dia.jpg, terra-nit.jpg
   Exemples de textures planetàries del projecte three.js (llicència MIT).
 
-Venus, Tità, els anells de Saturn i l'Estació Espacial es dibuixen amb codi.
+eei.jpg
+  Imatge de l'Estació Espacial facilitada per en Xavier (retallada en quadrat).
+
+Venus, Tità i els anells de Saturn es dibuixen amb codi.
