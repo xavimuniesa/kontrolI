@@ -1,0 +1,12 @@
+Textures del Centre de Control Orbital (Kontrol)
+
+mercuri.jpg, mart.jpg, jupiter.jpg, saturn.jpg, ura.jpg, neptu.jpg, lluna.jpg
+  © Solar System Scope (www.solarsystemscope.com/textures)
+  Llicència Creative Commons Reconeixement 4.0 (CC BY 4.0)
+  https://creativecommons.org/licenses/by/4.0/
+  Reduïdes a 1024 × 512 píxels.
+
+terra-dia.jpg, terra-nit.jpg
+  Exemples de textures planetàries del projecte three.js (llicència MIT).
+
+Venus, Tità, els anells de Saturn i l'Estació Espacial es dibuixen amb codi.

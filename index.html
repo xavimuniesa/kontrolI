@@ -3,698 +3,1477 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Centre de Control Orbital — iPhone</title>
+<meta name="theme-color" content="#04060a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Centre de Control Orbital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg-0:#04060a;
-    --bg-1:#0a0f16;
     --panel:#10161f;
     --panel-2:#0c1119;
     --bezel:#1e2731;
     --bezel-hi:#2c3a48;
-    --turquoise:#2fd9c4;
-    --turquoise-dim:rgba(47,217,196,.22);
+    --turq:#2fd9c4;
+    --turq-dim:rgba(47,217,196,.22);
     --lume:#e9dfc2;
-    --lume-dim:#9a927a;
     --text:#d7dee6;
-    --text-dim:#6f7c8c;
-    --red:#ff5b4d;
-    --amber:#ffb454;
+    --dim:#8b98a8;
     --lcd:#8fae86;
-    --lcd-dark:#3a4a3a;
+    --lcd-dim:#7f9a77;
+    --calor:#ff8a5b;
+    --fred:#5bc8ff;
+    --sensa:#c084fc;
+    --dissabte:#6fd39a;
+    --festiu:#ff8a8a;
     --font-d:'Oswald',sans-serif;
     --font-m:'Share Tech Mono',monospace;
-    --radius:14px;
+    --r:14px;
   }
-
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
-  html,body{
-    margin:0; padding:0;
+  html,body{margin:0; height:100%; overflow:hidden;}
+  body{
+    height:100dvh;
+    display:flex; flex-direction:column;
     background:
       radial-gradient(ellipse at 30% -10%, #0d1b22 0%, transparent 55%),
       radial-gradient(ellipse at 90% 110%, #150d22 0%, transparent 50%),
       var(--bg-0);
-    color:var(--text);
-    font-family:var(--font-d);
-    min-height:100dvh;
-    overflow-x:hidden;
+    color:var(--text); font-family:var(--font-m);
+    -webkit-user-select:none; user-select:none;
   }
-
-  .stars{
-    position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.55;
+  .estels{position:fixed; inset:0; pointer-events:none; opacity:.5; z-index:0;
     background-image:
-      radial-gradient(1px 1px at 20% 30%, #fff, transparent),
-      radial-gradient(1px 1px at 70% 65%, #fff, transparent),
-      radial-gradient(1px 1px at 40% 80%, #fff, transparent),
-      radial-gradient(1.5px 1.5px at 85% 20%, #fff, transparent),
-      radial-gradient(1px 1px at 55% 10%, #fff, transparent),
-      radial-gradient(1.5px 1.5px at 10% 60%, #fff, transparent),
-      radial-gradient(1px 1px at 92% 85%, #fff, transparent),
-      radial-gradient(1px 1px at 30% 50%, #fff, transparent);
-    background-size:100% 100%;
-  }
+      radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 70% 65%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 80%, #fff, transparent), radial-gradient(1.5px 1.5px at 85% 20%, #fff, transparent),
+      radial-gradient(1px 1px at 55% 10%, #fff, transparent), radial-gradient(1.5px 1.5px at 10% 60%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 85%, #fff, transparent), radial-gradient(1px 1px at 30% 50%, #fff, transparent);}
 
-  html,body{height:100dvh; overflow:hidden;}
-  body{display:flex; flex-direction:column;}
+  .cap{position:relative; z-index:1; flex:0 0 auto; text-align:center;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 8px;}
+  .cap h1{margin:0; font-family:var(--font-d); font-weight:600; letter-spacing:.06em;
+    font-size:clamp(16px,2.6vw,30px); color:var(--lume);}
 
-  header{
-    position:relative; z-index:1; flex:0 0 auto;
-    padding:calc(env(safe-area-inset-top,0px) + 8px) 12px 8px;
-    text-align:center;
-  }
-  header h1{
-    margin:0; font-weight:600; letter-spacing:.05em;
-    font-size:15px; color:var(--lume);
-  }
+  .finestres{position:relative; z-index:1; flex:1 1 auto; min-height:0;
+    width:100%; max-width:1500px; margin:0 auto;
+    display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:10px;
+    padding:0 calc(env(safe-area-inset-right,0px) + 10px) 0 calc(env(safe-area-inset-left,0px) + 10px);}
 
-  .dashboard{
-    position:relative; z-index:1;
-    flex:1 1 auto; min-height:0; overflow:hidden;
-    max-width:100%; margin:0 auto;
-    padding:10px 10px calc(env(safe-area-inset-bottom,0px) + 8px);
-    display:flex; flex-wrap:wrap;
-    align-content:center; justify-content:center;
-    gap:10px;
-  }
+  .peu{position:relative; z-index:1; flex:0 0 auto; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);
+    font-size:9px; letter-spacing:.06em; color:var(--dim); line-height:1.5;}
+  .peu a{color:var(--dim);}
+  .peu .punt{color:var(--turq);}
 
-  .globe-panel{
+  /* ---------- Finestra lliscant ---------- */
+  .finestra{position:relative; min-width:0; min-height:0; overflow:hidden;
+    container-type:size; container-name:fin;
+    border-radius:var(--r); border:1px solid var(--bezel);
     background:linear-gradient(160deg,var(--panel),var(--panel-2));
-    border:1px solid var(--bezel);
-    border-radius:var(--radius);
-    padding:10px 14px;
     box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.35);
-    display:flex; flex-direction:row; align-items:center; gap:14px;
-    position:relative;
-    overflow:hidden;
-    flex:1 1 100%;
-  }
-  .globe-panel::before, .globe-panel::after, .gauge::before, .gauge::after{
-    content:""; position:absolute; width:13px; height:13px; pointer-events:none;
-    opacity:.6; z-index:3;
-  }
-  .globe-panel::before, .gauge::before{ top:9px; left:9px; border-top:2px solid var(--turquoise); border-left:2px solid var(--turquoise); }
-  .globe-panel::after, .gauge::after{ bottom:9px; right:9px; border-bottom:2px solid var(--turquoise); border-right:2px solid var(--turquoise); }
+    outline:none;}
+  .finestra:focus-visible{border-color:var(--turq);}
+  .finestra::before,.finestra::after{content:""; position:absolute; width:13px; height:13px; pointer-events:none; opacity:.6; z-index:4;}
+  .finestra::before{top:9px; left:9px; border-top:2px solid var(--turq); border-left:2px solid var(--turq);}
+  .finestra::after{bottom:9px; right:9px; border-bottom:2px solid var(--turq); border-right:2px solid var(--turq);}
+  .pista{display:flex; height:100%; touch-action:pan-y; will-change:transform;
+    transition:transform .38s cubic-bezier(.2,.8,.2,1);}
+  .pista.arrossega{transition:none;}
+  .pane{flex:0 0 100%; width:100%; height:100%; min-width:0; overflow:hidden; position:relative;
+    display:flex; align-items:center; justify-content:center;
+    gap:clamp(10px,5cqmin,26px);
+    padding:clamp(12px,5cqmin,26px) clamp(14px,5cqw,30px) clamp(22px,7cqmin,34px);}
 
-  .globe-panel .canvas-wrap{
-    position:relative; flex:0 0 auto;
-    width:140px; height:140px;
-    border-radius:50%;
-    box-shadow:
-      0 0 0 2px var(--bezel-hi),
-      0 0 0 8px var(--panel-2),
-      0 0 26px 4px var(--turquoise-dim),
-      inset 0 0 40px rgba(0,0,0,.6);
-    overflow:hidden;
+  .punts{position:absolute; left:0; right:0; bottom:4px; z-index:5; display:flex; justify-content:center; gap:0;}
+  .punts button{appearance:none; border:0; background:none; padding:6px 3px; cursor:pointer; display:flex; align-items:center;}
+  .punts button::after{content:""; display:block; width:5px; height:5px; border-radius:3px; background:var(--bezel-hi); transition:width .25s, background .25s;}
+  .punts button[aria-current="true"]::after{width:14px; background:var(--turq);}
+  .fletxa{position:absolute; top:50%; z-index:5; transform:translateY(-50%);
+    width:34px; height:54px; border:0; border-radius:10px; background:rgba(12,17,25,.7);
+    color:var(--turq); font:24px/1 var(--font-d); cursor:pointer; display:none;}
+  .fletxa.ant{left:6px;} .fletxa.seg{right:6px;}
+  @media (hover:hover) and (pointer:fine){ .finestra:hover .fletxa{display:block;} .fletxa[disabled]{opacity:.25; cursor:default;} }
+
+  /* ---------- Contingut comú ---------- */
+  .disc{position:relative; flex:0 0 auto; width:min(76cqh,44cqw); aspect-ratio:1/1; border-radius:50%;
     background:#000;
-  }
-  .globe-panel canvas{width:100%!important; height:100%!important; display:block;}
+    box-shadow:0 0 0 2px var(--bezel-hi), 0 0 0 8px var(--panel-2), 0 0 26px 4px var(--turq-dim), inset 0 0 40px rgba(0,0,0,.6);}
+  .disc canvas,.disc svg{position:absolute; inset:0; width:100%; height:100%; border-radius:50%; display:block;}
+  .gal{position:absolute; width:4px; height:4px; margin:-2px 0 0 -2px; border-radius:50%; background:#efe9d6; box-shadow:0 0 3px rgba(255,250,230,.7);}
+  .gal i{position:absolute; top:6px;}
+  .gal.dalt i{top:auto; bottom:6px;}
+  .gal i{ left:50%; transform:translateX(-50%); font:normal 8px/1 var(--font-m); color:var(--dim);}
+  .info{display:flex; flex-direction:column; gap:.35em; min-width:0; font-size:clamp(10px,4.4cqmin,15px);}
+  .etq{font-size:.82em; letter-spacing:.18em; text-transform:uppercase; color:var(--dim);}
+  .nom{font-family:var(--font-d); font-weight:500; font-size:clamp(16px,8cqmin,32px); color:var(--lume); line-height:1.1;}
+  .nom.petit{font-size:clamp(14px,6.4cqmin,26px);}
+  .sub{color:var(--dim);}
+  .dades{display:grid; grid-template-columns:auto auto; column-gap:1.1em; row-gap:.22em; margin:.35em 0 0;}
+  .dades dt{color:var(--dim); white-space:nowrap;} .dades dd{margin:0; color:var(--lume); text-align:right; white-space:nowrap;}
 
-  .globe-caption{
-    margin-top:0; text-align:left; z-index:2;
-  }
-  .globe-caption .status{
-    font-size:9.5px; color:var(--lume); font-weight:500;
-    letter-spacing:.03em;
-  }
-  .globe-caption .meta{
-    margin-top:3px; font-size:6.5px; color:var(--text-dim);
-    font-family:var(--font-m); letter-spacing:.08em;
-  }
-  #earth-panel .globe-caption .meta{
-    margin-top:0; font-size:9px; color:var(--lume); font-weight:500;
-    font-family:var(--font-d); letter-spacing:.04em;
-  }
-  .earth-alt{
-    margin-left:6px; font-size:9px; color:var(--lume); font-weight:500;
-    font-family:var(--font-d); letter-spacing:.04em;
+  @container fin (orientation: portrait){
+    .pane{flex-direction:column; text-align:center;}
+    .disc{width:min(74cqw,50cqh);}
+    .info{align-items:center;}
+    .dades{justify-content:center;}
   }
 
-  .instruments{
-    flex:1 1 100%;
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:10px;
-  }
+  .lcd{border-radius:8px; border:1px solid #06110a; background:linear-gradient(180deg,#2c3830,#1c251f);
+    box-shadow:inset 0 2px 6px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.04); color:var(--lcd);}
+  .brilla{text-shadow:0 0 6px rgba(143,174,134,.6);}
 
-  .gauge{
-    background:linear-gradient(160deg,var(--panel),var(--panel-2));
-    border:1px solid var(--bezel);
-    border-radius:var(--radius);
-    padding:10px 8px 11px;
-    box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 8px 22px rgba(0,0,0,.32);
-    display:flex; flex-direction:column; align-items:center;
-    position:relative;
-  }
-  .gauge .g-label{
-    font-family:var(--font-m); font-size:8px; letter-spacing:.12em;
-    color:var(--text-dim); text-transform:uppercase; margin-bottom:5px;
-  }
-  /* Rellotge tipus LCD Casio + indicadors digitals (mateixa família visual) */
-  .clock-face, .digi-face{
-    width:100%;
-    background:linear-gradient(180deg,#2c3830,#1c251f);
-    border-radius:8px;
-    border:1px solid #06110a;
-    box-shadow:inset 0 2px 6px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.04);
-    padding:10px 8px 9px;
-    display:flex; flex-direction:column; align-items:center;
-    margin-top:2px;
-  }
-  .clock-face .lcd-time{
-    font-family:var(--font-m); font-size:21px;
-    color:var(--lcd); letter-spacing:.06em;
-    text-shadow:0 0 6px rgba(143,174,134,.6);
-    line-height:1;
-  }
-  .clock-face .lcd-time .blink{opacity:1; transition:opacity .15s;}
-  .clock-face .lcd-date{
-    margin-top:4px; font-family:var(--font-m); font-size:8.5px;
-    color:var(--lcd); opacity:.85; letter-spacing:.14em; text-transform:uppercase;
-  }
-  .clock-face .lcd-tag{
-    margin-top:5px; font-family:var(--font-m); font-size:6.5px;
-    color:var(--lcd-dark); letter-spacing:.2em; text-transform:uppercase;
-  }
+  /* Ara */
+  .p-ara{flex-direction:column; gap:clamp(6px,3cqmin,14px);}
+  .p-ara .lcd{width:100%; max-width:560px; padding:clamp(12px,6cqmin,34px) 10px; display:flex; flex-direction:column; align-items:center; gap:clamp(6px,3cqmin,14px);}
+  .lcd-hora{font-size:clamp(24px,min(17cqmin,13.5cqw),80px); line-height:1; letter-spacing:.05em;}
+  .lcd-hora .dp{transition:opacity .15s;}
+  .lcd-data{font-size:clamp(11px,5cqmin,22px); letter-spacing:.16em;}
+  .lcd-extra{font-size:clamp(9px,4cqmin,16px); letter-spacing:.12em; color:var(--lcd-dim);}
 
-  .digi-face .digi-value{
-    font-family:var(--font-m); font-size:22px;
-    color:var(--lcd); letter-spacing:.02em; line-height:1;
-    text-shadow:0 0 6px rgba(143,174,134,.6);
-  }
-  .digi-face .digi-unit{
-    font-size:11px; margin-left:4px; opacity:.75;
-  }
-  .digi-face .digi-bar{
-    margin-top:8px; width:100%; display:flex; gap:2px; height:7px;
-  }
-  .digi-face .digi-seg{
-    flex:1; background:#22301f; border-radius:1px; transition:background .3s;
-  }
-  .digi-face .digi-seg.active{
-    background:var(--seg-color, var(--turquoise));
-    box-shadow:0 0 4px var(--seg-color, var(--turquoise));
-  }
-  .digi-face .digi-range{
-    margin-top:5px; font-family:var(--font-m); font-size:8px;
-    color:var(--lcd-dark); letter-spacing:.1em;
-  }
+  /* On som */
+  .p-lloc{flex-direction:column; align-items:flex-start; justify-content:center; gap:.4em; font-size:clamp(10px,4.4cqmin,16px);}
+  .p-lloc .nom{font-size:clamp(20px,10cqmin,40px);}
+  .graella2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1em; margin-top:.5em; width:100%;}
+  .graella2 span{display:block; color:var(--dim);} .graella2 b{display:block; font-weight:400; color:var(--lume); margin-top:.15em;}
+  .graella2 b.gran{font-family:var(--font-d); font-size:1.4em;}
+  .boto{appearance:none; min-height:44px; padding:0 16px; display:inline-flex; align-items:center; gap:8px;
+    border-radius:10px; border:1px solid var(--turq); background:transparent; color:var(--turq);
+    font:inherit; font-size:.9em; letter-spacing:.06em; text-decoration:none; cursor:pointer;}
+  .boto:hover{background:rgba(47,217,196,.08);}
+  @container fin (orientation: portrait){ .p-lloc{align-items:center; text-align:center;} }
 
-  footer{
-    position:relative; z-index:1; text-align:center; flex:0 0 auto;
-    padding:2px 8px calc(env(safe-area-inset-bottom,0px) + 4px);
-    font-family:var(--font-m); font-size:8px; color:var(--text-dim);
-    letter-spacing:.08em;
+  /* Temps */
+  .p-temps{flex-direction:column; gap:clamp(6px,3cqmin,14px); font-size:clamp(10px,4.2cqmin,15px);}
+  .p-temps .lcd{width:100%; max-width:520px; padding:clamp(8px,4cqmin,20px) 14px; display:flex; align-items:center; justify-content:center; gap:14px;}
+  .t-ic{width:clamp(30px,15cqmin,70px); height:clamp(30px,15cqmin,70px); color:var(--lcd); flex:0 0 auto;}
+  .t-gran{font-size:clamp(26px,13cqmin,60px); line-height:1;}
+  .t-desc{font-size:.8em; letter-spacing:.12em; text-transform:uppercase; margin-top:.3em;}
+  .t-4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; width:100%; max-width:520px; text-align:center;}
+  .t-4 span{display:block; color:var(--dim); font-size:.85em;} .t-4 b{display:block; font-weight:400; font-size:1.2em; margin-top:.1em;}
+  .t-hores{display:none; width:100%; max-width:520px; grid-template-columns:repeat(6,minmax(0,1fr)); gap:4px; text-align:center; font-size:.85em;}
+  .t-hores div{display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--dim);}
+  .t-hores svg{width:22px; height:22px; color:var(--lume);} .t-hores b{font-weight:400; color:var(--lume);}
+  @container fin (orientation: portrait) and (min-height: 420px){ .t-hores{display:grid;} }
+
+  /* Calendari i avisos */
+  .p-cal{gap:clamp(10px,5cqmin,24px); font-size:clamp(9px,3.8cqmin,14px);}
+  .cal{flex:0 0 auto; display:flex; flex-direction:column; gap:.4em;}
+  .cal-tit{text-align:center; font-family:var(--font-d); font-size:1.25em; letter-spacing:.08em; color:var(--lume);}
+  .cal-g{display:grid; grid-template-columns:repeat(7,2.2em); row-gap:2px; text-align:center;}
+  .cal-g span{height:1.75em; line-height:1.75em; border-radius:4px;}
+  .cal-g .cs{color:var(--dim);}
+  .cal-g .ds{color:var(--dissabte);} .cal-g .fe{color:var(--festiu);}
+  .cal-g .avui{background:var(--turq); color:#04060a; font-weight:700;}
+  .cal-dreta{display:flex; flex-direction:column; gap:.9em; min-width:0;}
+  .llista{list-style:none; margin:.3em 0 0; padding:0; display:flex; flex-direction:column; gap:.3em;}
+  .llista li{color:var(--lume);}
+  .avisos li{display:flex; gap:.5em; align-items:flex-start;}
+  .avisos li::before{content:""; flex:0 0 auto; width:.55em; height:.55em; margin-top:.35em; border-radius:50%; background:var(--lcd);}
+  .avisos li.groc::before{background:#ffd34d;} .avisos li.taronja::before{background:#ff9b3d;} .avisos li.vermell::before{background:#ff5b4d;} .avisos li.info::before{background:var(--turq);}
+  .avisos li.cap{color:var(--lcd);}
+  @container fin (orientation: portrait){ .p-cal{flex-direction:column;} .cal-dreta{align-items:center; text-align:center;} .avisos li{justify-content:center;} }
+
+  /* Rellotge */
+  .p-rell .disc{background:none; box-shadow:0 0 0 8px var(--panel-2), 0 0 26px 4px rgba(47,217,196,.16);}
+
+  /* Sol i Lluna */
+  .p-sl{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(10px,5cqmin,30px); font-size:clamp(10px,4.4cqmin,16px);}
+  .sl-col{display:flex; flex-direction:column; align-items:center; gap:.35em; text-align:center;}
+  .sl-col svg{width:clamp(28px,14cqmin,64px); height:clamp(28px,14cqmin,64px);}
+  .sl-col .nom{font-size:clamp(15px,7cqmin,28px);}
+  .sl-fila{display:flex; gap:.8em;} .sl-fila span{color:var(--dim);} .sl-fila b{font-weight:400; color:var(--lume);}
+
+  /* Sant */
+  .p-sant{flex-direction:column; align-items:stretch; justify-content:center; gap:1em; font-size:clamp(10px,4.2cqmin,16px);}
+  .p-sant .nom{font-size:clamp(15px,7.4cqmin,28px);}
+  .efem{line-height:1.5; color:var(--text);} .efem b{color:var(--turq); font-weight:400;}
+
+  /* Ràdio */
+  .p-radio{flex-direction:column; gap:.6em; font-size:clamp(10px,4cqmin,15px);}
+  .radios{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; width:100%; max-width:520px;}
+  .radio{appearance:none; min-height:clamp(52px,22cqmin,90px); border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
+    color:var(--lume); font-family:var(--font-d); font-size:1.15em; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; padding:4px;}
+  .radio small{font-family:var(--font-m); font-size:.62em; color:var(--dim);}
+  .radio.sona{border-color:var(--turq);} .radio.sona small{color:var(--turq);}
+  @container fin (orientation: portrait){ .radios{grid-template-columns:1fr;} }
+  @container fin (orientation: portrait) and (min-width: 300px){ .radios{grid-template-columns:repeat(2,minmax(0,1fr));} }
+
+  /* Podcasts */
+  .p-pod{flex-direction:column; gap:.6em; font-size:clamp(10px,4cqmin,15px);}
+  .pod{appearance:none; width:100%; max-width:520px; min-height:clamp(48px,20cqmin,80px); border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
+    color:var(--lume); padding:0 14px; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer; font:inherit;}
+  .pod svg{flex:0 0 auto; width:1.8em; height:1.8em; color:var(--turq);}
+  .pod b{display:block; font-family:var(--font-d); font-weight:500; font-size:1.2em;}
+  .pod span span{display:block; color:var(--dim); font-size:.85em; margin-top:2px;}
+  .pod.sona{border-color:var(--turq);}
+
+  /* Notícies */
+  .p-not{flex-direction:column; align-items:stretch; justify-content:flex-start; gap:.5em; font-size:clamp(10px,3.9cqmin,15px); padding-top:clamp(14px,5cqmin,26px);}
+  .not-llista{flex:1 1 auto; min-height:0; overflow-y:auto; margin:0; padding:0 4px 0 0; list-style:none; display:flex; flex-direction:column; gap:.55em;
+    scrollbar-width:thin; scrollbar-color:var(--bezel-hi) transparent; -webkit-user-select:text; user-select:text;}
+  .not-llista a{display:flex; gap:.6em; color:var(--text); text-decoration:none; line-height:1.35;}
+  .not-llista a:hover{color:var(--lume);}
+  .not-llista a span:first-child{flex:0 0 1.4em; color:var(--turq);}
+  .not-peu{color:var(--dim); font-size:.8em; text-align:center;}
+
+  /* Alarmes */
+  .p-al{flex-direction:column; gap:.55em; font-size:clamp(10px,4cqmin,15px);}
+  .al-fila{width:100%; max-width:520px; display:flex; align-items:center; gap:8px; padding:6px 8px;}
+  .al-fila.off{opacity:.5;}
+  .al-fila input[type=time]{appearance:none; -webkit-appearance:none; background:transparent; border:0; color:var(--lcd); font:clamp(20px,10cqmin,40px)/1 var(--font-m); width:5em; padding:0; text-shadow:0 0 6px rgba(143,174,134,.6);}
+  .al-fila input[type=time]::-webkit-calendar-picker-indicator{display:none;}
+  .al-mini{appearance:none; min-height:36px; min-width:36px; border-radius:8px; border:1px solid rgba(143,174,134,.35); background:rgba(0,0,0,.2); color:var(--lcd); font:inherit; font-size:.8em; letter-spacing:.08em; padding:0 8px; cursor:pointer;}
+  .al-fila .espai{flex:1 1 auto;}
+  .al-nova{min-height:40px;}
+  .al-nota{color:var(--dim); font-size:.8em; text-align:center;}
+  .sonant{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:rgba(4,6,10,.82);}
+  .sonant[hidden]{display:none;}
+  .sonant button{min-height:80px; padding:0 40px; border-radius:16px; border:2px solid var(--turq); background:var(--panel); color:var(--lume); font:600 24px var(--font-d); letter-spacing:.06em; cursor:pointer;}
+
+  /* Horitzontal: tres columnes */
+  @media (orientation: landscape){
+    .finestres{grid-template-rows:none; grid-template-columns:repeat(3,minmax(0,1fr)); padding-bottom:4px;}
   }
-  footer .dot{color:var(--turquoise);}
-
-  /* ===== ORIENTACIÓ HORITZONTAL: graella 3 columnes — Terra/Lluna a l'esquerra, indicadors 2×2 a la dreta ===== */
-  @media (orientation:landscape){
-    .stars{opacity:.35;}
-    header{display:none;}
-    footer{display:none;}
-
-    .dashboard{
-      display:grid;
-      grid-template-columns:1fr 1.7fr;
-      grid-template-rows:1fr 1fr;
-      align-items:stretch;
-      padding:8px calc(env(safe-area-inset-right,0px) + 8px) 8px calc(env(safe-area-inset-left,0px) + 8px);
-      gap:7px;
-    }
-
-    #earth-panel{ grid-column:1; grid-row:1; }
-    #moon-panel{ grid-column:1; grid-row:2; }
-    #earth-panel, #moon-panel{
-      display:flex; flex-direction:row; align-items:center; justify-content:flex-start;
-      gap:10px; padding:6px 10px; min-height:0;
-    }
-    .globe-panel .canvas-wrap{
-      flex:0 0 auto; width:min(24vh,24vw); height:min(24vh,24vw); max-width:none;
-      aspect-ratio:auto;
-    }
-    .globe-caption{margin-top:0; text-align:left;}
-    .globe-caption .status{font-size:7px;}
-    .globe-caption .meta{font-size:5px;}
-    #earth-panel .globe-caption .meta{font-size:6.5px;}
-    .earth-alt{font-size:6.5px; margin-left:4px;}
-
-    .instruments{
-      grid-column:2; grid-row:1/3; min-width:0;
-      grid-template-columns:repeat(2,1fr);
-      grid-template-rows:repeat(2,1fr);
-      gap:7px;
-    }
-    .gauge{padding:5px 5px 6px; justify-content:center;}
-    .gauge .g-label{font-size:6.5px; letter-spacing:.08em; margin-bottom:3px;}
-    .clock-face, .digi-face{padding:5px 5px 5px;}
-    .clock-face .lcd-time{font-size:15px;}
-    .clock-face .lcd-date{font-size:6.5px; margin-top:2px;}
-    .clock-face .lcd-tag{display:none;}
-    .digi-face .digi-value{font-size:16px;}
-    .digi-face .digi-unit{font-size:8px;}
-    .digi-face .digi-bar{margin-top:4px; height:5px;}
-    .digi-face .digi-range{font-size:6.5px; margin-top:2px;}
+  @media (orientation: landscape) and (max-height: 500px){
+    .cap,.peu{display:none;}
+    .finestres{padding-top:calc(env(safe-area-inset-top,0px) + 8px); padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px); gap:8px;}
   }
+  @media (orientation: landscape) and (min-height: 501px){
+    .finestres{padding-bottom:6px; gap:16px;}
+  }
+  @media (prefers-reduced-motion: reduce){ .pista{transition:none;} }
 </style>
 </head>
 <body>
-<div class="stars"></div>
+<div class="estels" aria-hidden="true"></div>
 
-<header>
-  <h1>Centre de Control Orbital</h1>
-</header>
+<header class="cap"><h1>Centre de Control Orbital</h1></header>
 
-<div class="dashboard">
+<main class="finestres">
+  <!-- ===================== FINESTRA 1 · COSSOS CELESTES ===================== -->
+  <section class="finestra" id="f1" tabindex="0" aria-roledescription="carrusel" aria-label="Cossos celestes">
+    <div class="pista" id="pista1"></div>
+    <button class="fletxa ant" type="button" aria-label="Anterior">‹</button>
+    <button class="fletxa seg" type="button" aria-label="Següent">›</button>
+    <div class="punts" role="group" aria-label="Pantalles"></div>
+  </section>
 
-  <div class="globe-panel" id="earth-panel">
-    <div class="canvas-wrap"><canvas id="earthCanvas"></canvas></div>
-    <div class="globe-caption">
-      <div class="meta" id="earth-meta"><span id="earth-name">Barcelona</span><span class="earth-alt" id="earth-alt"></span></div>
+  <!-- ===================== FINESTRA 2 · AQUÍ I ARA ===================== -->
+  <section class="finestra" id="f2" tabindex="0" aria-roledescription="carrusel" aria-label="Aquí i ara">
+    <div class="pista">
+      <article class="pane p-ara" aria-label="Ara">
+        <div class="etq">Ara</div>
+        <div class="lcd">
+          <div class="lcd-hora brilla" id="lcdHora">--:--:--</div>
+          <div class="lcd-data" id="lcdData">--- -- --- ----</div>
+          <div class="lcd-extra" id="lcdExtra">SETMANA -- · DIA ---</div>
+        </div>
+      </article>
+
+      <article class="pane p-lloc" aria-label="On som">
+        <div class="etq">On som</div>
+        <div class="nom" id="llNom">Barcelona</div>
+        <div class="sub" id="llRegio">—</div>
+        <div class="graella2">
+          <div><span>Altitud</span><b class="gran" id="llAlt">-- m</b></div>
+          <div><span>Coordenades</span><b id="llCoord">—</b></div>
+        </div>
+        <a class="boto" id="llMapa" href="https://www.google.com/maps?q=41.3874,2.1686" target="_blank" rel="noopener">
+          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+          Obre a Google Maps
+        </a>
+      </article>
+
+      <article class="pane p-temps" aria-label="El temps">
+        <div class="etq">El temps</div>
+        <div class="lcd">
+          <svg class="t-ic" id="tIc" viewBox="0 0 24 24" aria-hidden="true"></svg>
+          <div>
+            <div class="t-gran brilla" id="tTemp">--°</div>
+            <div class="t-desc" id="tDesc">Esperant dades…</div>
+          </div>
+        </div>
+        <div class="t-4">
+          <div><span>Màx</span><b id="tMax" style="color:var(--calor)">--°</b></div>
+          <div><span>Mín</span><b id="tMin" style="color:var(--fred)">--°</b></div>
+          <div><span>Sensació</span><b id="tSens" style="color:var(--sensa)">--°</b></div>
+          <div><span>Humitat</span><b id="tHum" style="color:var(--lume)">--%</b></div>
+        </div>
+        <div class="t-hores" id="tHores"></div>
+      </article>
+
+      <article class="pane p-cal" aria-label="Calendari i avisos">
+        <div class="cal">
+          <div class="cal-tit" id="calTit">—</div>
+          <div class="cal-g" id="calG" role="grid" aria-label="Calendari del mes"></div>
+        </div>
+        <div class="cal-dreta">
+          <div><div class="etq">Properament</div><ul class="llista" id="calFestes"></ul></div>
+          <div><div class="etq">Avisos</div><ul class="llista avisos" id="calAvisos"><li class="cap">Esperant la previsió…</li></ul></div>
+        </div>
+      </article>
     </div>
-  </div>
+    <button class="fletxa ant" type="button" aria-label="Anterior">‹</button>
+    <button class="fletxa seg" type="button" aria-label="Següent">›</button>
+    <div class="punts" role="group" aria-label="Pantalles"></div>
+  </section>
 
-  <div class="globe-panel" id="moon-panel">
-    <div class="canvas-wrap"><canvas id="moonCanvas"></canvas></div>
-    <div class="globe-caption">
-      <div class="status" id="moon-status">calculant fase…</div>
-      <div class="meta" id="moon-meta">il·luminació —%</div>
+  <!-- ===================== FINESTRA 3 · REPÚBLICA ===================== -->
+  <section class="finestra" id="f3" tabindex="0" aria-roledescription="carrusel" aria-label="República">
+    <div class="pista">
+      <article class="pane p-rell" aria-label="Rellotge CAPITAINE">
+        <div class="disc" id="rellDisc"></div>
+        <div class="info">
+          <div class="etq">República</div>
+          <div class="nom">Rellotge CAPITAINE</div>
+          <div class="sub" id="rellSub">—</div>
+        </div>
+      </article>
+
+      <article class="pane p-sl" aria-label="Sol i Lluna">
+        <div class="sl-col">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <div class="nom">Sol</div>
+          <div class="sl-fila"><span>Surt</span><b id="slSolS">--:--</b></div>
+          <div class="sl-fila"><span>Es pon</span><b id="slSolP">--:--</b></div>
+          <div class="sub" id="slLlum">—</div>
+        </div>
+        <div class="sl-col">
+          <svg viewBox="-12 -12 24 24" aria-hidden="true" id="slLlunaIc"></svg>
+          <div class="nom">Lluna</div>
+          <div class="sl-fila"><span>Surt</span><b id="slLlS">--:--</b></div>
+          <div class="sl-fila"><span>Es pon</span><b id="slLlP">--:--</b></div>
+          <div class="sub" id="slFase">—</div>
+        </div>
+      </article>
+
+      <article class="pane p-sant" aria-label="Sant del dia i efemèride">
+        <div><div class="etq">Sant del dia</div><div class="nom" id="santNom">—</div></div>
+        <div><div class="etq" id="efemEtq">Efemèride</div><div class="efem" id="efemText">Carregant…</div></div>
+      </article>
+
+      <article class="pane p-radio" aria-label="Ràdio">
+        <div class="etq">Ràdio</div>
+        <div class="radios" id="radios"></div>
+      </article>
+
+      <article class="pane p-pod" aria-label="Podcasts de RAC1">
+        <div class="etq">Podcasts · RAC1</div>
+        <button class="pod" type="button" id="podComp" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
+          <span><b>La Competència</b><span>Carregant…</span></span>
+        </button>
+        <button class="pod" type="button" id="podVia" disabled>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
+          <span><b>Via lliure</b><span>Carregant…</span></span>
+        </button>
+      </article>
+
+      <article class="pane p-not" aria-label="Notícies">
+        <div class="etq" style="text-align:center">Notícies</div>
+        <ol class="not-llista" id="notLlista"><li class="not-peu">Carregant…</li></ol>
+        <div class="not-peu" id="notPeu"></div>
+      </article>
+
+      <article class="pane p-al" aria-label="Alarmes">
+        <div class="etq">Alarmes</div>
+        <div id="alLlista" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:.5em;"></div>
+        <button class="boto al-nova" type="button" id="alNova">+ Nova alarma</button>
+        <div class="al-nota">Sonen mentre aquesta pàgina és oberta</div>
+      </article>
     </div>
-  </div>
+    <button class="fletxa ant" type="button" aria-label="Anterior">‹</button>
+    <button class="fletxa seg" type="button" aria-label="Següent">›</button>
+    <div class="punts" role="group" aria-label="Pantalles"></div>
+  </section>
+</main>
 
-  <div class="instruments">
-
-    <div class="gauge" id="gauge-clock">
-      <div class="g-label">Hora local</div>
-      <div class="clock-face">
-        <div class="lcd-time" id="lcd-time">--:--<span class="blink">:</span>--</div>
-        <div class="lcd-date" id="lcd-date">--- -- ---</div>
-        <div class="lcd-tag">Quars · Centre de Control</div>
-      </div>
-    </div>
-
-    <div class="gauge" id="gauge-temp">
-      <div class="g-label">Temperatura</div>
-      <div class="digi-face">
-        <div class="digi-value"><span id="val-temp">--</span><span class="digi-unit">°C</span></div>
-        <div class="digi-bar" id="bar-temp"></div>
-        <div class="digi-range" id="range-temp">— — —</div>
-      </div>
-    </div>
-
-    <div class="gauge" id="gauge-hum">
-      <div class="g-label">Humitat relativa</div>
-      <div class="digi-face">
-        <div class="digi-value"><span id="val-hum">--</span><span class="digi-unit">%</span></div>
-        <div class="digi-bar" id="bar-hum"></div>
-        <div class="digi-range" id="range-hum">— — —</div>
-      </div>
-    </div>
-
-    <div class="gauge" id="gauge-feels">
-      <div class="g-label">Sensació</div>
-      <div class="digi-face">
-        <div class="digi-value"><span id="val-feels">--</span><span class="digi-unit">°C</span></div>
-        <div class="digi-bar" id="bar-feels"></div>
-        <div class="digi-range" id="range-feels">— — —</div>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-<footer>
-  <span id="loc-status">localitzant posició…</span>
-  <span class="dot"> · </span>
-  <span id="update-status">dades no actualitzades</span>
+<footer class="peu">
+  <span id="peuLloc">localitzant…</span><span class="punt"> · </span><span id="peuDades">dades pendents</span><span class="punt"> · </span>textures <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0)
 </footer>
+
+<div class="sonant" id="sonant" hidden><button type="button" id="alAtura">Atura l'alarma</button></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-/* ============================================================
-   UTILITATS ASTRONÒMIQUES
-   ============================================================ */
+/*!
+ * satellite-js v5.0.0
+ * (c) 2013 Shashwat Kandadai and UCSC
+ * https://github.com/shashwatak/satellite-js
+ * License: MIT
+ */
 
-// Punt subsolar (lat/lon on el Sol és al zenit) — fórmula de baixa
-// precisió basada en efemèrides solars simplificades (NOAA/Meeus).
-function getSubsolarPoint(date){
-  const rad = Math.PI/180;
-  const J2000 = Date.UTC(2000,0,1,12,0,0);
-  const d = (date.getTime() - J2000) / 86400000; // dies des de J2000.0
+!function(o,t){"object"==typeof exports&&"undefined"!=typeof module?module.exports=t():"function"==typeof define&&define.amd?define(t):(o="undefined"!=typeof globalThis?globalThis:o||self).satellite=t()}(this,(function(){"use strict";var o=Math.PI,t=2*o,e=o/180,s=180/o,a=1440,n=398600.8,d=6378.135,r=60/Math.sqrt(650942.9922085947),i=d*r/60,c=1/r,h=.001082616,m=-253881e-11,l=-165597e-11,p=m/h,x=2/3;function g(o,t){for(var e=[31,o%4==0?29:28,31,30,31,30,31,31,30,31,30,31],s=Math.floor(t),a=1,n=0;s>n+e[a-1]&&a<12;)n+=e[a-1],a+=1;var d=a,r=s-n,i=24*(t-s),c=Math.floor(i);i=60*(i-c);var h=Math.floor(i);return{mon:d,day:r,hr:c,minute:h,sec:60*(i-h)}}function M(o,t,e,s,a,n){var d=arguments.length>6&&void 0!==arguments[6]?arguments[6]:0;return 367*o-Math.floor(7*(o+Math.floor((t+9)/12))*.25)+Math.floor(275*t/9)+e+1721013.5+((d/6e4+n/60+a)/60+s)/24}function f(o,t,e,s,a,n,d){if(o instanceof Date){var r=o;return M(r.getUTCFullYear(),r.getUTCMonth()+1,r.getUTCDate(),r.getUTCHours(),r.getUTCMinutes(),r.getUTCSeconds(),r.getUTCMilliseconds())}return M(o,t,e,s,a,n,d)}function u(e,s){var a,n,d,r,i,c,h,m,l,p,x,g,M,f,u,z,v,y,b=e.e3,q=e.ee2,w=e.peo,T=e.pgho,j=e.pho,E=e.pinco,F=e.plo,A=e.se2,C=e.se3,L=e.sgh2,S=e.sgh3,U=e.sgh4,D=e.sh2,I=e.sh3,R=e.si2,_=e.si3,k=e.sl2,O=e.sl3,P=e.sl4,Z=e.t,G=e.xgh2,H=e.xgh3,Y=e.xgh4,$=e.xh2,B=e.xh3,J=e.xi2,K=e.xi3,N=e.xl2,Q=e.xl3,V=e.xl4,W=e.zmol,X=e.zmos,oo=s.init,to=s.opsmode,eo=s.ep,so=s.inclp,ao=s.nodep,no=s.argpp,ro=s.mp;y=X+119459e-10*Z,"y"===oo&&(y=X),v=y+.0335*Math.sin(y);var io=A*(h=.5*(f=Math.sin(v))*f-.25)+C*(m=-.5*f*Math.cos(v)),co=R*h+_*m,ho=k*h+O*m+P*f,mo=L*h+S*m+U*f,lo=D*h+I*m;return y=W+.00015835218*Z,"y"===oo&&(y=W),v=y+.1098*Math.sin(y),l=io+(q*(h=.5*(f=Math.sin(v))*f-.25)+b*(m=-.5*f*Math.cos(v))),g=co+(J*h+K*m),M=ho+(N*h+Q*m+V*f),p=mo+(G*h+H*m+Y*f),x=lo+($*h+B*m),"n"===oo&&(M-=F,p-=T,x-=j,so+=g-=E,eo+=l-=w,r=Math.sin(so),d=Math.cos(so),so>=.2?(no+=p-=d*(x/=r),ao+=x,ro+=M):(a=r*(c=Math.sin(ao)),n=r*(i=Math.cos(ao)),a+=x*i+g*d*c,n+=-x*c+g*d*i,(ao%=t)<0&&"a"===to&&(ao+=t),u=ro+no+d*ao,u+=M+p-g*ao*r,z=ao,(ao=Math.atan2(a,n))<0&&"a"===to&&(ao+=t),Math.abs(z-ao)>o&&(ao<z?ao+=t:ao-=t),no=u-(ro+=M)-d*ao)),{ep:eo,inclp:so,nodep:ao,argpp:no,mp:ro}}function z(o){var s=(o-2451545)/36525,a=-62e-7*s*s*s+.093104*s*s+3164400184.812866*s+67310.54841;return(a=a*e/240%t)<0&&(a+=t),a}function v(){return(arguments.length<=0?void 0:arguments[0])instanceof Date||arguments.length>1?z(f.apply(void 0,arguments)):z.apply(void 0,arguments)}function y(e,s){var a,n,c,m,l,g,M,f,z,v,y,b,q,w,T,j,E,F,A,C,L,S,U,D,I,R;e.t=s,e.error=0;var _=e.mo+e.mdot*e.t,k=e.argpo+e.argpdot*e.t,O=e.nodeo+e.nodedot*e.t;f=k,C=_;var P=e.t*e.t;if(S=O+e.nodecf*P,j=1-e.cc1*e.t,E=e.bstar*e.cc4*e.t,F=e.t2cof*P,1!==e.isimp){g=e.omgcof*e.t;var Z=1+e.eta*Math.cos(_);C=_+(T=g+e.xmcof*(Z*Z*Z-e.delmo)),f=k-T,b=(y=P*e.t)*e.t,j=j-e.d2*P-e.d3*y-e.d4*b,E+=e.bstar*e.cc5*(Math.sin(C)-e.sinmao),F=F+e.t3cof*y+b*(e.t4cof+e.t*e.t5cof)}L=e.no;var G=e.ecco;if(A=e.inclo,"d"===e.method){q=e.t;var H=function(o){var e,s,a,n,d,r,i,c,h=o.irez,m=o.d2201,l=o.d2211,p=o.d3210,x=o.d3222,g=o.d4410,M=o.d4422,f=o.d5220,u=o.d5232,z=o.d5421,v=o.d5433,y=o.dedt,b=o.del1,q=o.del2,w=o.del3,T=o.didt,j=o.dmdt,E=o.dnodt,F=o.domdt,A=o.argpo,C=o.argpdot,L=o.t,S=o.tc,U=o.gsto,D=o.xfact,I=o.xlamo,R=o.no,_=o.atime,k=o.em,O=o.argpm,P=o.inclm,Z=o.xli,G=o.mm,H=o.xni,Y=o.nodem,$=o.nm,B=.13130908,J=2.8843198,K=.37448087,N=5.7686396,Q=.95240898,V=1.8014998,W=1.050833,X=4.4108898,oo=259200,to=0,eo=0,so=(U+.0043752690880113*S)%t;if(k+=y*L,P+=T*L,O+=F*L,Y+=E*L,G+=j*L,0!==h){(0===_||L*_<=0||Math.abs(L)<Math.abs(_))&&(_=0,H=R,Z=I),e=L>0?720:-720;for(var ao=381;381===ao;)2!==h?(i=b*Math.sin(Z-B)+q*Math.sin(2*(Z-J))+w*Math.sin(3*(Z-K)),d=H+D,r=b*Math.cos(Z-B)+2*q*Math.cos(2*(Z-J))+3*w*Math.cos(3*(Z-K)),r*=d):(a=(c=A+C*_)+c,s=Z+Z,i=m*Math.sin(a+Z-N)+l*Math.sin(Z-N)+p*Math.sin(c+Z-Q)+x*Math.sin(-c+Z-Q)+g*Math.sin(a+s-V)+M*Math.sin(s-V)+f*Math.sin(c+Z-W)+u*Math.sin(-c+Z-W)+z*Math.sin(c+s-X)+v*Math.sin(-c+s-X),d=H+D,r=m*Math.cos(a+Z-N)+l*Math.cos(Z-N)+p*Math.cos(c+Z-Q)+x*Math.cos(-c+Z-Q)+f*Math.cos(c+Z-W)+u*Math.cos(-c+Z-W)+2*(g*Math.cos(a+s-V)+M*Math.cos(s-V)+z*Math.cos(c+s-X)+v*Math.cos(-c+s-X)),r*=d),Math.abs(L-_)>=720?ao=381:(eo=L-_,ao=0),381===ao&&(Z+=d*e+i*oo,H+=i*e+r*oo,_+=e);$=H+i*eo+r*eo*eo*.5,n=Z+d*eo+i*eo*eo*.5,1!==h?(G=n-2*Y+2*so,to=$-R):(G=n-Y-O+so,to=$-R),$=R+to}return{atime:_,em:k,argpm:O,inclm:P,xli:Z,mm:G,xni:H,nodem:Y,dndt:to,nm:$}}({irez:e.irez,d2201:e.d2201,d2211:e.d2211,d3210:e.d3210,d3222:e.d3222,d4410:e.d4410,d4422:e.d4422,d5220:e.d5220,d5232:e.d5232,d5421:e.d5421,d5433:e.d5433,dedt:e.dedt,del1:e.del1,del2:e.del2,del3:e.del3,didt:e.didt,dmdt:e.dmdt,dnodt:e.dnodt,domdt:e.domdt,argpo:e.argpo,argpdot:e.argpdot,t:e.t,tc:q,gsto:e.gsto,xfact:e.xfact,xlamo:e.xlamo,no:e.no,atime:e.atime,em:G,argpm:f,inclm:A,xli:e.xli,mm:C,xni:e.xni,nodem:S,nm:L});G=H.em,f=H.argpm,A=H.inclm,C=H.mm,S=H.nodem,L=H.nm}if(L<=0)return e.error=2,[!1,!1];var Y=Math.pow(r/L,x)*j*j;if(L=r/Math.pow(Y,1.5),(G-=E)>=1||G<-.001)return e.error=1,[!1,!1];G<1e-6&&(G=1e-6),D=(C+=e.no*F)+f+S;var $=G;if(U=A,z=f%=t,R=S%=t,I=C=((D%=t)-f-S)%t,m=Math.sin(A),c=Math.cos(A),"d"===e.method){var B=u(e,{inclo:e.inclo,init:"n",ep:$,inclp:U,nodep:R,argpp:z,mp:I,opsmode:e.operationmode});if($=B.ep,R=B.nodep,z=B.argpp,I=B.mp,(U=B.inclp)<0&&(U=-U,R+=o,z-=o),$<0||$>1)return e.error=3,[!1,!1]}"d"===e.method&&(m=Math.sin(U),c=Math.cos(U),e.aycof=-.5*p*m,Math.abs(c+1)>15e-13?e.xlcof=-.25*p*m*(3+5*c)/(1+c):e.xlcof=-.25*p*m*(3+5*c)/15e-13);var J=$*Math.cos(z);T=1/(Y*(1-$*$));var K=$*Math.sin(z)+T*e.aycof,N=(I+z+R+T*e.xlcof*J-R)%t;M=N,w=9999.9;for(var Q=1;Math.abs(w)>=1e-12&&Q<=10;)n=Math.sin(M),w=(N-K*(a=Math.cos(M))+J*n-M)/(w=1-a*J-n*K),Math.abs(w)>=.95&&(w=w>0?.95:-.95),M+=w,Q+=1;var V=J*a+K*n,W=J*n-K*a,X=J*J+K*K,oo=Y*(1-X);if(oo<0)return e.error=4,[!1,!1];var to=Y*(1-V),eo=Math.sqrt(Y)*W/to,so=Math.sqrt(oo)/to,ao=Math.sqrt(1-X),no=Y/to*(n-K-J*(T=W/(1+ao))),ro=Y/to*(a-J+K*T);v=Math.atan2(no,ro);var io=(ro+ro)*no,co=1-2*no*no,ho=.5*h*(T=1/oo),mo=ho*T;"d"===e.method&&(l=c*c,e.con41=3*l-1,e.x1mth2=1-l,e.x7thm1=7*l-1);var lo=to*(1-1.5*mo*ao*e.con41)+.5*ho*e.x1mth2*co;if(lo<1)return e.error=6,{position:!1,velocity:!1};v-=.25*mo*e.x7thm1*io;var po=R+1.5*mo*c*io,xo=U+1.5*mo*c*m*co,go=eo-L*ho*e.x1mth2*io/r,Mo=so+L*ho*(e.x1mth2*co+1.5*e.con41)/r,fo=Math.sin(v),uo=Math.cos(v),zo=Math.sin(po),vo=Math.cos(po),yo=Math.sin(xo),bo=Math.cos(xo),qo=-zo*bo,wo=vo*bo,To=qo*fo+vo*uo,jo=wo*fo+zo*uo,Eo=yo*fo;return{position:{x:lo*To*d,y:lo*jo*d,z:lo*Eo*d},velocity:{x:(go*To+Mo*(qo*uo-vo*fo))*i,y:(go*jo+Mo*(wo*uo-zo*fo))*i,z:(go*Eo+Mo*(yo*uo))*i}}}function b(e,s){var a,n,i,m,g,M,f,z,b,q,w,T,j,E,F,A,C,L,S,U,D,I,R,_,k,O,P,Z,G,H,Y,$,B,J,K,N,Q,V,W,X,oo,to,eo,so,ao,no,ro,io,co,ho,mo,lo,po=s.opsmode,xo=s.satn,go=s.epoch,Mo=s.xbstar,fo=s.xecco,uo=s.xargpo,zo=s.xinclo,vo=s.xmo,yo=s.xno,bo=s.xnodeo;e.isimp=0,e.method="n",e.aycof=0,e.con41=0,e.cc1=0,e.cc4=0,e.cc5=0,e.d2=0,e.d3=0,e.d4=0,e.delmo=0,e.eta=0,e.argpdot=0,e.omgcof=0,e.sinmao=0,e.t=0,e.t2cof=0,e.t3cof=0,e.t4cof=0,e.t5cof=0,e.x1mth2=0,e.x7thm1=0,e.mdot=0,e.nodedot=0,e.xlcof=0,e.xmcof=0,e.nodecf=0,e.irez=0,e.d2201=0,e.d2211=0,e.d3210=0,e.d3222=0,e.d4410=0,e.d4422=0,e.d5220=0,e.d5232=0,e.d5421=0,e.d5433=0,e.dedt=0,e.del1=0,e.del2=0,e.del3=0,e.didt=0,e.dmdt=0,e.dnodt=0,e.domdt=0,e.e3=0,e.ee2=0,e.peo=0,e.pgho=0,e.pho=0,e.pinco=0,e.plo=0,e.se2=0,e.se3=0,e.sgh2=0,e.sgh3=0,e.sgh4=0,e.sh2=0,e.sh3=0,e.si2=0,e.si3=0,e.sl2=0,e.sl3=0,e.sl4=0,e.gsto=0,e.xfact=0,e.xgh2=0,e.xgh3=0,e.xgh4=0,e.xh2=0,e.xh3=0,e.xi2=0,e.xi3=0,e.xl2=0,e.xl3=0,e.xl4=0,e.xlamo=0,e.zmol=0,e.zmos=0,e.atime=0,e.xli=0,e.xni=0,e.bstar=Mo,e.ecco=fo,e.argpo=uo,e.inclo=zo,e.mo=vo,e.no=yo,e.nodeo=bo,e.operationmode=po;e.init="y",e.t=0;var qo=function(o){var e=o.ecco,s=o.epoch,a=o.inclo,n=o.opsmode,d=o.no,i=e*e,c=1-i,m=Math.sqrt(c),l=Math.cos(a),p=l*l,g=Math.pow(r/d,x),M=.75*h*(3*p-1)/(m*c),f=M/(g*g),u=g*(1-f*f-f*(1/3+134*f*f/81));d/=1+(f=M/(u*u));var z,y=Math.pow(r/d,x),b=Math.sin(a),q=y*c,w=1-5*p,T=-w-p-p,j=1/y,E=q*q,F=y*(1-e);if("a"===n){var A=s-7305,C=Math.floor(A+1e-8),L=.017202791694070362;(z=(1.7321343856509375+L*C+(L+t)*(A-C)+A*A*5075514194322695e-30)%t)<0&&(z+=t)}else z=v(s+2433281.5);return{no:d,method:"n",ainv:j,ao:y,con41:T,con42:w,cosio:l,cosio2:p,eccsq:i,omeosq:c,posq:E,rp:F,rteosq:m,sinio:b,gsto:z}}({satn:xo,ecco:e.ecco,epoch:go,inclo:e.inclo,no:e.no,method:e.method,opsmode:e.operationmode}),wo=qo.ao,To=qo.con42,jo=qo.cosio,Eo=qo.cosio2,Fo=qo.eccsq,Ao=qo.omeosq,Co=qo.posq,Lo=qo.rp,So=qo.rteosq,Uo=qo.sinio;if(e.no=qo.no,e.con41=qo.con41,e.gsto=qo.gsto,e.a=Math.pow(e.no*c,-2/3),e.alta=e.a*(1+e.ecco)-1,e.altp=e.a*(1-e.ecco)-1,e.error=0,Ao>=0||e.no>=0){if(e.isimp=0,Lo<1.034492841559484&&(e.isimp=1),_=1.0122292801892716,L=1.880279159015271e-9,(F=(Lo-1)*d)<156){_=F-78,F<98&&(_=20);var Do=(120-_)/d;L=Do*Do*Do*Do,_=_/d+1}A=1/Co,to=1/(wo-_),e.eta=wo*e.ecco*to,T=e.eta*e.eta,w=e.ecco*e.eta,C=Math.abs(1-T),m=(f=(M=L*Math.pow(to,4))/Math.pow(C,3.5))*e.no*(wo*(1+1.5*T+w*(4+T))+.375*h*to/C*e.con41*(8+3*T*(8+T))),e.cc1=e.bstar*m,g=0,e.ecco>1e-4&&(g=-2*M*to*p*e.no*Uo/e.ecco),e.x1mth2=1-Eo,e.cc4=2*e.no*f*wo*Ao*(e.eta*(2+.5*T)+e.ecco*(.5+2*T)-h*to/(wo*C)*(-3*e.con41*(1-2*w+T*(1.5-.5*w))+.75*e.x1mth2*(2*T-w*(1+T))*Math.cos(2*e.argpo))),e.cc5=2*f*wo*Ao*(1+2.75*(T+w)+w*T),z=Eo*Eo,X=.5*(W=1.5*h*A*e.no)*h*A,oo=-.46875*l*A*A*e.no,e.mdot=e.no+.5*W*So*e.con41+.0625*X*So*(13-78*Eo+137*z),e.argpdot=-.5*W*To+.0625*X*(7-114*Eo+395*z)+oo*(3-36*Eo+49*z),so=-W*jo,e.nodedot=so+(.5*X*(4-19*Eo)+2*oo*(3-7*Eo))*jo,eo=e.argpdot+e.nodedot,e.omgcof=e.bstar*g*Math.cos(e.argpo),e.xmcof=0,e.ecco>1e-4&&(e.xmcof=-x*M*e.bstar/w),e.nodecf=3.5*Ao*so*e.cc1,e.t2cof=1.5*e.cc1,Math.abs(jo+1)>15e-13?e.xlcof=-.25*p*Uo*(3+5*jo)/(1+jo):e.xlcof=-.25*p*Uo*(3+5*jo)/15e-13,e.aycof=-.5*p*Uo;var Io=1+e.eta*Math.cos(e.mo);if(e.delmo=Io*Io*Io,e.sinmao=Math.sin(e.mo),e.x7thm1=7*Eo-1,2*o/e.no>=225){e.method="d",e.isimp=1,0,j=e.inclo;var Ro=function(o){var e,s,a,n,d,r,i,c,h,m,l,p,x,g,M,f,u,z,v,y,b,q,w,T,j,E,F,A,C,L,S,U,D,I,R,_,k,O,P,Z,G,H,Y,$,B,J,K,N,Q,V,W,X,oo,to,eo,so,ao,no,ro,io,co,ho,mo,lo=o.epoch,po=o.ep,xo=o.argpp,go=o.tc,Mo=o.inclp,fo=o.nodep,uo=.01675,zo=.0549,vo=o.np,yo=po,bo=Math.sin(fo),qo=Math.cos(fo),wo=Math.sin(xo),To=Math.cos(xo),jo=Math.sin(Mo),Eo=Math.cos(Mo),Fo=yo*yo,Ao=1-Fo,Co=Math.sqrt(Ao),Lo=lo+18261.5+go/1440,So=(4.523602-.00092422029*Lo)%t,Uo=Math.sin(So),Do=Math.cos(So),Io=.91375164-.03568096*Do,Ro=Math.sqrt(1-Io*Io),_o=.089683511*Uo/Ro,ko=Math.sqrt(1-_o*_o),Oo=5.8351514+.001944368*Lo,Po=.39785416*Uo/Ro,Zo=ko*Do+.91744867*_o*Uo;Po=Math.atan2(Po,Zo),Po+=Oo-So;var Go=Math.cos(Po),Ho=Math.sin(Po);y=.1945905,b=-.98088458,T=.91744867,j=.39785416,q=qo,w=bo,l=29864797e-13;for(var Yo=1/vo,$o=0;$o<2;)eo=-6*(e=y*q+b*T*w)*(d=-jo*(i=-y*w+b*T*q)+Eo*(c=b*j))+Fo*(-24*(p=e*To+(s=Eo*i+jo*c)*wo)*(z=d*To)-6*(g=-e*wo+s*To)*(f=d*wo)),so=-6*(e*(r=-jo*(h=b*w+y*T*q)+Eo*(m=y*j))+(a=-b*q+y*T*w)*d)+Fo*(-24*((x=a*To+(n=Eo*h+jo*m)*wo)*z+p*(v=r*To))+-6*(g*(u=r*wo)+(M=-a*wo+n*To)*f)),ao=-6*a*r+Fo*(-24*x*v-6*M*u),no=6*s*d+Fo*(24*p*f-6*g*z),ro=6*(n*d+s*r)+Fo*(24*(x*f+p*u)-6*(M*z+g*v)),io=6*n*r+Fo*(24*x*u-6*M*v),X=(X=3*(e*e+s*s)+(co=12*p*p-3*g*g)*Fo)+X+Ao*co,oo=(oo=6*(e*a+s*n)+(ho=24*p*x-6*g*M)*Fo)+oo+Ao*ho,to=(to=3*(a*a+n*n)+(mo=12*x*x-3*M*M)*Fo)+to+Ao*mo,J=-.5*(K=l*Yo)/Co,B=-15*yo*(N=K*Co),Q=p*g+x*M,V=x*g+p*M,W=x*M-p*g,1===($o+=1)&&(E=B,F=J,A=K,C=N,L=Q,S=V,U=W,D=X,I=oo,R=to,_=eo,k=so,O=ao,P=no,Z=ro,G=io,H=co,Y=ho,$=mo,y=Go,b=Ho,T=Io,j=Ro,q=ko*qo+_o*bo,w=bo*ko-qo*_o,l=4.7968065e-7);return{snodm:bo,cnodm:qo,sinim:jo,cosim:Eo,sinomm:wo,cosomm:To,day:Lo,e3:2*B*W,ee2:2*B*V,em:yo,emsq:Fo,gam:Oo,peo:0,pgho:0,pho:0,pinco:0,plo:0,rtemsq:Co,se2:2*E*S,se3:2*E*U,sgh2:2*C*Y,sgh3:2*C*($-H),sgh4:-18*C*uo,sh2:-2*F*Z,sh3:-2*F*(G-P),si2:2*F*k,si3:2*F*(O-_),sl2:-2*A*I,sl3:-2*A*(R-D),sl4:-2*A*(-21-9*Fo)*uo,s1:B,s2:J,s3:K,s4:N,s5:Q,s6:V,s7:W,ss1:E,ss2:F,ss3:A,ss4:C,ss5:L,ss6:S,ss7:U,sz1:D,sz2:I,sz3:R,sz11:_,sz12:k,sz13:O,sz21:P,sz22:Z,sz23:G,sz31:H,sz32:Y,sz33:$,xgh2:2*N*ho,xgh3:2*N*(mo-co),xgh4:-18*N*zo,xh2:-2*J*ro,xh3:-2*J*(io-no),xi2:2*J*so,xi3:2*J*(ao-eo),xl2:-2*K*oo,xl3:-2*K*(to-X),xl4:-2*K*(-21-9*Fo)*zo,nm:vo,z1:X,z2:oo,z3:to,z11:eo,z12:so,z13:ao,z21:no,z22:ro,z23:io,z31:co,z32:ho,z33:mo,zmol:(.2299715*Lo-Oo+4.7199672)%t,zmos:(6.2565837+.017201977*Lo)%t}}({epoch:go,ep:e.ecco,argpp:e.argpo,tc:0,inclp:e.inclo,nodep:e.nodeo,np:e.no,e3:e.e3,ee2:e.ee2,peo:e.peo,pgho:e.pgho,pho:e.pho,pinco:e.pinco,plo:e.plo,se2:e.se2,se3:e.se3,sgh2:e.sgh2,sgh3:e.sgh3,sgh4:e.sgh4,sh2:e.sh2,sh3:e.sh3,si2:e.si2,si3:e.si3,sl2:e.sl2,sl3:e.sl3,sl4:e.sl4,xgh2:e.xgh2,xgh3:e.xgh3,xgh4:e.xgh4,xh2:e.xh2,xh3:e.xh3,xi2:e.xi2,xi3:e.xi3,xl2:e.xl2,xl3:e.xl3,xl4:e.xl4,zmol:e.zmol,zmos:e.zmos});e.e3=Ro.e3,e.ee2=Ro.ee2,e.peo=Ro.peo,e.pgho=Ro.pgho,e.pho=Ro.pho,e.pinco=Ro.pinco,e.plo=Ro.plo,e.se2=Ro.se2,e.se3=Ro.se3,e.sgh2=Ro.sgh2,e.sgh3=Ro.sgh3,e.sgh4=Ro.sgh4,e.sh2=Ro.sh2,e.sh3=Ro.sh3,e.si2=Ro.si2,e.si3=Ro.si3,e.sl2=Ro.sl2,e.sl3=Ro.sl3,e.sl4=Ro.sl4,n=Ro.sinim,a=Ro.cosim,b=Ro.em,q=Ro.emsq,S=Ro.s1,U=Ro.s2,D=Ro.s3,I=Ro.s4,R=Ro.s5,k=Ro.ss1,O=Ro.ss2,P=Ro.ss3,Z=Ro.ss4,G=Ro.ss5,H=Ro.sz1,Y=Ro.sz3,$=Ro.sz11,B=Ro.sz13,J=Ro.sz21,K=Ro.sz23,N=Ro.sz31,Q=Ro.sz33,e.xgh2=Ro.xgh2,e.xgh3=Ro.xgh3,e.xgh4=Ro.xgh4,e.xh2=Ro.xh2,e.xh3=Ro.xh3,e.xi2=Ro.xi2,e.xi3=Ro.xi3,e.xl2=Ro.xl2,e.xl3=Ro.xl3,e.xl4=Ro.xl4,e.zmol=Ro.zmol,e.zmos=Ro.zmos,E=Ro.nm,ao=Ro.z1,no=Ro.z3,ro=Ro.z11,io=Ro.z13,co=Ro.z21,ho=Ro.z23,mo=Ro.z31,lo=Ro.z33;var _o=u(e,{inclo:j,init:e.init,ep:e.ecco,inclp:e.inclo,nodep:e.nodeo,argpp:e.argpo,mp:e.mo,opsmode:e.operationmode});e.ecco=_o.ep,e.inclo=_o.inclp,e.nodeo=_o.nodep,e.argpo=_o.argpp,e.mo=_o.mp,0,0,0;var ko=function(e){var s,a,n,d,i,c,h,m,l,p,g,M,f,u,z,v,y,b=e.cosim,q=e.argpo,w=e.s1,T=e.s2,j=e.s3,E=e.s4,F=e.s5,A=e.sinim,C=e.ss1,L=e.ss2,S=e.ss3,U=e.ss4,D=e.ss5,I=e.sz1,R=e.sz3,_=e.sz11,k=e.sz13,O=e.sz21,P=e.sz23,Z=e.sz31,G=e.sz33,H=e.t,Y=e.tc,$=e.gsto,B=e.mo,J=e.mdot,K=e.no,N=e.nodeo,Q=e.nodedot,V=e.xpidot,W=e.z1,X=e.z3,oo=e.z11,to=e.z13,eo=e.z21,so=e.z23,ao=e.z31,no=e.z33,ro=e.ecco,io=e.eccsq,co=e.emsq,ho=e.em,mo=e.argpm,lo=e.inclm,po=e.mm,xo=e.nm,go=e.nodem,Mo=e.irez,fo=e.atime,uo=e.d2201,zo=e.d2211,vo=e.d3210,yo=e.d3222,bo=e.d4410,qo=e.d4422,wo=e.d5220,To=e.d5232,jo=e.d5421,Eo=e.d5433,Fo=e.dedt,Ao=e.didt,Co=e.dmdt,Lo=e.dnodt,So=e.domdt,Uo=e.del1,Do=e.del2,Io=e.del3,Ro=e.xfact,_o=e.xlamo,ko=e.xli,Oo=e.xni,Po=.0043752690880113,Zo=.00015835218,Go=119459e-10;Mo=0,xo<.0052359877&&xo>.0034906585&&(Mo=1),xo>=.00826&&xo<=.00924&&ho>=.5&&(Mo=2);var Ho=-Go*L*(O+P);(lo<.052359877||lo>o-.052359877)&&(Ho=0),0!==A&&(Ho/=A);var Yo=-Zo*T*(eo+so);(lo<.052359877||lo>o-.052359877)&&(Yo=0),So=U*Go*(Z+G-6)-b*Ho+E*Zo*(ao+no-6),Lo=Ho,0!==A&&(So-=b/A*Yo,Lo+=Yo/A);var $o=($+Y*Po)%t;if(ho+=(Fo=C*Go*D+w*Zo*F)*H,lo+=(Ao=L*Go*(_+k)+T*Zo*(oo+to))*H,mo+=So*H,go+=Lo*H,po+=(Co=-Go*S*(I+R-14-6*co)-Zo*j*(W+X-14-6*co))*H,0!==Mo){if(z=Math.pow(xo/r,x),2===Mo){var Bo=ho,Jo=co;y=(ho=ro)*(co=io),ho<=.65?(n=3.616-13.247*ho+16.29*co,d=117.39*ho-19.302-228.419*co+156.591*y,i=109.7927*ho-18.9068-214.6334*co+146.5816*y,c=242.694*ho-41.122-471.094*co+313.953*y,h=841.88*ho-146.407-1629.014*co+1083.435*y,m=3017.977*ho-532.114-5740.032*co+3708.276*y):(n=331.819*ho-72.099-508.738*co+266.724*y,d=1582.851*ho-346.844-2415.925*co+1246.113*y,i=1554.908*ho-342.585-2366.899*co+1215.972*y,c=4758.686*ho-1052.797-7193.992*co+3651.957*y,h=16178.11*ho-3581.69-24462.77*co+12422.52*y,m=ho>.715?29936.92*ho-5149.66-54087.36*co+31324.56*y:1464.74-4664.75*ho+3763.64*co),ho<.7?(g=4988.61*ho-919.2277-9064.77*co+5542.21*y,l=4568.6173*ho-822.71072-8491.4146*co+5337.524*y,p=4690.25*ho-853.666-8624.77*co+5341.4*y):(g=161616.52*ho-37995.78-229838.2*co+109377.94*y,l=218913.95*ho-51752.104-309468.16*co+146349.42*y,p=170470.89*ho-40023.88-242699.48*co+115605.82*y),uo=(f=17891679e-13*(u=xo*xo*3*(z*z)))*(s=.75*(1+2*b+(v=b*b)))*(-.306-.44*(ho-.64)),zo=f*(1.5*(M=A*A))*n,vo=(f=3.7393792e-7*(u*=z))*(1.875*A*(1-2*b-3*v))*d,yo=f*(-1.875*A*(1+2*b-3*v))*i,bo=(f=2*(u*=z)*7.3636953e-9)*(35*M*s)*c,qo=f*(39.375*M*M)*h,wo=(f=1.1428639e-7*(u*=z))*(9.84375*A*(M*(1-2*b-5*v)+.33333333*(4*b-2+6*v)))*m,To=f*(A*(4.92187512*M*(-2-4*b+10*v)+6.56250012*(1+2*b-3*v)))*p,jo=(f=2*u*2.1765803e-9)*(29.53125*A*(2-8*b+v*(8*b-12+10*v)))*l,Eo=f*(29.53125*A*(-2-8*b+v*(12+8*b-10*v)))*g,_o=(B+N+N-($o+$o))%t,Ro=J+Co+2*(Q+Lo-Po)-K,ho=Bo,co=Jo}1===Mo&&(a=1+b,Do=2*(Uo=3*xo*xo*z*z)*(s=.75*(1+b)*(1+b))*(1+co*(.8125*co-2.5))*17891679e-13,Io=3*Uo*(a*=1.875*a*a)*(1+co*(6.60937*co-6))*2.2123015e-7*z,Uo=Uo*(.9375*A*A*(1+3*b)-.75*(1+b))*(d=1+2*co)*21460748e-13*z,_o=(B+N+q-$o)%t,Ro=J+V+Co+So+Lo-(K+Po)),ko=_o,Oo=K,fo=0,xo=K+0}return{em:ho,argpm:mo,inclm:lo,mm:po,nm:xo,nodem:go,irez:Mo,atime:fo,d2201:uo,d2211:zo,d3210:vo,d3222:yo,d4410:bo,d4422:qo,d5220:wo,d5232:To,d5421:jo,d5433:Eo,dedt:Fo,didt:Ao,dmdt:Co,dndt:0,dnodt:Lo,domdt:So,del1:Uo,del2:Do,del3:Io,xfact:Ro,xlamo:_o,xli:ko,xni:Oo}}({cosim:a,emsq:q,argpo:e.argpo,s1:S,s2:U,s3:D,s4:I,s5:R,sinim:n,ss1:k,ss2:O,ss3:P,ss4:Z,ss5:G,sz1:H,sz3:Y,sz11:$,sz13:B,sz21:J,sz23:K,sz31:N,sz33:Q,t:e.t,tc:0,gsto:e.gsto,mo:e.mo,mdot:e.mdot,no:e.no,nodeo:e.nodeo,nodedot:e.nodedot,xpidot:eo,z1:ao,z3:no,z11:ro,z13:io,z21:co,z23:ho,z31:mo,z33:lo,ecco:e.ecco,eccsq:Fo,em:b,argpm:0,inclm:j,mm:0,nm:E,nodem:0,irez:e.irez,atime:e.atime,d2201:e.d2201,d2211:e.d2211,d3210:e.d3210,d3222:e.d3222,d4410:e.d4410,d4422:e.d4422,d5220:e.d5220,d5232:e.d5232,d5421:e.d5421,d5433:e.d5433,dedt:e.dedt,didt:e.didt,dmdt:e.dmdt,dnodt:e.dnodt,domdt:e.domdt,del1:e.del1,del2:e.del2,del3:e.del3,xfact:e.xfact,xlamo:e.xlamo,xli:e.xli,xni:e.xni});e.irez=ko.irez,e.atime=ko.atime,e.d2201=ko.d2201,e.d2211=ko.d2211,e.d3210=ko.d3210,e.d3222=ko.d3222,e.d4410=ko.d4410,e.d4422=ko.d4422,e.d5220=ko.d5220,e.d5232=ko.d5232,e.d5421=ko.d5421,e.d5433=ko.d5433,e.dedt=ko.dedt,e.didt=ko.didt,e.dmdt=ko.dmdt,e.dnodt=ko.dnodt,e.domdt=ko.domdt,e.del1=ko.del1,e.del2=ko.del2,e.del3=ko.del3,e.xfact=ko.xfact,e.xlamo=ko.xlamo,e.xli=ko.xli,e.xni=ko.xni}1!==e.isimp&&(i=e.cc1*e.cc1,e.d2=4*wo*to*i,V=e.d2*to*e.cc1/3,e.d3=(17*wo+_)*V,e.d4=.5*V*wo*to*(221*wo+31*_)*e.cc1,e.t3cof=e.d2+2*i,e.t4cof=.25*(3*e.d3+e.cc1*(12*e.d2+10*i)),e.t5cof=.2*(3*e.d4+12*e.cc1*e.d3+6*e.d2*e.d2+15*i*(2*e.d2+i)))}y(e,0),e.init="n"}function q(o){return function(o){if(Array.isArray(o))return w(o)}(o)||function(o){if("undefined"!=typeof Symbol&&null!=o[Symbol.iterator]||null!=o["@@iterator"])return Array.from(o)}(o)||function(o,t){if(!o)return;if("string"==typeof o)return w(o,t);var e=Object.prototype.toString.call(o).slice(8,-1);"Object"===e&&o.constructor&&(e=o.constructor.name);if("Map"===e||"Set"===e)return Array.from(o);if("Arguments"===e||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(e))return w(o,t)}(o)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function w(o,t){(null==t||t>o.length)&&(t=o.length);for(var e=0,s=new Array(t);e<t;e++)s[e]=o[e];return s}function T(o){return o*s}function j(o){return o*e}function E(o){var t=o.longitude,e=o.latitude,s=o.height,a=6378.137,n=(a-6356.7523142)/a,d=2*n-n*n,r=a/Math.sqrt(1-d*(Math.sin(e)*Math.sin(e)));return{x:(r+s)*Math.cos(e)*Math.cos(t),y:(r+s)*Math.cos(e)*Math.sin(t),z:(r*(1-d)+s)*Math.sin(e)}}var F={constants:Object.freeze({__proto__:null,deg2rad:e,earthRadius:d,j2:h,j3:m,j3oj2:p,j4:l,minutesPerDay:a,mu:n,pi:o,rad2deg:s,tumin:c,twoPi:t,vkmpersec:i,x2o3:x,xke:r}),propagate:function(){for(var o=arguments.length,t=new Array(o),e=0;e<o;e++)t[e]=arguments[e];var s=t[0],n=Array.prototype.slice.call(t,1),d=f.apply(void 0,q(n)),r=(d-s.jdsatepoch)*a;return y(s,r)},sgp4:y,twoline2satrec:function(t,s){var a=1440/(2*o),n=0,d={error:0};d.satnum=t.substring(2,7),d.epochyr=parseInt(t.substring(18,20),10),d.epochdays=parseFloat(t.substring(20,32)),d.ndot=parseFloat(t.substring(33,43)),d.nddot=parseFloat(".".concat(parseInt(t.substring(44,50),10),"E").concat(t.substring(50,52))),d.bstar=parseFloat("".concat(t.substring(53,54),".").concat(parseInt(t.substring(54,59),10),"E").concat(t.substring(59,61))),d.inclo=parseFloat(s.substring(8,16)),d.nodeo=parseFloat(s.substring(17,25)),d.ecco=parseFloat(".".concat(s.substring(26,33))),d.argpo=parseFloat(s.substring(34,42)),d.mo=parseFloat(s.substring(43,51)),d.no=parseFloat(s.substring(52,63)),d.no/=a,d.inclo*=e,d.nodeo*=e,d.argpo*=e,d.mo*=e;var r=g(n=d.epochyr<57?d.epochyr+2e3:d.epochyr+1900,d.epochdays),i=r.mon,c=r.day,h=r.hr,m=r.minute,l=r.sec;return d.jdsatepoch=f(n,i,c,h,m,l),b(d,{opsmode:"i",satn:d.satnum,epoch:d.jdsatepoch-2433281.5,xbstar:d.bstar,xecco:d.ecco,xargpo:d.argpo,xinclo:d.inclo,xmo:d.mo,xno:d.no,xnodeo:d.nodeo}),d},gstime:v,jday:f,invjday:function(o,t){var e=o-2415019.5,s=e/365.25,a=1900+Math.floor(s),n=Math.floor(.25*(a-1901)),d=e-(365*(a-1900)+n)+1e-11;d<1&&(d=e-(365*((a-=1)-1900)+(n=Math.floor(.25*(a-1901)))));var r=g(a,d),i=r.mon,c=r.day,h=r.hr,m=r.minute,l=r.sec-864e-9;return t?[a,i,c,h,m,Math.floor(l)]:new Date(Date.UTC(a,i-1,c,h,m,Math.floor(l)))},dopplerFactor:function(o,t,e){var s=7292115e-11,a={x:t.x-o.x,y:t.y-o.y,z:t.z-o.z};a.w=Math.sqrt(Math.pow(a.x,2)+Math.pow(a.y,2)+Math.pow(a.z,2));var n=e.x+s*o.y,d=e.y-s*o.x,r=e.z,i=(a.x*n+a.y*d+a.z*r)/a.w;return 1+i/299792.458*(i>=0?1:-1)},radiansToDegrees:T,degreesToRadians:j,degreesLat:function(t){if(t<-o/2||t>o/2)throw new RangeError("Latitude radians must be in range [-pi/2; pi/2].");return T(t)},degreesLong:function(t){if(t<-o||t>o)throw new RangeError("Longitude radians must be in range [-pi; pi].");return T(t)},radiansLat:function(o){if(o<-90||o>90)throw new RangeError("Latitude degrees must be in range [-90; 90].");return j(o)},radiansLong:function(o){if(o<-180||o>180)throw new RangeError("Longitude degrees must be in range [-180; 180].");return j(o)},geodeticToEcf:E,eciToGeodetic:function(e,s){for(var a=6378.137,n=Math.sqrt(e.x*e.x+e.y*e.y),d=(a-6356.7523142)/a,r=2*d-d*d,i=Math.atan2(e.y,e.x)-s;i<-o;)i+=t;for(;i>o;)i-=t;for(var c,h=0,m=Math.atan2(e.z,Math.sqrt(e.x*e.x+e.y*e.y));h<20;)c=1/Math.sqrt(1-r*(Math.sin(m)*Math.sin(m))),m=Math.atan2(e.z+a*c*r*Math.sin(m),n),h+=1;return{longitude:i,latitude:m,height:n/Math.cos(m)-a*c}},eciToEcf:function(o,t){return{x:o.x*Math.cos(t)+o.y*Math.sin(t),y:o.x*-Math.sin(t)+o.y*Math.cos(t),z:o.z}},ecfToEci:function(o,t){return{x:o.x*Math.cos(t)-o.y*Math.sin(t),y:o.x*Math.sin(t)+o.y*Math.cos(t),z:o.z}},ecfToLookAngles:function(t,e){var s,a,n,d,r,i,c=function(o,t){var e=o.longitude,s=o.latitude,a=E(o),n=t.x-a.x,d=t.y-a.y,r=t.z-a.z;return{topS:Math.sin(s)*Math.cos(e)*n+Math.sin(s)*Math.sin(e)*d-Math.cos(s)*r,topE:-Math.sin(e)*n+Math.cos(e)*d,topZ:Math.cos(s)*Math.cos(e)*n+Math.cos(s)*Math.sin(e)*d+Math.sin(s)*r}}(t,e);return a=(s=c).topS,n=s.topE,d=s.topZ,r=Math.sqrt(a*a+n*n+d*d),i=Math.asin(d/r),{azimuth:Math.atan2(-n,a)+o,elevation:i,rangeSat:r}}};return F}));
 
-  const meanLon = (280.460 + 0.9856474*d) % 360;
-  const meanAnom = ((357.528 + 0.9856003*d) % 360) * rad;
-  const eclLon = (meanLon + 1.915*Math.sin(meanAnom) + 0.020*Math.sin(2*meanAnom)) * rad;
-  const obliquity = (23.439 - 0.0000004*d) * rad;
+</script>
+<script>
+'use strict';
+/* ==========================================================================
+   UTILITATS
+   ========================================================================== */
+const $ = id => document.getElementById(id);
+const RAD = Math.PI / 180;
+const DIES_CURT = ['DG','DL','DT','DC','DJ','DV','DS'];
+const DIES_MIN = ['dg','dl','dt','dc','dj','dv','ds'];
+const MESOS_CURT = ['GEN','FEB','MAR','ABR','MAI','JUN','JUL','AGO','SET','OCT','NOV','DES'];
+const MESOS = ['gener','febrer','març','abril','maig','juny','juliol','agost','setembre','octubre','novembre','desembre'];
+const MESOS_CAP = MESOS.map(m => m.charAt(0).toUpperCase() + m.slice(1));
+const dosD = n => String(n).padStart(2, '0');
+const hm = d => d ? `${dosD(d.getHours())}:${dosD(d.getMinutes())}` : '--:--';
+function num(n, dec = 0){
+  const s = Math.abs(n).toFixed(dec); let [e, f] = s.split('.');
+  e = e.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  return (n < 0 ? '−' : '') + (f ? e + ',' + f : e);
+}
+const graus = t => num(t, Math.abs(t) < 10 ? 1 : 0) + '°';
+const desa = (k, v) => { try { localStorage.setItem('kontrol.' + k, JSON.stringify(v)); } catch(e){} };
+const llegeix = (k, def) => { try { const v = localStorage.getItem('kontrol.' + k); return v == null ? def : JSON.parse(v); } catch(e){ return def; } };
+function ambTemps(prom, ms){
+  return new Promise((res, rej) => { const t = setTimeout(() => rej(new Error('temps')), ms); prom.then(v => { clearTimeout(t); res(v); }, e => { clearTimeout(t); rej(e); }); });
+}
+function demanaJSON(url, ms = 12000){
+  return ambTemps(fetch(url), ms).then(r => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); });
+}
+const _ta = document.createElement('textarea');
+function neteja(s){ _ta.innerHTML = String(s || ''); return _ta.value.replace(/\s+/g, ' ').trim(); }
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const jd = d => d.getTime() / 86400000 + 2440587.5;
 
-  const decl = Math.asin(Math.sin(obliquity) * Math.sin(eclLon)) / rad;
-
-  let ra = Math.atan2(Math.cos(obliquity)*Math.sin(eclLon), Math.cos(eclLon)) / rad;
-  ra = ((ra % 360) + 360) % 360;
-
-  const gmst = (280.46061837 + 360.98564736629*d) % 360;
-  let lon = ra - gmst;
-  lon = ((lon + 180) % 360 + 360) % 360 - 180;
-
-  return { lat: decl, lon: lon };
+/* ==========================================================================
+   LLISCADOR (finestres)
+   ========================================================================== */
+class Lliscador {
+  constructor(sec){
+    this.sec = sec; this.pista = sec.querySelector('.pista');
+    this.panes = [...this.pista.children];
+    this.i = Math.min(llegeix(sec.id, 0) || 0, this.panes.length - 1);
+    this.punts = sec.querySelector('.punts');
+    this.punts.innerHTML = '';
+    this.panes.forEach((p, k) => {
+      const b = document.createElement('button'); b.type = 'button';
+      b.setAttribute('aria-label', (p.getAttribute('aria-label') || 'Pantalla') + ` (${k + 1} de ${this.panes.length})`);
+      b.addEventListener('click', () => this.ves(k));
+      this.punts.appendChild(b);
+    });
+    this.ant = sec.querySelector('.fletxa.ant'); this.seg = sec.querySelector('.fletxa.seg');
+    this.ant.addEventListener('click', () => this.ves(this.i - 1));
+    this.seg.addEventListener('click', () => this.ves(this.i + 1));
+    sec.addEventListener('keydown', e => {
+      if (e.target.closest('input')) return;
+      if (e.key === 'ArrowLeft'){ this.ves(this.i - 1); e.preventDefault(); }
+      if (e.key === 'ArrowRight'){ this.ves(this.i + 1); e.preventDefault(); }
+    });
+    // arrossegament amb el dit o el ratolí
+    let x0 = 0, y0 = 0, t0 = 0, dx = 0, actiu = false, horitz = null, id = null;
+    sec.addEventListener('pointerdown', e => {
+      if (e.button !== 0 || e.target.closest('input, select, textarea')) return;
+      actiu = true; horitz = null; dx = 0; x0 = e.clientX; y0 = e.clientY; t0 = performance.now(); id = e.pointerId;
+    });
+    sec.addEventListener('pointermove', e => {
+      if (!actiu || e.pointerId !== id) return;
+      const ddx = e.clientX - x0, ddy = e.clientY - y0;
+      if (horitz === null){
+        if (Math.abs(ddx) < 8 && Math.abs(ddy) < 8) return;
+        horitz = Math.abs(ddx) > Math.abs(ddy);
+        if (!horitz){ actiu = false; return; }
+        try { sec.setPointerCapture(id); } catch(_){}
+        this.pista.classList.add('arrossega');
+      }
+      dx = ddx;
+      const vora = (this.i === 0 && dx > 0) || (this.i === this.panes.length - 1 && dx < 0);
+      this.posa(vora ? dx * .3 : dx);
+    });
+    const acaba = e => {
+      if (!actiu || (e && e.pointerId !== id)) return;
+      actiu = false;
+      if (!horitz){ return; }
+      this.pista.classList.remove('arrossega');
+      const v = dx / Math.max(1, performance.now() - t0);
+      const w = sec.clientWidth;
+      if (dx < -w * .18 || v < -.35) this.ves(this.i + 1);
+      else if (dx > w * .18 || v > .35) this.ves(this.i - 1);
+      else this.ves(this.i);
+      this.blocaClic = true; setTimeout(() => this.blocaClic = false, 60);
+    };
+    sec.addEventListener('pointerup', acaba);
+    sec.addEventListener('pointercancel', acaba);
+    sec.addEventListener('click', e => { if (this.blocaClic){ e.preventDefault(); e.stopPropagation(); } }, true);
+    // trackpad o roda horitzontal
+    let acum = 0, espera = 0;
+    sec.addEventListener('wheel', e => {
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
+      e.preventDefault();
+      if (performance.now() < espera) return;
+      acum += e.deltaX;
+      if (Math.abs(acum) > 40){ this.ves(this.i + (acum > 0 ? 1 : -1)); acum = 0; espera = performance.now() + 450; }
+    }, { passive:false });
+    this.ves(this.i, true);
+  }
+  posa(px){ this.pista.style.transform = `translateX(calc(${-this.i * 100}% + ${px}px))`; }
+  ves(k, inicial){
+    k = Math.max(0, Math.min(this.panes.length - 1, k));
+    this.i = k; this.posa(0);
+    [...this.punts.children].forEach((b, n) => b.setAttribute('aria-current', n === k ? 'true' : 'false'));
+    this.panes.forEach((p, n) => p.setAttribute('aria-hidden', n === k ? 'false' : 'true'));
+    this.ant.disabled = k === 0; this.seg.disabled = k === this.panes.length - 1;
+    if (!inicial) desa(this.sec.id, k);
+    if (this.onCanvi) this.onCanvi(k);
+  }
 }
 
-// Fase lunar a partir del cicle sinòdic (29.53058867 dies)
-function getMoonPhase(date){
-  const synodic = 29.530588861;
-  const knownNewMoon = Date.UTC(2000,0,6,18,14,0);
-  let days = (date.getTime() - knownNewMoon) / 86400000;
-  let phase = (days % synodic) / synodic;
-  if(phase < 0) phase += 1;
-  const illumination = (1 - Math.cos(2*Math.PI*phase)) / 2;
-
-  let name;
-  if(phase < 0.02 || phase > 0.98) name = 'Lluna nova';
-  else if(phase < 0.24) name = 'Lluna creixent';
-  else if(phase < 0.26) name = 'Quart creixent';
-  else if(phase < 0.49) name = 'Gibosa creixent';
-  else if(phase < 0.51) name = 'Lluna plena';
-  else if(phase < 0.74) name = 'Gibosa minvant';
-  else if(phase < 0.76) name = 'Quart minvant';
-  else name = 'Lluna minvant';
-
-  return { phase, illumination, name };
-}
-
-function latLonToVector3(lat, lon, radius){
-  const phi = (90 - lat) * (Math.PI/180);
-  const theta = (lon + 180) * (Math.PI/180);
-  const x = -radius * Math.sin(phi) * Math.cos(theta);
-  const z =  radius * Math.sin(phi) * Math.sin(theta);
-  const y =  radius * Math.cos(phi);
-  return new THREE.Vector3(x, y, z);
-}
-
-const BARCELONA = { lat: 41.3874, lon: 2.1686 };
-
-/* ============================================================
-   ESCENA — TERRA
-   ============================================================ */
-
-const earthCanvas = document.getElementById('earthCanvas');
-const earthRenderer = new THREE.WebGLRenderer({ canvas: earthCanvas, antialias:true, alpha:true });
-const earthScene = new THREE.Scene();
-const earthCamera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-
-const EARTH_R = 2;
-const camPos = latLonToVector3(BARCELONA.lat, BARCELONA.lon, EARTH_R * 5.1);
-earthCamera.position.copy(camPos);
-earthCamera.lookAt(0,0,0);
-
-const loader = new THREE.TextureLoader();
-loader.crossOrigin = 'anonymous';
-const dayTex = loader.load('https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg');
-const nightTex = loader.load('https://threejs.org/examples/textures/planets/earth_lights_2048.png');
-
-const earthUniforms = {
-  dayTexture: { value: dayTex },
-  nightTexture: { value: nightTex },
-  sunDirection: { value: new THREE.Vector3(1,0,0) }
+/* ==========================================================================
+   EFEMÈRIDES: PLANETES (elements keplerians aproximats, JPL), LLUNA (Meeus)
+   ========================================================================== */
+const EPS = 23.4392911 * RAD;
+const eclEq = ([x, y, z]) => [x, y * Math.cos(EPS) - z * Math.sin(EPS), y * Math.sin(EPS) + z * Math.cos(EPS)];
+const ELEM = {
+  mercuri:[0.38709927,0.20563593,7.00497902,252.25032350,77.45779628,48.33076593, 0.00000037,0.00001906,-0.00594749,149472.67411175,0.16047689,-0.12534081],
+  venus:[0.72333566,0.00677672,3.39467605,181.97909950,131.60246718,76.67984255, 0.00000390,-0.00004107,-0.00078890,58517.81538729,0.00268329,-0.27769418],
+  terra:[1.00000261,0.01671123,-0.00001531,100.46457166,102.93768193,0.0, 0.00000562,-0.00004392,-0.01294668,35999.37244981,0.32327364,0.0],
+  mart:[1.52371034,0.09339410,1.84969142,-4.55343205,-23.94362959,49.55953891, 0.00001847,0.00007882,-0.00813131,19140.30268499,0.44441088,-0.29257343],
+  jupiter:[5.20288700,0.04838624,1.30439695,34.39644051,14.72847983,100.47390909, -0.00011607,-0.00013253,-0.00183714,3034.74612775,0.21252668,0.20469106],
+  saturn:[9.53667594,0.05386179,2.48599187,49.95424423,92.59887831,113.66242448, -0.00125060,-0.00050991,0.00193609,1222.49362201,-0.41897216,-0.28867794],
+  ura:[19.18916464,0.04725744,0.77263783,313.23810451,170.95427630,74.01692503, -0.00196176,-0.00004397,-0.00242939,428.48202785,0.40805281,0.04240589],
+  neptu:[30.06992276,0.00859048,1.77004347,-55.12002969,44.96476227,131.78422574, 0.00026291,0.00005105,0.00035372,218.45945325,-0.32241464,-0.00508664]
 };
+function helio(id, d){
+  const T = (jd(d) - 2451545) / 36525, el = ELEM[id];
+  const [a, e, I, L, w, O] = [0,1,2,3,4,5].map(k => el[k] + el[k + 6] * T);
+  const M = ((L - w) % 360) * RAD, om = (w - O) * RAD, i = I * RAD, o = O * RAD;
+  let E = M; for (let k = 0; k < 12; k++) E -= (E - e * Math.sin(E) - M) / (1 - e * Math.cos(E));
+  const x = a * (Math.cos(E) - e), y = a * Math.sqrt(1 - e * e) * Math.sin(E);
+  const co = Math.cos(om), so = Math.sin(om), cO = Math.cos(o), sO = Math.sin(o), ci = Math.cos(i), si = Math.sin(i);
+  return [(co * cO - so * sO * ci) * x + (-so * cO - co * sO * ci) * y,
+          (co * sO + so * cO * ci) * x + (-so * sO + co * cO * ci) * y,
+          (so * si) * x + (co * si) * y];
+}
+const sub = (a, b) => [a[0] - b[0], a[1] - b[1], a[2] - b[2]];
+const len = a => Math.hypot(a[0], a[1], a[2]);
+const nrm = a => { const l = len(a); return [a[0] / l, a[1] / l, a[2] / l]; };
+const dot = (a, b) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+const UA = 149597870.7;
 
-const earthMaterial = new THREE.ShaderMaterial({
-  uniforms: earthUniforms,
-  vertexShader: `
-    varying vec3 vWorldNormal;
-    varying vec2 vUv;
-    void main(){
-      vWorldNormal = normalize(mat3(modelMatrix) * normal);
-      vUv = uv;
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
-    }
-  `,
-  fragmentShader: `
-    uniform sampler2D dayTexture;
-    uniform sampler2D nightTexture;
-    uniform vec3 sunDirection;
-    varying vec3 vWorldNormal;
-    varying vec2 vUv;
-    void main(){
-      float intensity = dot(normalize(vWorldNormal), normalize(sunDirection));
-      float mixFactor = smoothstep(-0.18, 0.18, intensity);
-      vec4 dayColor = texture2D(dayTexture, vUv);
-      vec4 nightColor = texture2D(nightTexture, vUv) * 1.3;
-      gl_FragColor = mix(nightColor, dayColor, mixFactor);
-      gl_FragColor.a = 1.0;
-    }
-  `
+// posició geocèntrica d'un planeta (equatorial J2000, UA) i direcció planeta→Sol
+function planeta(id, d){
+  const E = helio('terra', d), P = helio(id, d);
+  const g = sub(P, E), dist = len(g);
+  const cosA = dot(nrm([-P[0], -P[1], -P[2]]), nrm(sub(E, P)));
+  return { g: eclEq(g), sol: eclEq(nrm([-P[0], -P[1], -P[2]])), dist, fase: (1 + cosA) / 2, rSol: len(P) };
+}
+
+function lluna(d){
+  const T = (jd(d) - 2451545) / 36525;
+  const Lp = 218.3164477 + 481267.88123421 * T, D = 297.8501921 + 445267.1114034 * T,
+        M = 357.5291092 + 35999.0502909 * T, Mp = 134.9633964 + 477198.8675055 * T, F = 93.2720950 + 483202.0175233 * T;
+  const s = x => Math.sin(x * RAD), c = x => Math.cos(x * RAD);
+  let lon = Lp + 6.288774*s(Mp) + 1.274027*s(2*D-Mp) + 0.658314*s(2*D) + 0.213618*s(2*Mp) - 0.185116*s(M) - 0.114332*s(2*F)
+    + 0.058793*s(2*D-2*Mp) + 0.057066*s(2*D-M-Mp) + 0.053322*s(2*D+Mp) + 0.045758*s(2*D-M) - 0.040923*s(M-Mp) - 0.034720*s(D) - 0.030383*s(M+Mp)
+    + 0.015327*s(2*D-2*F) - 0.012528*s(Mp+2*F) + 0.010980*s(Mp-2*F) + 0.010675*s(4*D-Mp) + 0.010034*s(3*Mp) + 0.008548*s(4*D-2*Mp);
+  const lat = 5.128122*s(F) + 0.280602*s(Mp+F) + 0.277693*s(Mp-F) + 0.173237*s(2*D-F) + 0.055413*s(2*D-F+Mp) + 0.046271*s(2*D-F-Mp)
+    + 0.032573*s(2*D+F) + 0.017198*s(2*Mp+F) + 0.009266*s(2*D+Mp-F) + 0.008822*s(2*Mp-F);
+  const dist = 385000.56 - 20905.355*c(Mp) - 3699.111*c(2*D-Mp) - 2955.968*c(2*D) - 569.925*c(2*Mp) + 48.888*c(M) - 3.149*c(2*F)
+    + 246.158*c(2*D-2*Mp) - 152.138*c(2*D-M-Mp) - 170.733*c(2*D+Mp) - 204.586*c(2*D-M) - 129.620*c(M-Mp) + 108.743*c(D) + 104.755*c(M+Mp)
+    + 10.321*c(2*D-2*F) + 79.661*c(Mp-2*F) - 34.782*c(4*D-Mp) - 23.210*c(3*Mp) - 21.636*c(4*D-2*Mp);
+  lon -= 1.3969713 * T;                       // de l'equinocci de la data a J2000
+  const l = lon * RAD, b = lat * RAD;
+  const ecl = [Math.cos(b) * Math.cos(l), Math.cos(b) * Math.sin(l), Math.sin(b)];
+  const E = helio('terra', d), solEcl = nrm([-E[0], -E[1], -E[2]]);
+  const lSol = Math.atan2(solEcl[1], solEcl[0]);
+  let elong = ((l - lSol) / RAD) % 360; if (elong < 0) elong += 360;
+  const cosPsi = dot(ecl, solEcl);
+  const illum = (1 - cosPsi) / 2;
+  const v = eclEq(ecl).map(k => k * dist / UA), solG = eclEq(solEcl);
+  const solDir = nrm(sub(solG.map(k => k * len(E)), v));     // de la Lluna cap al Sol
+  return { dist, elong, illum, edat: elong / 360 * 29.530589, g: eclEq(ecl), sol: solDir };
+}
+function nomFase(e){
+  if (e < 8 || e >= 352) return 'Lluna nova';
+  if (e < 82) return 'Lluna creixent';
+  if (e < 98) return 'Quart creixent';
+  if (e < 172) return 'Gibosa creixent';
+  if (e < 188) return 'Lluna plena';
+  if (e < 262) return 'Gibosa minvant';
+  if (e < 278) return 'Quart minvant';
+  return 'Lluna minvant';
+}
+
+// Llunes galileanes (Meeus, mètode de baixa precisió). X en radis de Júpiter, positiu cap a l'oest.
+function galileanes(dt){
+  const d = jd(dt) - 2451545.0, s = x => Math.sin(x * RAD), c = x => Math.cos(x * RAD);
+  const V = 172.74 + 0.00111588 * d, M = 357.529 + 0.9856003 * d;
+  const N = 20.020 + 0.0830853 * d + 0.329 * s(V), J = 66.115 + 0.9025179 * d - 0.329 * s(V);
+  const A = 1.915 * s(M) + 0.020 * s(2 * M), B = 5.555 * s(N) + 0.168 * s(2 * N), K = J + A - B;
+  const R = 1.00014 - 0.01671 * c(M) - 0.00014 * c(2 * M), r = 5.20872 - 0.25208 * c(N) - 0.00611 * c(2 * N);
+  const D = Math.sqrt(r * r + R * R - 2 * r * R * c(K)), psi = Math.asin(R / D * s(K)) / RAD, t = d - D / 173;
+  let u1 = 163.8069 + 203.4058646 * t + psi - B, u2 = 358.4140 + 101.2916335 * t + psi - B,
+      u3 = 5.7176 + 50.2345180 * t + psi - B, u4 = 224.8092 + 21.4879800 * t + psi - B;
+  const G = 331.18 + 50.310482 * t, H = 87.45 + 21.569231 * t;
+  const u1c = u1 + 0.473 * s(2 * (u1 - u2)), u2c = u2 + 1.065 * s(2 * (u2 - u3)), u3c = u3 + 0.165 * s(G), u4c = u4 + 0.843 * s(H);
+  const r1 = 5.9057 - 0.0244 * c(2 * (u1 - u2)), r2 = 9.3966 - 0.0882 * c(2 * (u2 - u3)), r3 = 14.9883 - 0.0216 * c(G), r4 = 26.3627 - 0.1939 * c(H);
+  return [['I', r1 * s(u1c), r1 * c(u1c)], ['E', r2 * s(u2c), r2 * c(u2c)], ['G', r3 * s(u3c), r3 * c(u3c)], ['C', r4 * s(u4c), r4 * c(u4c)]];
+}
+
+/* ==========================================================================
+   FINESTRA 1 · COSSOS CELESTES (Three.js, un sol renderitzador compartit)
+   ========================================================================== */
+const TERRA_DIAM = 12756;
+const COSSOS = [
+  { id:'terra' },
+  { id:'lluna', nom:'Lluna', diam:3475, tex:'lluna.jpg', pol:[270, 66.56], rp:.72 },
+  { id:'mercuri', nom:'Mercuri', ord:1, diam:4879, tex:'mercuri.jpg', pol:[281.01, 61.45], W:[329.5469, 6.1385025], fase:true, rp:.66 },
+  { id:'venus', nom:'Venus', ord:2, diam:12104, proc:'venus', pol:[272.76, 67.16], W:[160.20, -1.4813688], fase:true, limb:.35, rp:.66 },
+  { id:'mart', nom:'Mart', ord:4, diam:6792, tex:'mart.jpg', pol:[317.68, 52.89], W:[176.63, 350.89198226], fase:true, limb:.08, rp:.62 },
+  { id:'jupiter', nom:'Júpiter', ord:5, diam:142984, tex:'jupiter.jpg', pol:[268.06, 64.50], W:[284.95, 870.536], obl:.935, limb:.45, rp:.34, llunes:true },
+  { id:'saturn', nom:'Saturn', ord:6, diam:120536, tex:'saturn.jpg', pol:[40.59, 83.54], W:[38.90, 810.7939024], obl:.902, limb:.45, rp:.38, anells:true },
+  { id:'ura', nom:'Urà', ord:7, diam:51118, tex:'ura.jpg', pol:[257.31, -15.18], W:[203.81, -501.1600928], obl:.977, limb:.5, rp:.6 },
+  { id:'neptu', nom:'Neptú', ord:8, diam:49528, tex:'neptu.jpg', pol:[299.36, 43.46], W:[249.978, 541.1397757], obl:.983, limb:.5, rp:.6 },
+  { id:'tita', nom:'Tità', diam:5150, proc:'tita', pol:[40.59, 83.54], W:[0, 22.5769768], limb:.25, rp:.6, atm:true },
+  { id:'eei' }
+];
+const pistaF1 = $('pista1');
+COSSOS.forEach(c => {
+  const a = document.createElement('article'); a.className = 'pane'; c.el = a;
+  if (c.id === 'eei'){
+    a.setAttribute('aria-label', 'Estació Espacial Internacional');
+    a.innerHTML = `<div class="disc" role="img" aria-label="Silueta de l'Estació Espacial Internacional">${SVG_EEI()}</div>
+      <div class="info"><div class="etq">Satèl·lit artificial</div><div class="nom petit">Estació Espacial</div>
+      <dl class="dades"><dt>Distància</dt><dd data-k="dist">—</dd><dt>Alçada</dt><dd data-k="alt">—</dd><dt>Velocitat</dt><dd data-k="vel">—</dd><dt data-k="pasEtq">Pròxim pas</dt><dd data-k="pas">calculant…</dd></dl></div>`;
+  } else if (c.id === 'terra'){
+    a.setAttribute('aria-label', 'Terra');
+    a.innerHTML = `<div class="disc" role="img" aria-label="La Terra vista des de la vertical de Barcelona"><canvas></canvas></div>
+      <div class="info"><div class="etq">Terra</div><div class="nom"><span id="terraNom">Barcelona</span><span id="terraAlt"></span></div></div>`;
+  } else {
+    a.setAttribute('aria-label', c.nom);
+    const etq = c.id === 'lluna' ? 'Lluna' : c.id === 'tita' ? 'Satèl·lit de Saturn' : `Planeta ${c.ord}`;
+    a.innerHTML = `<div class="disc" role="img" aria-label="${c.nom} tal com es veuria amb un telescopi"><canvas></canvas></div>
+      <div class="info"><div class="etq">${etq}</div><div class="nom">${c.nom}</div><dl class="dades"></dl></div>`;
+    if (c.llunes) ['I','E','G','C'].forEach(n => { const g = document.createElement('span'); g.className = 'gal'; g.innerHTML = `<i>${n}</i>`; g.dataset.n = n; a.querySelector('.disc').appendChild(g); });
+  }
+  pistaF1.appendChild(a);
 });
 
-const earthMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R, 64, 64), earthMaterial);
-earthScene.add(earthMesh);
+function SVG_EEI(){
+  // Silueta esquemàtica de l'EEI: biga principal, quatre parells de panells solars, mòduls i radiadors
+  const panell = (x, y) => `<rect x="${x}" y="${y}" width="9" height="34" fill="url(#eeiPan)" stroke="#c8a24a" stroke-width=".5"/>`;
+  let p = '';
+  [-62, -50, 41, 53].forEach(x => { p += panell(x, -40) + panell(x, 6); });
+  return `<svg viewBox="-75 -75 150 150" aria-hidden="true">
+    <defs><linearGradient id="eeiPan" x1="0" x2="1"><stop offset="0" stop-color="#2a3a5c"/><stop offset=".5" stop-color="#4a5f8a"/><stop offset="1" stop-color="#2a3a5c"/></linearGradient>
+    <radialGradient id="eeiBrill"><stop offset="0" stop-color="rgba(255,250,235,.25)"/><stop offset="1" stop-color="rgba(255,250,235,0)"/></radialGradient></defs>
+    <rect x="-75" y="-75" width="150" height="150" fill="#000"/>
+    <circle r="60" fill="url(#eeiBrill)"/>
+    <rect x="-64" y="-2" width="128" height="4" fill="#cfcfcf"/>
+    ${p}
+    <rect x="-22" y="8" width="14" height="5" fill="#e6e6e6"/><rect x="8" y="8" width="14" height="5" fill="#e6e6e6"/>
+    <rect x="-4" y="-30" width="8" height="62" rx="3" fill="#ededed"/>
+    <rect x="-14" y="-18" width="28" height="7" rx="3" fill="#dcdcdc"/>
+    <rect x="-3" y="32" width="6" height="12" rx="2" fill="#d6d6d6"/>
+    <rect x="-30" y="16" width="10" height="14" fill="#f2f2f2" opacity=".85"/><rect x="20" y="16" width="10" height="14" fill="#f2f2f2" opacity=".85"/>
+  </svg>`;
+}
 
-// Halo atmosfèric subtil (fresnel simple)
-const atmoMat = new THREE.ShaderMaterial({
-  uniforms:{},
-  vertexShader:`
-    varying vec3 vNormal;
-    void main(){
-      vNormal = normalize(normalMatrix * normal);
-      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+const PAQ_TEX = 'textures/';
+let gl = null, carregador = null;
+const escenes = {};
+function preparaGL(){
+  if (gl || !window.THREE) return !!gl;
+  try {
+    gl = new THREE.WebGLRenderer({ antialias:true, alpha:true, preserveDrawingBuffer:true });
+    gl.setClearColor(0x000000, 1);
+    carregador = new THREE.TextureLoader();
+  } catch(e){ gl = null; }
+  return !!gl;
+}
+function texturaProc(tipus){
+  const cv = document.createElement('canvas'); cv.width = 512; cv.height = 256;
+  const x = cv.getContext('2d');
+  if (tipus === 'venus'){
+    const g = x.createLinearGradient(0, 0, 0, 256);
+    g.addColorStop(0, '#e9dcb4'); g.addColorStop(.5, '#f6eccc'); g.addColorStop(1, '#e6d7ad');
+    x.fillStyle = g; x.fillRect(0, 0, 512, 256);
+    for (let k = 0; k < 60; k++){ x.fillStyle = `rgba(${200 + Math.random()*40|0},${185 + Math.random()*30|0},${140 + Math.random()*30|0},.08)`; x.fillRect(0, Math.random() * 256, 512, 2 + Math.random() * 10); }
+  } else {
+    const g = x.createLinearGradient(0, 0, 0, 256);
+    g.addColorStop(0, '#b97a3c'); g.addColorStop(.5, '#d9a35a'); g.addColorStop(1, '#a8682e');
+    x.fillStyle = g; x.fillRect(0, 0, 512, 256);
+    for (let k = 0; k < 40; k++){ x.fillStyle = `rgba(120,70,30,${Math.random() * .08})`; x.fillRect(0, Math.random() * 256, 512, 3 + Math.random() * 14); }
+  }
+  return new THREE.CanvasTexture(cv);
+}
+function texturaAnells(){
+  const n = 1024, cv = document.createElement('canvas'); cv.width = cv.height = n;
+  const x = cv.getContext('2d'), c = n / 2, Rout = 2.27, img = x.createImageData(n, n);
+  // perfil radial (en radis de Saturn): anell C, anell B, divisió de Cassini, anell A, divisió d'Encke
+  const perfil = r => {
+    if (r < 1.24 || r > 2.27) return null;
+    if (r < 1.53) return [138, 125, 106, .18 + .08 * Math.sin(r * 90)];
+    if (r < 1.95) return [216, 201, 168, .8 + .12 * Math.sin(r * 140)];
+    if (r < 2.03) return [60, 55, 50, .06];
+    if (r > 2.205 && r < 2.215) return [60, 55, 50, .05];
+    return [201, 185, 149, .6 + .06 * Math.sin(r * 120)];
+  };
+  for (let j = 0; j < n; j++) for (let i = 0; i < n; i++){
+    const r = Math.hypot(i - c, j - c) / c * Rout, p = perfil(r);
+    if (!p) continue;
+    const k = (j * n + i) * 4; img.data[k] = p[0]; img.data[k + 1] = p[1]; img.data[k + 2] = p[2]; img.data[k + 3] = p[3] * 255;
+  }
+  x.putImageData(img, 0, 0);
+  return new THREE.CanvasTexture(cv);
+}
+const VERT = `varying vec3 vN; varying vec3 vNv; varying vec2 vUv;
+  void main(){ vN = normalize(mat3(modelMatrix) * normal); vNv = normalize(normalMatrix * normal); vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`;
+const FRAG = `uniform sampler2D map; uniform vec3 solDir; uniform float limb; uniform float amb;
+  varying vec3 vN; varying vec3 vNv; varying vec2 vUv;
+  void main(){
+    vec3 t = texture2D(map, vUv).rgb;
+    float d = max(dot(normalize(vN), normalize(solDir)), 0.0);
+    float mu = max(normalize(vNv).z, 0.0);
+    float ld = mix(1.0, pow(mu, 0.55), limb);
+    gl_FragColor = vec4(t * (d * ld + amb), 1.0);
+  }`;
+function quatPol(ra, de){ return [Math.cos(de * RAD) * Math.cos(ra * RAD), Math.cos(de * RAD) * Math.sin(ra * RAD), Math.sin(de * RAD)]; }
+
+function escenaCos(c){
+  if (escenes[c.id]) return escenes[c.id];
+  const sc = new THREE.Scene(), cam = new THREE.PerspectiveCamera(20, 1, .01, 2000);
+  cam.up.set(0, 0, 1);
+  const tex = c.proc ? texturaProc(c.proc) : carregador.load(PAQ_TEX + c.tex, () => refrescaF1(true));
+  const mat = new THREE.ShaderMaterial({ uniforms:{ map:{ value:tex }, solDir:{ value:new THREE.Vector3(1, 0, 0) }, limb:{ value:c.limb || 0 }, amb:{ value:0 } }, vertexShader:VERT, fragmentShader:FRAG });
+  const esfera = new THREE.Mesh(new THREE.SphereGeometry(1, 64, 48), mat);
+  sc.add(esfera);
+  let anells = null, atm = null;
+  if (c.anells){
+    anells = new THREE.Mesh(new THREE.PlaneGeometry(4.54, 4.54), new THREE.MeshBasicMaterial({ map:texturaAnells(), transparent:true, side:THREE.DoubleSide, depthWrite:false }));
+    sc.add(anells);
+  }
+  if (c.atm){
+    atm = new THREE.Mesh(new THREE.SphereGeometry(1.06, 48, 32), new THREE.ShaderMaterial({
+      vertexShader:`varying vec3 vNv; void main(){ vNv = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+      fragmentShader:`varying vec3 vNv; void main(){ float r = pow(1.0 - abs(vNv.z), 2.5); gl_FragColor = vec4(0.95, 0.65, 0.3, r * 0.28); }`,
+      transparent:true, side:THREE.BackSide, blending:THREE.AdditiveBlending, depthWrite:false }));
+    sc.add(atm);
+  }
+  return escenes[c.id] = { sc, cam, esfera, mat, anells, atm };
+}
+
+// orienta el cos: eix local Y = pol nord, eix local X = meridià zero (o la cara visible, per a la Lluna)
+function orienta(es, c, d, capTerra){
+  const p = quatPol(c.pol[0], c.pol[1]);
+  let X;
+  if (capTerra){
+    X = sub(capTerra, p.map(k => k * dot(capTerra, p)));
+  } else {
+    const Q = nrm([-p[1], p[0], 0]);          // node ascendent de l'equador del cos
+    const Pq = [p[1] * Q[2] - p[2] * Q[1], p[2] * Q[0] - p[0] * Q[2], p[0] * Q[1] - p[1] * Q[0]];
+    const W = ((c.W ? c.W[0] + c.W[1] * (jd(d) - 2451545) : 0) % 360) * RAD;
+    X = [Q[0] * Math.cos(W) + Pq[0] * Math.sin(W), Q[1] * Math.cos(W) + Pq[1] * Math.sin(W), Q[2] * Math.cos(W) + Pq[2] * Math.sin(W)];
+  }
+  const vx = new THREE.Vector3(...nrm(X)), vy = new THREE.Vector3(...p), vz = new THREE.Vector3().crossVectors(vx, vy);
+  const m = new THREE.Matrix4().makeBasis(vx, vy, vz);
+  es.esfera.setRotationFromMatrix(m);
+  es.esfera.scale.set(1, c.obl || 1, 1);
+  if (es.anells) es.anells.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), vy);
+}
+
+// ---- Terra (com abans: textura de dia i de nit, terminador real) ----
+const BARCELONA = { lat:41.3874, lon:2.1686 };
+function latLonV(lat, lon, r){
+  const phi = (90 - lat) * RAD, th = (lon + 180) * RAD;
+  return new THREE.Vector3(-r * Math.sin(phi) * Math.cos(th), r * Math.cos(phi), r * Math.sin(phi) * Math.sin(th));
+}
+function puntSubsolar(date){
+  const d = (date.getTime() - Date.UTC(2000, 0, 1, 12)) / 86400000;
+  const L = (280.460 + 0.9856474 * d) % 360, g = ((357.528 + 0.9856003 * d) % 360) * RAD;
+  const lam = (L + 1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * RAD, ob = (23.439 - 0.0000004 * d) * RAD;
+  const dec = Math.asin(Math.sin(ob) * Math.sin(lam)) / RAD;
+  let ra = Math.atan2(Math.cos(ob) * Math.sin(lam), Math.cos(lam)) / RAD; ra = ((ra % 360) + 360) % 360;
+  const gmst = (280.46061837 + 360.98564736629 * d) % 360;
+  let lon = ra - gmst; lon = ((lon + 180) % 360 + 360) % 360 - 180;
+  return { lat:dec, lon };
+}
+function escenaTerra(){
+  if (escenes.terra) return escenes.terra;
+  const sc = new THREE.Scene(), cam = new THREE.PerspectiveCamera(32, 1, .1, 100);
+  cam.position.copy(latLonV(BARCELONA.lat, BARCELONA.lon, 2 * 5.1)); cam.lookAt(0, 0, 0);
+  const u = { dia:{ value:carregador.load(PAQ_TEX + 'terra-dia.jpg', () => refrescaF1(true)) }, nit:{ value:carregador.load(PAQ_TEX + 'terra-nit.jpg', () => refrescaF1(true)) }, solDir:{ value:new THREE.Vector3(1, 0, 0) } };
+  const terra = new THREE.Mesh(new THREE.SphereGeometry(2, 64, 64), new THREE.ShaderMaterial({ uniforms:u,
+    vertexShader:`varying vec3 vN; varying vec2 vUv; void main(){ vN = normalize(mat3(modelMatrix) * normal); vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader:`uniform sampler2D dia; uniform sampler2D nit; uniform vec3 solDir; varying vec3 vN; varying vec2 vUv;
+      void main(){ float i = dot(normalize(vN), normalize(solDir)); float m = smoothstep(-0.18, 0.18, i);
+        gl_FragColor = vec4(mix(texture2D(nit, vUv).rgb * 0.45, texture2D(dia, vUv).rgb, m), 1.0); }` }));
+  sc.add(terra);
+  sc.add(new THREE.Mesh(new THREE.SphereGeometry(2.08, 64, 64), new THREE.ShaderMaterial({
+    vertexShader:`varying vec3 vNv; void main(){ vNv = normalize(normalMatrix * normal); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }`,
+    fragmentShader:`varying vec3 vNv; void main(){ float r = pow(1.0 - abs(vNv.z), 3.0); gl_FragColor = vec4(0.25, 0.65, 0.85, r * 0.55); }`,
+    transparent:true, side:THREE.BackSide, blending:THREE.AdditiveBlending })));
+  return escenes.terra = { sc, cam, u };
+}
+
+function pintaCanvas(canvas, sc, cam){
+  const w = canvas.clientWidth; if (!w) return;
+  const px = Math.round(w * Math.min(window.devicePixelRatio || 1, 2));
+  if (canvas.width !== px){ canvas.width = canvas.height = px; }
+  gl.setSize(px, px, false);
+  cam.aspect = 1; cam.updateProjectionMatrix();
+  gl.render(sc, cam);
+  const x = canvas.getContext('2d'); x.clearRect(0, 0, px, px); x.drawImage(gl.domElement, 0, 0, px, px);
+}
+function camaraA(es, c, v, rp){
+  // la càmera mira el cos des de la Terra; distància triada perquè el disc ocupi una fracció rp del visor
+  const a = Math.atan(rp * Math.tan(10 * RAD)), D = 1 / Math.sin(a);
+  es.cam.position.set(-v[0] * D, -v[1] * D, -v[2] * D); es.cam.lookAt(0, 0, 0);
+  return rp;
+}
+const dadesHTML = rows => rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+function distTxt(km){ return km > 1e6 ? num(km / 1e6, km < 1e8 ? 1 : 0) + ' M km' : num(Math.round(km / 100) * 100) + ' km'; }
+function llumTxt(ua){ const s = ua * 499.005; const h = Math.floor(s / 3600), m = Math.round((s % 3600) / 60); return h ? `${h} h ${m} min` : `${m} min`; }
+function midaTxt(diam){ const r = diam / TERRA_DIAM; return num(r, r < 1 ? 2 : r < 10 ? 2 : 1) + ' × Terra'; }
+
+let idxF1 = 0;
+function refrescaF1(tots){
+  if (!preparaGL()) return;
+  const ara = new Date();
+  COSSOS.forEach((c, k) => {
+    if (!tots && Math.abs(k - idxF1) > 1) return;
+    if (c.id === 'eei') return;
+    const canvas = c.el.querySelector('canvas');
+    if (c.id === 'terra'){
+      const es = escenaTerra(), sp = puntSubsolar(ara);
+      es.u.solDir.value.copy(latLonV(sp.lat, sp.lon, 1).normalize());
+      pintaCanvas(canvas, es.sc, es.cam);
+      return;
     }
-  `,
-  fragmentShader:`
-    varying vec3 vNormal;
-    void main(){
-      float rim = pow(1.0 - abs(vNormal.z), 3.0);
-      gl_FragColor = vec4(0.25, 0.65, 0.85, rim * 0.55);
+    const es = escenaCos(c);
+    let v, sol, rows = [];
+    if (c.id === 'lluna'){
+      const L = lluna(ara); v = L.g; sol = L.sol;
+      orienta(es, c, ara, [-v[0], -v[1], -v[2]]);
+      c.el.querySelector('.nom').textContent = nomFase(L.elong);
+      rows = [['Il·luminació', Math.round(L.illum * 100) + '%'], ['Distància', distTxt(L.dist)], ['Edat', num(L.edat, 1) + ' dies'], ['Mida', midaTxt(c.diam)]];
+    } else {
+      const pid = c.id === 'tita' ? 'saturn' : c.id, P = planeta(pid, ara);
+      v = nrm(P.g); sol = P.sol;
+      orienta(es, c, ara);
+      const km = P.dist * UA, ap = c.diam / km / RAD * 3600;
+      if (c.fase) rows.push(['Fase', Math.round(P.fase * 100) + '%']);
+      rows.push(['Distància', distTxt(km)], ['Mida', midaTxt(c.diam)], ['Aparent', num(ap, ap < 10 ? 1 : 0) + '″']);
+      if (c.anells) rows.push(['Anells', 'obertura ' + num(Math.asin(Math.abs(dot(quatPol(c.pol[0], c.pol[1]), v))) / RAD, 1) + '°']);
+      else if (c.id === 'tita') rows.push(['Òrbita', '15,9 dies']);
+      else if (!c.fase) rows.push(['Llum', llumTxt(P.dist)]);
+      if (c.llunes) pintaGalileanes(c, ara, c.rp);
     }
-  `,
-  transparent:true,
-  side: THREE.BackSide,
-  blending: THREE.AdditiveBlending
-});
-const atmoMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R*1.04, 64, 64), atmoMat);
-earthScene.add(atmoMesh);
-
-/* ============================================================
-   ESCENA — LLUNA
-   ============================================================ */
-
-const moonCanvas = document.getElementById('moonCanvas');
-const moonRenderer = new THREE.WebGLRenderer({ canvas: moonCanvas, antialias:true, alpha:true });
-const moonScene = new THREE.Scene();
-const moonCamera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
-moonCamera.position.set(0,0, EARTH_R*5.1);
-moonCamera.lookAt(0,0,0);
-
-const moonTex = loader.load('https://threejs.org/examples/textures/planets/moon_1024.jpg');
-const moonMaterial = new THREE.MeshStandardMaterial({ map: moonTex, roughness:1, metalness:0 });
-const moonMesh = new THREE.Mesh(new THREE.SphereGeometry(EARTH_R, 64, 64), moonMaterial);
-moonScene.add(moonMesh);
-
-const moonAmbient = new THREE.AmbientLight(0x1a2233, 0.06);
-moonScene.add(moonAmbient);
-const moonSun = new THREE.DirectionalLight(0xfff2d8, 1.9);
-moonScene.add(moonSun);
-
-/* ============================================================
-   RESIZE
-   ============================================================ */
-
-function resizeRenderer(renderer, camera, canvas){
-  const wrap = canvas.parentElement;
-  const size = wrap.clientWidth;
-  renderer.setSize(size, size, false);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  camera.aspect = 1;
-  camera.updateProjectionMatrix();
+    es.mat.uniforms.solDir.value.set(...sol);
+    camaraA(es, c, v, c.rp);
+    pintaCanvas(canvas, es.sc, es.cam);
+    const dl = c.el.querySelector('.dades'), h = dadesHTML(rows);
+    if (dl.innerHTML !== h) dl.innerHTML = h;
+  });
 }
-function resizeAll(){
-  resizeRenderer(earthRenderer, earthCamera, earthCanvas);
-  resizeRenderer(moonRenderer, moonCamera, moonCanvas);
-}
-window.addEventListener('resize', resizeAll);
-window.addEventListener('orientationchange', () => {
-  setTimeout(resizeAll, 60);
-  setTimeout(resizeAll, 300);
-});
-resizeAll();
-
-/* ============================================================
-   BUCLE D'ACTUALITZACIÓ ASTRONÒMICA
-   ============================================================ */
-
-const CATALAN_DIES = ['DG','DL','DT','DC','DJ','DV','DS'];
-const CATALAN_MESOS = ['GEN','FEB','MAR','ABR','MAI','JUN','JUL','AGO','SET','OCT','NOV','DES'];
-
-function updateAstro(){
-  const now = new Date();
-
-  // --- Terra: terminador dia/nit ---
-  const sub = getSubsolarPoint(now);
-  const sunVec = latLonToVector3(sub.lat, sub.lon, 1).normalize();
-  earthUniforms.sunDirection.value.copy(sunVec);
-
-  // --- Lluna: fase ---
-  const moonData = getMoonPhase(now);
-  const angle = moonData.phase * Math.PI * 2;
-  moonSun.position.set(Math.sin(angle) * 6, 0.6, -Math.cos(angle) * 6);
-  document.getElementById('moon-status').textContent = moonData.name;
-  document.getElementById('moon-meta').textContent = 'il·luminació ' + Math.round(moonData.illumination*100) + '%';
-
-  // --- Rellotge LCD ---
-  const hh = String(now.getHours()).padStart(2,'0');
-  const mm = String(now.getMinutes()).padStart(2,'0');
-  const ss = String(now.getSeconds()).padStart(2,'0');
-  const colonOpacity = now.getMilliseconds() < 500 ? 1 : 0.25;
-  document.getElementById('lcd-time').innerHTML = hh + '<span class="blink" style="opacity:'+colonOpacity+'">:</span>' + mm + ':' + ss;
-  const diaSetmana = CATALAN_DIES[now.getDay()];
-  const dia = String(now.getDate()).padStart(2,'0');
-  const mes = CATALAN_MESOS[now.getMonth()];
-  document.getElementById('lcd-date').textContent = diaSetmana + ' ' + dia + ' ' + mes + ' ' + now.getFullYear();
+function pintaGalileanes(c, d, rp){
+  const disc = c.el.querySelector('.disc'), w = disc.clientWidth;
+  galileanes(d).forEach(([n, X, Z]) => {
+    const el = disc.querySelector(`.gal[data-n="${n}"]`);
+    const ax = Math.abs(X);
+    if (ax < 1 && Z < 0){ el.style.display = 'none'; return; }   // darrere del planeta
+    el.style.display = '';
+    // escala comprimida perquè hi càpiguen totes quatre (Cal·listo arriba a ~26 radis)
+    const xn = ax <= 1 ? ax * rp : rp + (ax - 1) / 26 * (.9 - rp);
+    el.style.left = (50 + Math.sign(X) * xn * 50) + '%';
+    el.style.top = '50%';
+    el._x = Math.sign(X) * xn;
+  });
+  // etiquetes alternades amunt i avall quan dues llunes queden a prop
+  const vis = [...disc.querySelectorAll('.gal')].filter(g => g.style.display !== 'none').sort((a, b) => a._x - b._x);
+  vis.forEach((g, k) => g.classList.toggle('dalt', k > 0 && Math.abs(g._x - vis[k - 1]._x) * w / 2 < 14 && !vis[k - 1].classList.contains('dalt')));
 }
 
-function renderLoop(){
-  updateAstro();
-  earthRenderer.render(earthScene, earthCamera);
-  moonRenderer.render(moonScene, moonCamera);
-  requestAnimationFrame(renderLoop);
+/* ---------- Estació Espacial Internacional (satellite.js) ---------- */
+let satrec = null, passos = null, darrerPas = 0;
+function carregaTLE(){
+  const desat = llegeix('tle', null);
+  if (desat && Date.now() - desat.t < 12 * 3600e3){ satrec = satellite.twoline2satrec(desat.l1, desat.l2); return Promise.resolve(); }
+  return demanaJSON('https://api.wheretheiss.at/v1/satellites/25544/tles', 12000)
+    .then(j => ({ l1:j.line1, l2:j.line2 }))
+    .catch(() => ambTemps(fetch('https://celestrak.org/NORAD/elements/gp.php?CATNR=25544&FORMAT=TLE'), 12000).then(r => r.text()).then(t => { const ll = t.trim().split(/\r?\n/); return { l1:ll[1].trim(), l2:ll[2].trim() }; }))
+    .then(o => { satrec = satellite.twoline2satrec(o.l1, o.l2); desa('tle', { ...o, t:Date.now() }); passos = null; })
+    .catch(() => { if (desat) satrec = satellite.twoline2satrec(desat.l1, desat.l2); });
 }
-requestAnimationFrame(renderLoop);
+function solECI(d){
+  const n = jd(d) - 2451545, L = (280.460 + 0.9856474 * n) * RAD, g = (357.528 + 0.9856003 * n) * RAD;
+  const lam = L + (1.915 * Math.sin(g) + 0.020 * Math.sin(2 * g)) * RAD, ob = 23.439 * RAD;
+  return [Math.cos(lam), Math.cos(ob) * Math.sin(lam), Math.sin(ob) * Math.sin(lam)];
+}
+function estatEEI(d){
+  const pv = satellite.propagate(satrec, d); if (!pv || !pv.position) return null;
+  const gmst = satellite.gstime(d), gd = satellite.eciToGeodetic(pv.position, gmst);
+  const obs = { longitude:pos.lon * RAD, latitude:pos.lat * RAD, height:(pos.alt || 0) / 1000 };
+  const la = satellite.ecfToLookAngles(obs, satellite.eciToEcf(pv.position, gmst));
+  const v = pv.velocity, r = pv.position;
+  return { h:gd.height, el:la.elevation / RAD, dist:la.rangeSat, vel:Math.hypot(v.x, v.y, v.z) * 3600, r:[r.x, r.y, r.z], gmst };
+}
+function visible(d, e){
+  const s = solECI(d);
+  const dec = Math.asin(s[2]), ra = Math.atan2(s[1], s[0]);
+  const H = e.gmst + pos.lon * RAD - ra, phi = pos.lat * RAD;
+  const altSol = Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H)) / RAD;
+  const p = dot(e.r, s), perp = len(sub(e.r, s.map(k => k * p)));
+  const ombra = p < 0 && perp < 6371;
+  return altSol < -6 && !ombra;
+}
+function calculaPassos(){
+  const t0 = Date.now(), llista = []; let actual = null;
+  for (let t = t0; t < t0 + 48 * 3600e3; t += 20000){
+    const d = new Date(t), e = estatEEI(d); if (!e) continue;
+    if (e.el > 10){
+      if (!actual) actual = { inici:d, max:e.el, tmax:d, vis:false };
+      if (e.el > actual.max){ actual.max = e.el; actual.tmax = d; }
+      if (visible(d, e)) actual.vis = true;
+    } else if (actual){ llista.push(actual); actual = null; if (llista.filter(p => p.vis).length >= 1 && llista.length >= 1) break; }
+  }
+  passos = llista; darrerPas = Date.now();
+}
+function refrescaEEI(){
+  const c = COSSOS.find(x => x.id === 'eei'), dd = k => c.el.querySelector(`[data-k="${k}"]`);
+  if (!window.satellite || !satrec) return;
+  const e = estatEEI(new Date()); if (!e) return;
+  dd('dist').textContent = num(Math.round(e.dist)) + ' km';
+  dd('alt').textContent = num(Math.round(e.h)) + ' km';
+  dd('vel').textContent = num(Math.round(e.vel / 10) * 10) + ' km/h';
+  if (!passos || Date.now() - darrerPas > 20 * 60e3) calculaPassos();
+  const vis = passos.find(p => p.vis), prox = passos[0];
+  const fmt = p => `${DIES_MIN[p.inici.getDay()]} ${hm(p.inici)}`;
+  dd('pasEtq').textContent = e.el > 10 ? 'Ara' : vis ? 'Pas visible' : 'Pròxim pas';
+  dd('pas').textContent = e.el > 10 ? 'per sobre!' : vis ? fmt(vis) : prox ? fmt(prox) : '—';
+}
 
-/* ============================================================
-   INSTRUMENTS DIGITALS (barra de segments LCD)
-   ============================================================ */
+/* ==========================================================================
+   FINESTRA 2 · AQUÍ I ARA
+   ========================================================================== */
+const pos = llegeix('pos', { lat:BARCELONA.lat, lon:BARCELONA.lon, alt:null, nom:'Barcelona' });
+function diaAny(d){ return Math.round((new Date(d.getFullYear(), d.getMonth(), d.getDate()) - new Date(d.getFullYear(), 0, 1)) / 864e5) + 1; }
+function setmanaISO(d){
+  const t = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())), dia = t.getUTCDay() || 7;
+  t.setUTCDate(t.getUTCDate() + 4 - dia);
+  return Math.ceil(((t - new Date(Date.UTC(t.getUTCFullYear(), 0, 1))) / 864e5 + 1) / 7);
+}
+function pintaAra(){
+  const d = new Date();
+  $('lcdHora').innerHTML = `${dosD(d.getHours())}<span class="dp" style="opacity:${d.getMilliseconds() < 500 ? 1 : .25}">:</span>${dosD(d.getMinutes())}:${dosD(d.getSeconds())}`;
+  $('lcdData').textContent = `${DIES_CURT[d.getDay()]} ${dosD(d.getDate())} ${MESOS_CURT[d.getMonth()]} ${d.getFullYear()}`;
+  $('lcdExtra').textContent = `SETMANA ${setmanaISO(d)} · DIA ${diaAny(d)}`;
+}
 
-const DIGI_SEGMENTS = 16;
+// --- Lloc (BigDataCloud) ---
+const PAISOS_CAT = { 'ES-CT':'Catalunya', 'ES-VC':'País Valencià', 'ES-IB':'Illes Balears' };
+const textAdm = d => ((d.localityInfo && d.localityInfo.administrative) || []).map(a => `${a.name || ''} ${a.isoCode || ''}`).join(' | ');
+function territoriCat(d){
+  const subd = d.principalSubdivision || '', adm = textAdm(d), cc = d.countryCode, ll = d._ll || [0, 0];
+  if (PAISOS_CAT[d.principalSubdivisionCode]) return PAISOS_CAT[d.principalSubdivisionCode];
+  if (cc === 'AD') return 'Andorra';
+  if (cc === 'ES'){
+    if (/^(Catalunya|Cataluña|Catalonia)/i.test(subd)) return 'Catalunya';
+    if (/valencia/i.test(subd)) return 'País Valencià';
+    if (/balear/i.test(subd)) return 'Illes Balears';
+    if ((d.principalSubdivisionCode === 'ES-AR' || /arag/i.test(subd)) && /Ribagor|Litera|Llitera|Bajo Cinca|Baix Cinca|Matarra|Caspe|Casp\b/i.test(adm)) return 'Franja de Ponent';
+  }
+  if (cc === 'FR' && (/FR-66|Pyr[ée]n[ée]es[- ]Orientales|Pirineus Orientals/i.test(adm) || (ll[0] > 42.33 && ll[0] < 42.93 && ll[1] > 1.72 && ll[1] < 3.18))) return 'Catalunya Nord';
+  if (cc === 'IT' && /alghero|alguer/i.test(`${d.city || ''} ${d.locality || ''} ${adm}`)) return "L'Alguer";
+  return null;
+}
+function comarca(d, nom){
+  const adm = (d.localityInfo && d.localityInfo.administrative) || [];
+  const c = adm.find(a => a.adminLevel === 7 && a.name && a.name !== nom);
+  return c ? c.name : null;
+}
+function geocodifica(){
+  demanaJSON(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${pos.lat.toFixed(4)}&longitude=${pos.lon.toFixed(4)}&localityLanguage=ca`, 10000)
+    .then(d => {
+      d._ll = [pos.lat, pos.lon];
+      const terr = territoriCat(d);
+      const nom = (terr === "L'Alguer" ? "L'Alguer" : null) || d.city || d.locality || d.principalSubdivision || 'Barcelona';
+      const regio = terr ? [comarca(d, nom), terr === "L'Alguer" ? 'Sardenya' : terr] : [d.countryName];
+      pos.nom = nom; pos.regio = [...new Set(regio.filter(x => x && x !== nom))].join(' · ');
+      desa('pos', pos); pintaLloc();
+    }).catch(() => {});
+}
+function pintaLloc(){
+  $('llNom').textContent = pos.nom || 'Barcelona';
+  $('terraNom').textContent = pos.nom || 'Barcelona';
+  $('llRegio').textContent = pos.regio || '—';
+  const alt = pos.alt != null ? num(Math.round(pos.alt)) + ' m' : '-- m';
+  $('llAlt').textContent = alt;
+  $('terraAlt').textContent = pos.alt != null ? ' · ' + alt : '';
+  const ns = pos.lat >= 0 ? 'N' : 'S', eo = pos.lon >= 0 ? 'E' : 'O';
+  $('llCoord').innerHTML = `${num(Math.abs(pos.lat), 4)}° ${ns}<br>${num(Math.abs(pos.lon), 4)}° ${eo}`;
+  $('llMapa').href = `https://www.google.com/maps?q=${pos.lat.toFixed(5)},${pos.lon.toFixed(5)}`;
+  $('peuLloc').textContent = `${pos.nom || 'Barcelona'} · ${pos.lat.toFixed(3)}, ${pos.lon.toFixed(3)}`;
+}
 
-function initDigiBar(barId){
-  const bar = document.getElementById(barId);
-  bar.innerHTML = '';
-  for(let i=0; i<DIGI_SEGMENTS; i++){
-    const seg = document.createElement('div');
-    seg.className = 'digi-seg';
-    bar.appendChild(seg);
+// --- Temps (Open-Meteo) ---
+const CODIS = [0,1,2,3,45,48,51,53,55,56,57,61,63,65,66,67,71,73,75,77,80,81,82,85,86,95,96,99];
+const CEL = ['Cel serè','Gairebé serè','Parcialment ennuvolat','Cel cobert','Boira','Boira gebradora','Plugim feble','Plugim','Plugim intens','Plugim gelat','Plugim gelat','Pluja feble','Pluja','Pluja forta','Pluja gelada','Pluja gelada','Neu feble','Neu','Neu forta','Neu granulada','Ruixats febles','Ruixats','Ruixats forts','Ruixats de neu','Ruixats de neu','Tempesta','Tempesta amb calamarsa','Tempesta amb calamarsa'];
+const descCel = c => CEL[CODIS.indexOf(c)] || '—';
+function iconaTemps(c, dia){
+  const sol = '<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M3 12h2M19 12h2M5.6 18.4L7 17M17 7l1.4-1.4"/>';
+  const llu = '<path d="M19 14.5A7.5 7.5 0 1 1 9.5 5a6 6 0 0 0 9.5 9.5z"/>';
+  const nuv = '<path d="M7 18h10a4 4 0 0 0 .4-8A5.5 5.5 0 0 0 6.8 11 3.5 3.5 0 0 0 7 18z"/>';
+  const petitSol = dia ? '<g transform="translate(-3 -4) scale(.75)">' + sol + '</g>' : '<g transform="translate(-3 -4) scale(.75)">' + llu + '</g>';
+  let cos;
+  if (c === 0) cos = dia ? sol : llu;
+  else if (c <= 2) cos = petitSol + '<g transform="translate(2 2) scale(.85)">' + nuv + '</g>';
+  else if (c === 3) cos = nuv;
+  else if (c === 45 || c === 48) cos = '<path d="M4 9h16M3 13h18M5 17h14"/>';
+  else if (c >= 95) cos = '<g transform="translate(0 -3)">' + nuv + '</g><path d="M12 15l-2 4h3l-2 4"/>';
+  else if ((c >= 71 && c <= 77) || c === 85 || c === 86) cos = '<g transform="translate(0 -3)">' + nuv + '</g><path d="M8 19v.01M12 21v.01M16 19v.01"/>';
+  else if (c >= 51) cos = '<g transform="translate(0 -3)">' + nuv + '</g><path d="M8 18l-1 3M12 18l-1 3M16 18l-1 3"/>';
+  else cos = sol;
+  return `<g fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${cos}</g>`;
+}
+let meteo = null;
+function carregaTemps(){
+  const qs = `latitude=${pos.lat.toFixed(4)}&longitude=${pos.lon.toFixed(4)}`;
+  demanaJSON(`https://api.open-meteo.com/v1/forecast?${qs}&current=temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,is_day,wind_gusts_10m&hourly=precipitation_probability,precipitation,wind_gusts_10m,uv_index,weather_code,temperature_2m,is_day&forecast_hours=13&daily=temperature_2m_max,temperature_2m_min,uv_index_max&forecast_days=2&timezone=auto`, 15000)
+    .then(m => {
+      meteo = m;
+      if (m.elevation != null){ pos.alt = m.elevation; desa('pos', pos); pintaLloc(); }
+      pintaTemps(); pintaAvisos();
+      $('peuDades').textContent = 'dades actualitzades ' + hm(new Date());
+    }).catch(() => { $('peuDades').textContent = 'sense connexió amb Open-Meteo'; });
+}
+function pintaTemps(){
+  if (!meteo || !meteo.current) return;
+  const c = meteo.current, dd = meteo.daily || {}, h = meteo.hourly || {};
+  $('tIc').innerHTML = iconaTemps(c.weather_code, c.is_day);
+  $('tTemp').textContent = graus(c.temperature_2m);
+  $('tDesc').textContent = descCel(c.weather_code);
+  if (dd.temperature_2m_max) $('tMax').textContent = graus(dd.temperature_2m_max[0]);
+  if (dd.temperature_2m_min) $('tMin').textContent = graus(dd.temperature_2m_min[0]);
+  $('tSens').textContent = graus(c.apparent_temperature);
+  $('tHum').textContent = Math.round(c.relative_humidity_2m) + '%';
+  if (h.time){
+    $('tHores').innerHTML = [1, 3, 5, 7, 9, 11].filter(k => h.time[k]).map(k =>
+      `<div><span>${h.time[k].slice(11, 13)} h</span><svg viewBox="0 0 24 24" aria-hidden="true">${iconaTemps(h.weather_code[k], h.is_day[k])}</svg><b>${Math.round(h.temperature_2m[k])}°</b></div>`).join('');
   }
 }
 
-function updateDigiBar(barId, min, max, value, color){
-  const bar = document.getElementById(barId);
-  const frac = Math.max(0, Math.min(1, (value - min) / (max - min)));
-  const activeCount = Math.round(frac * DIGI_SEGMENTS);
-  const segs = bar.children;
-  for(let i=0; i<segs.length; i++){
-    if(i < activeCount){
-      segs[i].classList.add('active');
-      segs[i].style.setProperty('--seg-color', color);
-    }else{
-      segs[i].classList.remove('active');
-    }
+// --- Festius (Barcelona) ---
+const clauData = d => `${d.getFullYear()}-${dosD(d.getMonth() + 1)}-${dosD(d.getDate())}`;
+const sumaDies = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+function pasqua(any){
+  const a = any % 19, b = Math.floor(any / 100), c = any % 100, d = Math.floor(b / 4), e = b % 4,
+    f = Math.floor((b + 8) / 25), g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30,
+    i = Math.floor(c / 4), k = c % 4, l = (32 + 2 * e + 2 * i - h - k) % 7, m = Math.floor((a + 11 * h + 22 * l) / 451),
+    mes = Math.floor((h + l - 7 * m + 114) / 31), dia = ((h + l - 7 * m + 114) % 31) + 1;
+  return new Date(any, mes - 1, dia);
+}
+const festiusMem = {};
+function festiusAny(any){
+  if (festiusMem[any]) return festiusMem[any];
+  const P = pasqua(any), f = (m, d, nom) => [clauData(new Date(any, m - 1, d)), nom];
+  return festiusMem[any] = new Map([
+    f(1, 1, "Cap d'Any"), f(1, 6, 'Reis'),
+    [clauData(sumaDies(P, -2)), 'Divendres Sant'], [clauData(sumaDies(P, 1)), 'Dilluns de Pasqua'],
+    f(5, 1, 'Festa del Treball'), [clauData(sumaDies(P, 50)), 'Pasqua Granada'],
+    f(6, 24, 'Sant Joan'), f(8, 15, "L'Assumpció"), f(9, 11, 'Diada Nacional'), f(9, 24, 'La Mercè'),
+    f(10, 1, 'Dia de la República'), f(10, 12, 'Festa Nacional d\'Espanya'), f(11, 1, 'Tots Sants'),
+    f(12, 6, 'Constitució'), f(12, 8, 'Immaculada'), f(12, 25, 'Nadal'), f(12, 26, 'Sant Esteve')
+  ]);
+}
+const festiu = d => festiusAny(d.getFullYear()).get(clauData(d)) || null;
+function pintaCalendari(){
+  const avui = new Date(), any = avui.getFullYear(), mes = avui.getMonth();
+  $('calTit').textContent = `${MESOS_CAP[mes]} ${any}`;
+  const primer = new Date(any, mes, 1), buits = (primer.getDay() + 6) % 7, dies = new Date(any, mes + 1, 0).getDate();
+  let h = ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'].map(x => `<span class="cs">${x}</span>`).join('');
+  for (let k = 0; k < buits; k++) h += '<span></span>';
+  for (let d = 1; d <= dies; d++){
+    const dt = new Date(any, mes, d), fe = festiu(dt), dw = dt.getDay();
+    let cls = d === avui.getDate() ? 'avui' : fe || dw === 0 ? 'fe' : dw === 6 ? 'ds' : '';
+    h += `<span class="${cls}"${fe ? ` title="${esc(fe)}"` : ''}>${d}</span>`;
   }
+  $('calG').innerHTML = h;
+  const prop = [];
+  for (let k = 1; k < 200 && prop.length < 3; k++){ const dt = sumaDies(avui, k), fe = festiu(dt); if (fe) prop.push(`${DIES_MIN[dt.getDay()].replace(/^./, x => x.toUpperCase())} ${dt.getDate()} ${MESOS_CURT[dt.getMonth()].toLowerCase()} · ${esc(fe)}`); }
+  $('calFestes').innerHTML = prop.map(p => `<li>${p}</li>`).join('');
+}
+function pintaAvisos(){
+  const ll = [];
+  if (meteo){
+    const h = meteo.hourly || {}, dd = meteo.daily || {}, c = meteo.current || {};
+    const pr = (h.precipitation_probability || []).slice(0, 7), max6 = pr.reduce((a, b) => Math.max(a, b || 0), 0);
+    const ratxa = Math.max(c.wind_gusts_10m || 0, ...((h.wind_gusts_10m || []).slice(0, 7).map(v => v || 0)));
+    const codis = [c.weather_code, ...((h.weather_code || []).slice(0, 7))], codis12 = [c.weather_code, ...((h.weather_code || []).slice(0, 12))];
+    const uv = (dd.uv_index_max && dd.uv_index_max[0]) || 0, tmax = dd.temperature_2m_max && dd.temperature_2m_max[0], tmin = dd.temperature_2m_min && dd.temperature_2m_min[0];
+    const prec12 = Math.max(0, ...((h.precipitation || []).slice(0, 12).map(v => v || 0)));
+    if (codis.some(k => k >= 95)) ll.push(['vermell', 'Risc de tempesta a les properes hores']);
+    if (prec12 >= 10 || codis12.some(k => k === 65 || k === 82)) ll.push(['taronja', 'Pluja forta']);
+    else if (max6 > 40) ll.push([max6 > 70 ? 'taronja' : 'groc', `Pluja probable (${max6}%) en 6 hores`]);
+    if (codis12.some(k => (k >= 71 && k <= 77) || k === 85 || k === 86)) ll.push(['taronja', 'Neu']);
+    if (codis12.some(k => k === 56 || k === 57 || k === 66 || k === 67)) ll.push(['taronja', 'Glaç']);
+    if (ratxa >= 70) ll.push(['taronja', `Vent fort: ratxes de ${Math.round(ratxa)} km/h`]);
+    else if (ratxa >= 50) ll.push(['groc', `Ratxes de vent de ${Math.round(ratxa)} km/h`]);
+    if (tmax != null && tmax >= 35) ll.push(['taronja', `Calor intensa: màxima de ${graus(tmax)}`]);
+    else if (tmax != null && tmax >= 31) ll.push(['groc', `Fa calor: màxima de ${graus(tmax)}`]);
+    if (tmin != null && tmin <= 0) ll.push(['taronja', `Glaçada: mínima de ${graus(tmin)}`]);
+    else if (tmin != null && tmin <= 4) ll.push(['groc', `Fred: mínima de ${graus(tmin)}`]);
+    if (uv >= 8) ll.push(['taronja', `Índex UV molt alt (${Math.round(uv)})`]);
+    else if (uv >= 6) ll.push(['groc', `Índex UV alt (${Math.round(uv)})`]);
+    if (codis.some(k => k === 45 || k === 48)) ll.push(['groc', 'Boira: visibilitat reduïda']);
+  }
+  const avui = new Date(), fa = festiu(avui), fd = festiu(sumaDies(avui, 1));
+  if (fa) ll.push(['info', `Avui és festiu: ${fa}`]);
+  if (fd) ll.push(['info', `Demà és festiu: ${fd}`]);
+  $('calAvisos').innerHTML = ll.length ? ll.slice(0, 3).map(([c, t]) => `<li class="${c}">${esc(t)}</li>`).join('')
+    : `<li class="cap">${meteo ? 'Cap avís per a les properes hores' : 'Esperant la previsió…'}</li>`;
 }
 
-/* ============================================================
-   GEOLOCALITZACIÓ + DADES OPEN-METEO
-   ============================================================ */
-
-let currentCoords = { lat: BARCELONA.lat, lon: BARCELONA.lon, source: 'per defecte (Barcelona)' };
-let deviceAltitude = null;
-
-function setLocStatus(text){ document.getElementById('loc-status').textContent = text; }
-function setUpdateStatus(text){ document.getElementById('update-status').textContent = text; }
-
-async function fetchEnvironmentData(){
-  const { lat, lon } = currentCoords;
-  try{
-    const weatherUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,apparent_temperature&timezone=auto`;
-    const weatherRes = await fetch(weatherUrl);
-    const weather = await weatherRes.json();
-    const temp = weather.current?.temperature_2m;
-    const hum = weather.current?.relative_humidity_2m;
-    const feels = weather.current?.apparent_temperature;
-
-    if(typeof temp === 'number'){
-      document.getElementById('val-temp').textContent = temp.toFixed(1);
-      updateDigiBar('bar-temp', -10, 45, temp, '#ff8a5b');
-      document.getElementById('range-temp').textContent = '-10° — 45°C';
-    }
-    if(typeof hum === 'number'){
-      document.getElementById('val-hum').textContent = Math.round(hum);
-      updateDigiBar('bar-hum', 0, 100, hum, '#5bc8ff');
-      document.getElementById('range-hum').textContent = '0 — 100%';
-    }
-    if(typeof feels === 'number'){
-      document.getElementById('val-feels').textContent = feels.toFixed(1);
-      updateDigiBar('bar-feels', -10, 45, feels, '#c084fc');
-      document.getElementById('range-feels').textContent = '-10° — 45°C';
-    }
-
-    let altitude = deviceAltitude;
-    if(altitude === null || altitude === undefined){
-      const elevUrl = `https://api.open-meteo.com/v1/elevation?latitude=${lat}&longitude=${lon}`;
-      const elevRes = await fetch(elevUrl);
-      const elevData = await elevRes.json();
-      altitude = elevData.elevation ? elevData.elevation[0] : null;
-    }
-    if(typeof altitude === 'number'){
-      document.getElementById('earth-alt').textContent = ' · ' + Math.round(altitude) + ' m';
-    }
-
-    const now = new Date();
-    setUpdateStatus('dades actualitzades ' + now.toLocaleTimeString('ca-ES'));
-  }catch(err){
-    setUpdateStatus('error en carregar dades ambientals');
+/* ==========================================================================
+   FINESTRA 3 · REPÚBLICA
+   ========================================================================== */
+// --- Rellotge CAPITAINE ---
+function faseSVG(f, r){
+  // f: fracció del cicle (0 nova, .5 plena). Torna el camí de la part il·luminada.
+  const th = 2 * Math.PI * f, rx = Math.abs(Math.cos(th)) * r;
+  if (f < .02 || f > .98) return '';
+  if (Math.abs(f - .5) < .02) return `<circle r="${r}"/>`;
+  if (f < .5){ const sw = f < .25 ? 0 : 1; return `<path d="M0 ${-r} A${r} ${r} 0 0 1 0 ${r} A${rx} ${r} 0 0 ${sw} 0 ${-r}Z"/>`; }
+  const sw = f > .75 ? 1 : 0; return `<path d="M0 ${-r} A${r} ${r} 0 0 0 0 ${r} A${rx} ${r} 0 0 ${sw} 0 ${-r}Z"/>`;
+}
+function creaRellotge(){
+  const ROM = ['XII','I','II','III','IIII','V','VI','VII','VIII','IX','X','XI'];
+  let marques = '', nums = '';
+  for (let k = 0; k < 60; k++){
+    const a = k * 6 * RAD, h = k % 5 === 0, r1 = 86, r2 = h ? 79 : 83;
+    marques += `<line x1="${100 + r1 * Math.sin(a)}" y1="${100 - r1 * Math.cos(a)}" x2="${100 + r2 * Math.sin(a)}" y2="${100 - r2 * Math.cos(a)}" stroke="#3b2f22" stroke-width="${h ? 1.6 : .6}"/>`;
   }
+  ROM.forEach((t, k) => { const a = k * 30 * RAD, r = 68; nums += `<text x="${100 + r * Math.sin(a)}" y="${100 - r * Math.cos(a) + 4.2}" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="12" fill="#2a2118">${t}</text>`; });
+  $('rellDisc').innerHTML = `<svg viewBox="0 0 200 200" role="img" aria-label="Rellotge CAPITAINE">
+    <defs>
+      <radialGradient id="rFace" cx=".42" cy=".38" r=".7"><stop offset="0" stop-color="#fbf6e8"/><stop offset=".6" stop-color="#efe6cc"/><stop offset="1" stop-color="#d9cba4"/></radialGradient>
+      <linearGradient id="rBisell" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#c9a464"/><stop offset=".5" stop-color="#8a6a3c"/><stop offset="1" stop-color="#5e4626"/></linearGradient>
+    </defs>
+    <circle cx="100" cy="100" r="99" fill="url(#rBisell)"/>
+    <circle cx="100" cy="100" r="92" fill="url(#rFace)"/>
+    <circle cx="100" cy="100" r="87" fill="none" stroke="#3b2f22" stroke-width=".5"/>
+    ${marques}${nums}
+    <text x="100" y="62" text-anchor="middle" font-family="Oswald,sans-serif" font-size="7.5" letter-spacing="2.6" fill="#3b2f22">CAPITAINE</text>
+    <g transform="translate(100 136)">
+      <path d="M-17 4 A17 17 0 0 1 17 4 Z" fill="#1b2a4a" stroke="#8a6a3c" stroke-width="1"/>
+      <g transform="translate(0 -3)"><circle r="8.5" fill="#2b3a5a"/><g id="rLluna" fill="#f2e7c4"></g></g>
+    </g>
+    <rect x="128" y="94" width="16" height="12" fill="#fffdf6" stroke="#8a6a3c" stroke-width=".8"/>
+    <text id="rData" x="136" y="103.5" text-anchor="middle" font-family="Georgia,serif" font-size="9" fill="#2a2118">1</text>
+    <g id="rHora"><path d="M98.6 108 L98.8 100 L99.3 70 L100 56 L100.7 70 L101.2 100 L101.4 108 Z" fill="#1d1712"/><circle cx="100" cy="65" r="4.4" fill="none" stroke="#1d1712" stroke-width="1.7"/></g>
+    <g id="rMin"><path d="M99 112 L99.2 100 L99.6 50 L100 28 L100.4 50 L100.8 100 L101 112 Z" fill="#1d1712"/><circle cx="100" cy="42" r="3.6" fill="none" stroke="#1d1712" stroke-width="1.4"/></g>
+    <g id="rSeg"><line x1="100" y1="118" x2="100" y2="24" stroke="#2b4c8c" stroke-width=".9"/><circle cx="100" cy="100" r="2.4" fill="#2b4c8c"/></g>
+    <circle cx="100" cy="100" r="3.2" fill="#1d1712"/>
+  </svg>`;
+}
+function mouRellotge(){
+  const d = new Date(), s = d.getSeconds(), m = d.getMinutes() + s / 60, h = (d.getHours() % 12) + m / 60;
+  const hH = $('rHora'); if (!hH) return;
+  hH.setAttribute('transform', `rotate(${h * 30} 100 100)`);
+  $('rMin').setAttribute('transform', `rotate(${m * 6} 100 100)`);
+  $('rSeg').setAttribute('transform', `rotate(${s * 6} 100 100)`);
+  $('rData').textContent = d.getDate();
+  $('rellSub').textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][d.getDay()]}, ${d.getDate()} ${/^[aeiou]/.test(MESOS[d.getMonth()]) ? "d'" : 'de '}${MESOS[d.getMonth()]}`;
 }
 
-async function fetchLocalityName(lat, lon){
-  try{
-    const url = `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=ca`;
-    const res = await fetch(url);
-    const data = await res.json();
-    const name = data.locality || data.city || data.principalSubdivision || null;
-    if(name) document.getElementById('earth-name').textContent = name;
-  }catch(err){
-    // deixem el nom que ja hi hagi (per defecte, Barcelona)
+// --- Sol i Lluna (sortida i posta) ---
+const DIA = 864e5, J1970 = 2440588, J2000 = 2451545, OBL = RAD * 23.4397;
+const toDays = dt => dt.valueOf() / DIA - 0.5 + J1970 - J2000;
+const fromJ = j => new Date((j + 0.5 - J1970) * DIA);
+const ascensio = (l, b) => Math.atan2(Math.sin(l) * Math.cos(OBL) - Math.tan(b) * Math.sin(OBL), Math.cos(l));
+const declinacio = (l, b) => Math.asin(Math.sin(b) * Math.cos(OBL) + Math.cos(b) * Math.sin(OBL) * Math.sin(l));
+const anomaliaSol = d => RAD * (357.5291 + 0.98560028 * d);
+const longEcl = M => M + RAD * (1.9148 * Math.sin(M) + 0.02 * Math.sin(2 * M) + 0.0003 * Math.sin(3 * M)) + RAD * 102.9372 + Math.PI;
+function horesSol(dt, lat, lon){
+  const lw = RAD * -lon, phi = RAD * lat, d = toDays(dt), J0 = 0.0009;
+  const n = Math.round(d - J0 - lw / (2 * Math.PI)), ds = J0 + lw / (2 * Math.PI) + n, M = anomaliaSol(ds), Lg = longEcl(M), dec = declinacio(Lg, 0);
+  const Jnoon = J2000 + ds + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * Lg);
+  const w = Math.acos((Math.sin(-0.833 * RAD) - Math.sin(phi) * Math.sin(dec)) / (Math.cos(phi) * Math.cos(dec)));
+  const a = J0 + (w + lw) / (2 * Math.PI) + n, Jset = J2000 + a + 0.0053 * Math.sin(M) - 0.0069 * Math.sin(2 * Lg);
+  return { surt:fromJ(Jnoon - (Jset - Jnoon)), pon:fromJ(Jset) };
+}
+function alturaLluna(dt, lat, lon){
+  const lw = RAD * -lon, phi = RAD * lat, d = toDays(dt);
+  const Lm = RAD * (218.316 + 13.176396 * d), Mm = RAD * (134.963 + 13.064993 * d), F = RAD * (93.272 + 13.229350 * d);
+  const l = Lm + RAD * 6.289 * Math.sin(Mm), b = RAD * 5.128 * Math.sin(F), ra = ascensio(l, b), dec = declinacio(l, b);
+  const H = RAD * (280.16 + 360.9856235 * d) - lw - ra;
+  let h = Math.asin(Math.sin(phi) * Math.sin(dec) + Math.cos(phi) * Math.cos(dec) * Math.cos(H));
+  const hh = Math.max(h, 0); h += 0.0002967 / Math.tan(hh + 0.00312536 / (hh + 0.08901179));
+  return h;
+}
+function horesLluna(dt, lat, lon){
+  const t0 = new Date(dt); t0.setHours(0, 0, 0, 0);
+  const mes = hh => new Date(t0.valueOf() + hh * 36e5), hc = 0.133 * RAD;
+  let h0 = alturaLluna(t0, lat, lon) - hc, surt = null, pon = null;
+  for (let i = 1; i <= 24; i += 2){
+    const h1 = alturaLluna(mes(i), lat, lon) - hc, h2 = alturaLluna(mes(i + 1), lat, lon) - hc;
+    const a = (h0 + h2) / 2 - h1, b = (h2 - h0) / 2, xe = -b / (2 * a), ye = (a * xe + b) * xe + h1, disc = b * b - 4 * a * h1;
+    let arrels = 0, x1 = 0, x2 = 0;
+    if (disc >= 0){ const dx = Math.sqrt(disc) / (Math.abs(a) * 2); x1 = xe - dx; x2 = xe + dx; if (Math.abs(x1) <= 1) arrels++; if (Math.abs(x2) <= 1) arrels++; if (x1 < -1) x1 = x2; }
+    if (arrels === 1){ if (h0 < 0) surt = i + x1; else pon = i + x1; }
+    else if (arrels === 2){ surt = i + (ye < 0 ? x2 : x1); pon = i + (ye < 0 ? x1 : x2); }
+    if (surt != null && pon != null) break;
+    h0 = h2;
   }
+  return { surt:surt != null ? mes(surt) : null, pon:pon != null ? mes(pon) : null };
+}
+function pintaSolLluna(){
+  const d = new Date(), s = horesSol(d, pos.lat, pos.lon), l = horesLluna(d, pos.lat, pos.lon), L = lluna(d);
+  $('slSolS').textContent = hm(s.surt); $('slSolP').textContent = hm(s.pon);
+  const min = Math.round((s.pon - s.surt) / 6e4);
+  $('slLlum').textContent = isFinite(min) ? `${Math.floor(min / 60)} h ${min % 60} min de llum` : '—';
+  $('slLlS').textContent = l.surt ? hm(l.surt) : 'avui no';
+  $('slLlP').textContent = l.pon ? hm(l.pon) : 'avui no';
+  $('slFase').textContent = `${nomFase(L.elong)} · ${Math.round(L.illum * 100)}%`;
+  $('slLlunaIc').innerHTML = `<circle r="10" fill="#1a2230"/><g fill="#e6e3da">${faseSVG(L.elong / 360, 10)}</g>`;
+  $('rLluna').innerHTML = faseSVG(L.elong / 360, 8.5);
 }
 
-function initLocation(){
-  initDigiBar('bar-temp');
-  initDigiBar('bar-hum');
-  initDigiBar('bar-feels');
-  updateDigiBar('bar-temp', -10, 45, 15, '#ff8a5b');
-  updateDigiBar('bar-hum', 0, 100, 50, '#5bc8ff');
-  updateDigiBar('bar-feels', -10, 45, 15, '#c084fc');
-  document.getElementById('range-temp').textContent = '-10° — 45°C';
-  document.getElementById('range-hum').textContent = '0 — 100%';
-  document.getElementById('range-feels').textContent = '-10° — 45°C';
-
-  document.getElementById('earth-name').textContent = 'Barcelona';
-
-  if(!navigator.geolocation){
-    setLocStatus('geolocalització no disponible · ' + currentCoords.source);
-    fetchEnvironmentData();
-    return;
-  }
-
-  setLocStatus('sol·licitant ubicació…');
-  navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      currentCoords = { lat: pos.coords.latitude, lon: pos.coords.longitude, source: 'GPS' };
-      deviceAltitude = (typeof pos.coords.altitude === 'number' && pos.coords.altitude !== null) ? pos.coords.altitude : null;
-      setLocStatus('ubicació: ' + currentCoords.lat.toFixed(3) + ', ' + currentCoords.lon.toFixed(3));
-      fetchLocalityName(currentCoords.lat, currentCoords.lon);
-      fetchEnvironmentData();
-    },
-    (err) => {
-      setLocStatus('ubicació denegada · usant Barcelona per defecte');
-      fetchEnvironmentData();
-    },
-    { enableHighAccuracy:true, timeout:8000 }
-  );
+// --- Sant del dia i efemèride (Viquipèdia) ---
+const RE_FETS = /^(esdeveniments|fets)\b/i;
+const RE_FESTES = /(sant|commemora|festes|celebra|onom)/i;
+const RE_SANT = /(\bsant[ae]?s?\b|\bonom)/i;
+const SANTS_CAT = {
+  '01-07':['Sant Ramon de Penyafort', /penyafort/i], '02-12':['Santa Eulàlia de Barcelona', /eul[àa]lia/i], '03-06':['Sant Oleguer', /oleguer/i],
+  '03-23':['Sant Josep Oriol', /oriol/i], '04-05':['Sant Vicent Ferrer', /ferrer/i], '04-23':['Sant Jordi', /jordi/i],
+  '04-27':['Mare de Déu de Montserrat', /montserrat/i], '05-11':['Sant Ponç', /pon[çc]/i], '07-25':['Sant Jaume i sant Cugat', /\b(jaume|cugat)\b/i],
+  '08-19':['Sant Magí', /mag[íi]\b/i], '09-08':['Mare de Déu de Núria i de Meritxell', /(n[úu]ria|meritxell)/i], '09-09':['Sant Pere Claver', /claver/i],
+  '09-24':['Mare de Déu de la Mercè', /merc[èe]/i], '10-24':['Sant Antoni Maria Claret', /claret/i], '10-29':['Sant Narcís', /narc[íi]s/i],
+  '11-03':['Sant Ermengol', /ermengol/i]
+};
+function netejaWiki(s){
+  let x = s.replace(/<ref[^>]*\/>/g, '').replace(/<ref[\s\S]*?<\/ref>/g, '');
+  for (let k = 0; k < 3; k++) x = x.replace(/\{\{[^{}]*\}\}/g, '');
+  x = x.replace(/\[\[(?:Fitxer|File|Imatge|Image):[^\]]*\]\]/gi, '')
+       .replace(/\[\[[^\]|]*\|([^\]]*)\]\]/g, '$1').replace(/\[\[([^\]]*)\]\]/g, '$1')
+       .replace(/\[https?:\S+\s([^\]]*)\]/g, '$1').replace(/'{5}/g, '').replace(/'{4}/g, "'")
+       .replace(/(^|[^\p{L}])([ldnmstLDNMST])'{2,3}(?=\p{L})/gu, "$1$2'").replace(/'{2,3}/g, '').replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ');
+  return x.replace(/\s+/g, ' ').trim();
+}
+function seccions(wt){
+  const out = []; let act = null;
+  wt.split('\n').forEach(ln => {
+    const m = /^==\s*([^=].*?)\s*==\s*$/.exec(ln);
+    if (m){ act = { titol:netejaWiki(m[1]), linies:[] }; out.push(act); }
+    else if (act) act.linies.push(ln);
+  });
+  return out;
+}
+function extreu(wt, dt){
+  const sec = seccions(wt);
+  const fets = sec.filter(s => RE_FETS.test(s.titol)).flatMap(s => s.linies).filter(l => /^\*/.test(l))
+    .map(l => netejaWiki(l.replace(/^\*+\s*/, ''))).map(l => /^(\d{1,4})\s*(?:aC|a\. ?C\.)?\s*[-–—:,]\s*(.{25,260})$/.exec(l)).filter(Boolean);
+  const llavor = dt.getMonth() * 31 + dt.getDate(), curts = fets.filter(f => f[2].length <= 170), pou = curts.length ? curts : fets;
+  const fet = pou.length ? pou[(llavor * 7) % pou.length] : null;
+  const linies = sec.filter(s => RE_FESTES.test(s.titol)).flatMap(s => s.linies).map(l => netejaWiki(l.replace(/^[*:#]+\s*/, ''))).filter(l => RE_SANT.test(l) && l.length > 4);
+  let items = linies.map(l => l.replace(/^(santoral|onomàstica)\s*:\s*/i, '')).flatMap(l => l.split(/\s*;\s*/)).map(s => s.replace(/[.,;:\s]+$/, '').trim()).filter(s => s.length > 3);
+  const cat = SANTS_CAT[`${dosD(dt.getMonth() + 1)}-${dosD(dt.getDate())}`];
+  if (cat){ items = items.filter(s => !cat[1].test(s)); items.unshift(cat[0]); }
+  const triats = [];
+  for (const s of items){ if (triats.length && (triats.join(' · ').length + s.length > 90 || triats.length >= 2)) break; triats.push(s); }
+  let sant = triats.join(' · '); if (sant) sant = sant.charAt(0).toUpperCase() + sant.slice(1);
+  return { fet:fet ? { any:fet[1], text:fet[2] } : null, sant };
+}
+let santDia = '';
+function pintaSant(){
+  const d = new Date(), clau = clauData(d); if (santDia === clau) return; santDia = clau;
+  const m = MESOS[d.getMonth()], titol = `${d.getDate()} ${/^[aeiou]/.test(m) ? "d'" : 'de '}${m}`;
+  $('efemEtq').textContent = `Efemèride · ${titol}`;
+  demanaJSON(`https://ca.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(titol)}&prop=wikitext&redirects=1&format=json&formatversion=2&origin=*`, 12000)
+    .then(j => extreu((j && j.parse && j.parse.wikitext) || '', d))
+    .then(r => {
+      $('santNom').textContent = r.sant || '—';
+      if (r.fet){ $('efemText').innerHTML = `<b>${esc(r.fet.any)}</b> · ${esc(r.fet.text)}`; }
+      else $('efemText').textContent = 'Sense efemèride disponible avui.';
+    })
+    .catch(() => { santDia = ''; $('efemText').textContent = 'No s\'ha pogut consultar la Viquipèdia.'; });
 }
 
-initLocation();
-setInterval(fetchEnvironmentData, 10 * 60 * 1000); // refresc cada 10 min
+// --- Reproductor compartit (ràdio i podcasts) ---
+const player = new Audio(); player.preload = 'none';
+let sonaId = null;
+const RADIOS = [
+  { id:'rac1', nom:'RAC1', sub:'Generalista', audio:'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC_1.mp3' },
+  { id:'catradio', nom:'Catalunya Ràdio', sub:'3Cat', audio:'https://shoutcast.ccma.cat/ccma/catalunyaradioHD.mp3' },
+  { id:'catinfo', nom:'Catalunya Informació', sub:'Notícies · 3Cat', audio:'https://shoutcast.ccma.cat/ccma/catalunyainformacioHD.mp3' },
+  { id:'rac105', nom:'RAC105', sub:'Música', audio:'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC105.mp3' }
+];
+function sona(id, url){
+  if (sonaId === id){ player.pause(); player.removeAttribute('src'); player.load(); sonaId = null; pintaSo(); return; }
+  sonaId = id; player.src = url; player.play().catch(() => { sonaId = null; pintaSo(); }); pintaSo();
+}
+player.addEventListener('ended', () => { sonaId = null; pintaSo(); });
+player.addEventListener('error', () => { if (sonaId){ sonaId = null; pintaSo(); } });
+function pintaSo(){
+  document.querySelectorAll('.radio').forEach(b => {
+    const r = RADIOS.find(x => x.id === b.dataset.id), on = sonaId === r.id;
+    b.classList.toggle('sona', on); b.setAttribute('aria-pressed', on);
+    b.querySelector('small').textContent = on ? '■ atura' : r.sub;
+  });
+  ['podComp', 'podVia'].forEach(id => { const b = $(id); b.classList.toggle('sona', sonaId === id); });
+}
+$('radios').innerHTML = RADIOS.map(r => `<button type="button" class="radio" data-id="${r.id}" aria-pressed="false"><span>${r.nom}</span><small>${r.sub}</small></button>`).join('');
+document.querySelectorAll('.radio').forEach(b => b.addEventListener('click', () => { const r = RADIOS.find(x => x.id === b.dataset.id); sona(r.id, r.audio); }));
+
+// --- Podcasts de RAC1 (Omny; si falla, iTunes) ---
+const OMNY_ORG = '47dc05c7-7279-4c6f-9b31-ae74013297d9';
+const PROGRAMES = {
+  competencia:{ omny:'e38e0ded-b456-40ef-a8da-af1000eff5fc', apple:'330984064', n:25 },
+  via:{ omny:'48f190bf-f9df-4d37-961b-af0300af6177', apple:'395147618', n:80 }
+};
+function clipsOmny(p){
+  return demanaJSON(`https://api.omny.fm/orgs/${OMNY_ORG}/programs/${p.omny}/clips?pageSize=${p.n}`, 12000)
+    .then(j => (j.Clips || []).map(c => ({ titol:neteja(c.Title), data:new Date(c.PublishedUtc), audio:c.AudioUrl })));
+}
+function clipsApple(p){
+  return new Promise((res, rej) => {
+    const cb = '__kontrolApple' + Date.now() + Math.floor(Math.random() * 1e5), s = document.createElement('script');
+    const t = setTimeout(() => { fi(); rej(new Error('apple')); }, 12000);
+    function fi(){ clearTimeout(t); try { delete window[cb]; } catch(e){} s.remove(); }
+    window[cb] = j => { fi(); res((j.results || []).filter(r => r.wrapperType === 'podcastEpisode').map(r => ({ titol:neteja(r.trackName), data:new Date(r.releaseDate), audio:r.episodeUrl }))); };
+    s.onerror = () => { fi(); rej(new Error('apple')); };
+    s.src = `https://itunes.apple.com/lookup?id=${p.apple}&entity=podcastEpisode&limit=${p.n}&callback=${cb}`;
+    document.head.appendChild(s);
+  });
+}
+const clips = p => clipsOmny(p).catch(() => clipsApple(p));
+function darrer(llista){ return llista.filter(c => c.audio && !isNaN(c.data) && c.data <= Date.now()).sort((a, b) => b.data - a.data)[0]; }
+function carregaPodcasts(){
+  [['podComp', PROGRAMES.competencia], ['podVia', PROGRAMES.via]].forEach(([id, p]) => {
+    const b = $(id), sub = b.querySelector('span span');
+    clips(p).then(ll => {
+      const c = darrer(ll); if (!c) throw new Error('buit');
+      sub.textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][c.data.getDay()]} ${c.data.getDate()}/${c.data.getMonth() + 1}`;
+      b.title = c.titol; b.disabled = false; b.onclick = () => sona(id, c.audio);
+    }).catch(() => { sub.textContent = 'No disponible ara'; });
+  });
+}
+
+// --- Notícies (ACN) ---
+const INTERMEDIARIS = [
+  u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
+  u => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u),
+  u => 'https://corsproxy.io/?url=' + encodeURIComponent(u)
+];
+function acn(i = 0){
+  if (i >= INTERMEDIARIS.length) return Promise.reject(new Error('cap'));
+  return ambTemps(fetch(INTERMEDIARIS[i]('https://www.acn.cat/'), { cache:'no-store' }), 9000)
+    .then(r => { if (!r.ok) throw new Error('http'); return r.text(); })
+    .then(html => {
+      const doc = new DOMParser().parseFromString(html, 'text/html'), vist = {}, ordre = [];
+      [...doc.querySelectorAll('a[href*="/new/"]')].forEach(a => {
+        let h = a.getAttribute('href') || '';
+        if (h.indexOf('http') !== 0) h = 'https://www.acn.cat' + (h.charAt(0) === '/' ? '' : '/') + h;
+        const t = neteja(a.textContent); if (t.length < 20) return;
+        if (!vist[h]){ vist[h] = t; ordre.push(h); } else if (t.length > vist[h].length) vist[h] = t;
+      });
+      const r = ordre.slice(0, 12).map(h => ({ titol:vist[h], url:h })); if (!r.length) throw new Error('buit'); return r;
+    }).catch(() => acn(i + 1));
+}
+function googleACN(){
+  const rss = 'https://news.google.com/rss/search?q=' + encodeURIComponent('site:acn.cat when:1d') + '&hl=ca&gl=ES&ceid=ES:ca';
+  return ambTemps(fetch('https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(rss)), 9000).then(r => r.json())
+    .then(j => { const it = (j && j.items) || []; if (!it.length) throw new Error('buit'); return it.slice(0, 12).map(x => ({ titol:neteja(x.title).replace(/\s+-\s+(ACN|acn\.cat|Agència Catalana de Notícies)\s*$/i, ''), url:x.link })); });
+}
+function carregaNoticies(){
+  acn().catch(() => googleACN()).then(ll => {
+    ll = ll.filter(n => /^https?:\/\//i.test(n.url));
+    $('notLlista').innerHTML = ll.map((n, k) => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener"><span>${k + 1}</span><span>${esc(n.titol)}</span></a></li>`).join('');
+    $('notPeu').textContent = `Agència Catalana de Notícies · ${hm(new Date())}`;
+  }).catch(() => {
+    $('notLlista').innerHTML = '<li class="not-peu">No s\'han pogut carregar les notícies. <a href="https://www.acn.cat/" target="_blank" rel="noopener" style="color:var(--turq)">Obre l\'ACN</a></li>';
+  });
+}
+
+// --- Alarmes ---
+const PRESETS = { tots:['Cada dia', [0,1,2,3,4,5,6]], fe:['Dl–Dv', [1,2,3,4,5]], cs:['Ds–Dg', [6,0]] };
+const ORDRE_P = ['fe', 'tots', 'cs'];
+let alarmes = llegeix('alarmes', [{ h:'07:15', dies:'fe', on:false }]);
+let actx = null, sonantInt = null, darrerMinut = '';
+function pintaAlarmes(){
+  $('alLlista').innerHTML = alarmes.map((a, k) => `
+    <div class="lcd al-fila${a.on ? '' : ' off'}">
+      <input type="time" value="${a.h}" data-k="${k}" aria-label="Hora de l'alarma ${k + 1}">
+      <span class="espai"></span>
+      <button type="button" class="al-mini" data-dies="${k}" aria-label="Dies: ${PRESETS[a.dies][0]}">${PRESETS[a.dies][0]}</button>
+      <button type="button" class="al-mini" data-on="${k}" aria-pressed="${a.on}">${a.on ? 'ON' : 'OFF'}</button>
+      <button type="button" class="al-mini" data-treu="${k}" aria-label="Esborra l'alarma ${k + 1}">×</button>
+    </div>`).join('');
+  $('alNova').hidden = alarmes.length >= 3;
+  $('alLlista').querySelectorAll('input[type=time]').forEach(i => i.addEventListener('change', () => { alarmes[+i.dataset.k].h = i.value || '07:00'; alarmes[+i.dataset.k].on = true; desa('alarmes', alarmes); pintaAlarmes(); }));
+  $('alLlista').querySelectorAll('[data-dies]').forEach(b => b.addEventListener('click', () => { const a = alarmes[+b.dataset.dies]; a.dies = ORDRE_P[(ORDRE_P.indexOf(a.dies) + 1) % 3]; desa('alarmes', alarmes); pintaAlarmes(); }));
+  $('alLlista').querySelectorAll('[data-on]').forEach(b => b.addEventListener('click', () => { const a = alarmes[+b.dataset.on]; a.on = !a.on; desbloquejaSo(); desa('alarmes', alarmes); pintaAlarmes(); }));
+  $('alLlista').querySelectorAll('[data-treu]').forEach(b => b.addEventListener('click', () => { alarmes.splice(+b.dataset.treu, 1); desa('alarmes', alarmes); pintaAlarmes(); }));
+}
+$('alNova').addEventListener('click', () => { if (alarmes.length < 3){ alarmes.push({ h:'08:00', dies:'tots', on:true }); desbloquejaSo(); desa('alarmes', alarmes); pintaAlarmes(); } });
+function desbloquejaSo(){
+  try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch(e){}
+}
+document.addEventListener('pointerdown', desbloquejaSo, { once:true });
+function bip(){
+  if (!actx) return;
+  const t = actx.currentTime;
+  [0, .18, .36].forEach(dt => {
+    const o = actx.createOscillator(), g = actx.createGain();
+    o.type = 'square'; o.frequency.value = 2048;
+    g.gain.setValueAtTime(0, t + dt); g.gain.linearRampToValueAtTime(.12, t + dt + .01); g.gain.linearRampToValueAtTime(0, t + dt + .12);
+    o.connect(g).connect(actx.destination); o.start(t + dt); o.stop(t + dt + .14);
+  });
+}
+function comprovaAlarmes(){
+  const d = new Date(), clau = `${dosD(d.getHours())}:${dosD(d.getMinutes())}`;
+  if (clau === darrerMinut) return; darrerMinut = clau;
+  if (alarmes.some(a => a.on && a.h === clau && PRESETS[a.dies][1].includes(d.getDay()))){
+    $('sonant').hidden = false; bip(); clearInterval(sonantInt); sonantInt = setInterval(bip, 1000);
+    setTimeout(aturaAlarma, 5 * 60e3);
+  }
+}
+function aturaAlarma(){ clearInterval(sonantInt); sonantInt = null; $('sonant').hidden = true; }
+$('alAtura').addEventListener('click', aturaAlarma);
+
+/* ==========================================================================
+   POSADA EN MARXA
+   ========================================================================== */
+const f1 = new Lliscador($('f1')), f2 = new Lliscador($('f2')), f3 = new Lliscador($('f3'));
+f1.onCanvi = k => { idxF1 = k; refrescaF1(false); };
+idxF1 = f1.i;
+
+function localitza(){
+  if (!('geolocation' in navigator)){ geocodifica(); carregaTemps(); return; }
+  navigator.geolocation.getCurrentPosition(p => {
+    pos.lat = p.coords.latitude; pos.lon = p.coords.longitude; desa('pos', pos);
+    pintaLloc(); geocodifica(); carregaTemps(); pintaSolLluna(); passos = null;
+  }, () => { pintaLloc(); geocodifica(); carregaTemps(); }, { enableHighAccuracy:false, timeout:9000, maximumAge:600000 });
+}
+
+pintaLloc(); pintaAra(); pintaCalendari(); pintaAvisos(); creaRellotge(); mouRellotge(); pintaSolLluna(); pintaAlarmes();
+localitza(); pintaSant(); carregaNoticies(); carregaPodcasts();
+if (window.satellite) carregaTLE().then(refrescaEEI);
+requestAnimationFrame(() => refrescaF1(true));
+
+let darrerDia = new Date().getDate();
+setInterval(() => { pintaAra(); mouRellotge(); comprovaAlarmes(); }, 250);
+setInterval(() => { refrescaF1(false); refrescaEEI(); }, 4000);
+setInterval(() => {
+  const d = new Date();
+  if (d.getDate() !== darrerDia){ darrerDia = d.getDate(); pintaCalendari(); pintaSant(); }
+  pintaSolLluna(); pintaAvisos();
+}, 60e3);
+setInterval(localitza, 10 * 60e3);
+setInterval(carregaNoticies, 10 * 60e3);
+setInterval(carregaPodcasts, 30 * 60e3);
+setInterval(() => { if (window.satellite) carregaTLE(); }, 6 * 3600e3);
+document.addEventListener('visibilitychange', () => { if (!document.hidden){ refrescaF1(true); pintaSolLluna(); } });
+
+let tRes = null;
+new ResizeObserver(() => { clearTimeout(tRes); tRes = setTimeout(() => refrescaF1(true), 120); }).observe($('f1'));
+window.addEventListener('orientationchange', () => setTimeout(() => refrescaF1(true), 300));
 </script>
 </body>
 </html>
