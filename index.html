@@ -9,7 +9,7 @@
 <title>Centre de Control Orbital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg-0:#04060a;
@@ -210,22 +210,28 @@
 
   /* Ràdio */
   .p-radio{flex-direction:column; gap:.6em; font-size:clamp(10px,4cqmin,15px);}
-  .radios{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; width:100%; max-width:520px;}
-  .radio{appearance:none; min-height:clamp(52px,22cqmin,90px); border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
+  .p-radio{padding-top:clamp(14px,5cqmin,24px);}
+  .radios{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:6px; width:100%; max-width:560px;}
+  .radio{appearance:none; min-height:0; border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
     color:var(--lume); font-family:var(--font-d); font-size:1.15em; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; padding:4px;}
   .radio small{font-family:var(--font-m); font-size:.62em; color:var(--dim);}
   .radio.sona{border-color:var(--turq);} .radio.sona small{color:var(--turq);}
-  @container fin (orientation: portrait){ .radios{grid-template-columns:1fr;} }
-  @container fin (orientation: portrait) and (min-width: 300px){ .radios{grid-template-columns:repeat(2,minmax(0,1fr));} }
+  .radio span{font-size:clamp(11px,5cqmin,20px); line-height:1.1; text-align:center;} .radio small{font-size:clamp(8px,3.2cqmin,12px);}
 
   /* Podcasts */
-  .p-pod{flex-direction:column; gap:.6em; font-size:clamp(10px,4cqmin,15px);}
-  .pod{appearance:none; width:100%; max-width:520px; min-height:clamp(48px,20cqmin,80px); border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
-    color:var(--lume); padding:0 14px; display:flex; align-items:center; gap:12px; text-align:left; cursor:pointer; font:inherit;}
-  .pod svg{flex:0 0 auto; width:1.8em; height:1.8em; color:var(--turq);}
-  .pod b{display:block; font-family:var(--font-d); font-weight:500; font-size:1.2em;}
-  .pod span span{display:block; color:var(--dim); font-size:.85em; margin-top:2px;}
-  .pod.sona{border-color:var(--turq);}
+  .p-pod{flex-direction:column; gap:clamp(6px,3.4cqmin,16px); font-size:clamp(10px,4cqmin,15px);}
+  .p-seccio{width:100%; max-width:560px; display:flex; flex-direction:column; align-items:center; gap:.45em;}
+  .p-cap{font-family:var(--font-d); font-weight:500; font-size:1.15em; letter-spacing:.06em; color:var(--lume);}
+  .p-cap small{font-family:var(--font-m); font-weight:400; font-size:.7em; color:var(--dim);}
+  .p-fila{width:100%; display:flex; justify-content:center; gap:6px;}
+  .p-boto{appearance:none; flex:1 1 0; max-width:96px; min-width:0; min-height:clamp(40px,17cqmin,70px); border-radius:8px; border:1px solid var(--bezel-hi); background:var(--panel-2);
+    color:var(--lume); font:inherit; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:2px;}
+  .p-boto b{font-family:var(--font-d); font-weight:500; font-size:1.05em;}
+  .p-boto small{color:var(--dim); font-size:.75em;}
+  .p-boto.darrer{border-color:rgba(47,217,196,.45);}
+  .p-boto.sona{border-color:var(--turq); background:rgba(47,217,196,.1);} .p-boto.sona small{color:var(--turq);}
+  .p-estat{color:var(--dim); font-size:.85em;}
+  .p-titol{width:100%; max-width:560px; color:var(--turq); font-size:.82em; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
   /* Notícies */
   .p-not{flex-direction:column; align-items:stretch; justify-content:flex-start; gap:.5em; font-size:clamp(10px,3.9cqmin,15px); padding-top:clamp(14px,5cqmin,26px);}
@@ -236,19 +242,6 @@
   .not-llista a span:first-child{flex:0 0 1.4em; color:var(--turq);}
   .not-peu{color:var(--dim); font-size:.8em; text-align:center;}
 
-  /* Alarmes */
-  .p-al{flex-direction:column; gap:.55em; font-size:clamp(10px,4cqmin,15px);}
-  .al-fila{width:100%; max-width:520px; display:flex; align-items:center; gap:8px; padding:6px 8px;}
-  .al-fila.off{opacity:.5;}
-  .al-fila input[type=time]{appearance:none; -webkit-appearance:none; background:transparent; border:0; color:var(--lcd); font:clamp(20px,10cqmin,40px)/1 var(--font-m); width:5em; padding:0; text-shadow:0 0 6px rgba(143,174,134,.6);}
-  .al-fila input[type=time]::-webkit-calendar-picker-indicator{display:none;}
-  .al-mini{appearance:none; min-height:36px; min-width:36px; border-radius:8px; border:1px solid rgba(143,174,134,.35); background:rgba(0,0,0,.2); color:var(--lcd); font:inherit; font-size:.8em; letter-spacing:.08em; padding:0 8px; cursor:pointer;}
-  .al-fila .espai{flex:1 1 auto;}
-  .al-nova{min-height:40px;}
-  .al-nota{color:var(--dim); font-size:.8em; text-align:center;}
-  .sonant{position:fixed; inset:0; z-index:50; display:flex; align-items:center; justify-content:center; background:rgba(4,6,10,.82);}
-  .sonant[hidden]{display:none;}
-  .sonant button{min-height:80px; padding:0 40px; border-radius:16px; border:2px solid var(--turq); background:var(--panel); color:var(--lume); font:600 24px var(--font-d); letter-spacing:.06em; cursor:pointer;}
 
   /* Horitzontal: tres columnes */
   @media (orientation: landscape){
@@ -290,7 +283,7 @@
               <filter id="mMarcaOmbra" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="1.8" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.4"/></filter>
             </defs>
             <circle cx="150" cy="150" r="140" fill="url(#mDial)" stroke="url(#mBisell)" stroke-width="12"/>
-            <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="300" letter-spacing="1.8" fill="#000000" text-anchor="middle">MONDAINE</text>
+            <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="600" letter-spacing="1.6" fill="#000000" text-anchor="middle">MONDAINE</text>
             <g transform="translate(150, 110)">
               <circle cx="0" cy="0" r="6.5" fill="#e30613"/>
               <rect x="-1.3" y="-4.2" width="2.6" height="8.4" fill="#ffffff"/>
@@ -315,8 +308,8 @@
           </div>
         </div>
         <div class="info">
-          <div class="nom">Mondaine</div>
-          <div class="sub" id="rellZona" style="color:var(--lume)">Hora de París</div>
+          <div class="nom petit" id="rellZona">Hora de París</div>
+          <div class="sub" id="rellUtc" style="color:var(--lume)">UTC+1</div>
           <div class="sub" id="rellSub">—</div>
         </div>
       </article>
@@ -409,20 +402,14 @@
       </article>
 
       <article class="pane p-radio" aria-label="Ràdio">
-        <div class="etq">Ràdio</div>
+        <div class="etq">Ràdio en directe</div>
         <div class="radios" id="radios"></div>
       </article>
 
       <article class="pane p-pod" aria-label="Podcasts de RAC1">
-        <div class="etq">Podcasts · RAC1</div>
-        <button class="pod" type="button" id="podComp" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
-          <span><b>La Competència</b><span>Carregant…</span></span>
-        </button>
-        <button class="pod" type="button" id="podVia" disabled>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/></svg>
-          <span><b>Via lliure</b><span>Carregant…</span></span>
-        </button>
+        <div class="p-seccio"><div class="p-cap">La Competència <small>· RAC1</small></div><div class="p-fila" id="pComp"><span class="p-estat">Carregant…</span></div></div>
+        <div class="p-seccio"><div class="p-cap">Via lliure <small>· RAC1 · 1a hora</small></div><div class="p-fila" id="pVia"><span class="p-estat">Carregant…</span></div></div>
+        <div class="p-titol" id="podTitol" hidden></div>
       </article>
 
       <article class="pane p-not" aria-label="Notícies">
@@ -431,12 +418,6 @@
         <div class="not-peu" id="notPeu"></div>
       </article>
 
-      <article class="pane p-al" aria-label="Alarmes">
-        <div class="etq">Alarmes</div>
-        <div id="alLlista" style="width:100%; display:flex; flex-direction:column; align-items:center; gap:.5em;"></div>
-        <button class="boto al-nova" type="button" id="alNova">+ Nova alarma</button>
-        <div class="al-nota">Sonen mentre aquesta pàgina és oberta</div>
-      </article>
     </div>
     <button class="fletxa ant" type="button" aria-label="Anterior">‹</button>
     <button class="fletxa seg" type="button" aria-label="Següent">›</button>
@@ -448,7 +429,6 @@
   <span id="peuLloc">localitzant…</span><span class="punt"> · </span><span id="peuDades">dades pendents</span><span class="punt"> · </span>textures <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0)
 </footer>
 
-<div class="sonant" id="sonant" hidden><button type="button" id="alAtura">Atura l'alarma</button></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
@@ -499,27 +479,30 @@ const jd = d => d.getTime() / 86400000 + 2440587.5;
    LLISCADOR (finestres)
    ========================================================================== */
 class Lliscador {
+  // Roda: les pantalles són circulars. La pantalla visible sempre es manté al mig de la pista
+  // (es mouen de lloc les de les puntes), així es pot lliscar sense fi cap a tots dos costats.
   constructor(sec){
     this.sec = sec; this.pista = sec.querySelector('.pista');
     this.panes = [...this.pista.children];
-    this.i = Math.min(llegeix(sec.id, 0) || 0, this.panes.length - 1);
+    this.n = this.panes.length; this.mig = Math.floor(this.n / 2);
+    this.i = Math.min(Math.max(llegeix(sec.id, 0) || 0, 0), this.n - 1);
+    this.pos = 0;
     this.punts = sec.querySelector('.punts');
     this.punts.innerHTML = '';
     this.panes.forEach((p, k) => {
       const b = document.createElement('button'); b.type = 'button';
-      b.setAttribute('aria-label', (p.getAttribute('aria-label') || 'Pantalla') + ` (${k + 1} de ${this.panes.length})`);
+      b.setAttribute('aria-label', (p.getAttribute('aria-label') || 'Pantalla') + ` (${k + 1} de ${this.n})`);
       b.addEventListener('click', () => this.ves(k));
       this.punts.appendChild(b);
     });
     this.ant = sec.querySelector('.fletxa.ant'); this.seg = sec.querySelector('.fletxa.seg');
-    this.ant.addEventListener('click', () => this.ves(this.i - 1));
-    this.seg.addEventListener('click', () => this.ves(this.i + 1));
+    this.ant.addEventListener('click', () => this.pas(-1));
+    this.seg.addEventListener('click', () => this.pas(1));
     sec.addEventListener('keydown', e => {
       if (e.target.closest('input')) return;
-      if (e.key === 'ArrowLeft'){ this.ves(this.i - 1); e.preventDefault(); }
-      if (e.key === 'ArrowRight'){ this.ves(this.i + 1); e.preventDefault(); }
+      if (e.key === 'ArrowLeft'){ this.pas(-1); e.preventDefault(); }
+      if (e.key === 'ArrowRight'){ this.pas(1); e.preventDefault(); }
     });
-    // arrossegament amb el dit o el ratolí
     let x0 = 0, y0 = 0, t0 = 0, dx = 0, actiu = false, horitz = null, id = null;
     sec.addEventListener('pointerdown', e => {
       if (e.button !== 0 || e.target.closest('input, select, textarea')) return;
@@ -533,45 +516,62 @@ class Lliscador {
         horitz = Math.abs(ddx) > Math.abs(ddy);
         if (!horitz){ actiu = false; return; }
         try { sec.setPointerCapture(id); } catch(_){}
+        this.centra();
         this.pista.classList.add('arrossega');
       }
-      dx = ddx;
-      const vora = (this.i === 0 && dx > 0) || (this.i === this.panes.length - 1 && dx < 0);
-      this.posa(vora ? dx * .3 : dx);
+      dx = ddx; this.posa(dx);
     });
     const acaba = e => {
       if (!actiu || (e && e.pointerId !== id)) return;
       actiu = false;
-      if (!horitz){ return; }
+      if (!horitz) return;
       this.pista.classList.remove('arrossega');
-      const v = dx / Math.max(1, performance.now() - t0);
-      const w = sec.clientWidth;
-      if (dx < -w * .18 || v < -.35) this.ves(this.i + 1);
-      else if (dx > w * .18 || v > .35) this.ves(this.i - 1);
-      else this.ves(this.i);
+      const v = dx / Math.max(1, performance.now() - t0), w = sec.clientWidth;
+      if (dx < -w * .18 || v < -.35) this.pas(1);
+      else if (dx > w * .18 || v > .35) this.pas(-1);
+      else this.posa(0);
       this.blocaClic = true; setTimeout(() => this.blocaClic = false, 60);
     };
     sec.addEventListener('pointerup', acaba);
     sec.addEventListener('pointercancel', acaba);
     sec.addEventListener('click', e => { if (this.blocaClic){ e.preventDefault(); e.stopPropagation(); } }, true);
-    // trackpad o roda horitzontal
     let acum = 0, espera = 0;
     sec.addEventListener('wheel', e => {
       if (Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return;
       e.preventDefault();
       if (performance.now() < espera) return;
       acum += e.deltaX;
-      if (Math.abs(acum) > 40){ this.ves(this.i + (acum > 0 ? 1 : -1)); acum = 0; espera = performance.now() + 450; }
+      if (Math.abs(acum) > 40){ this.pas(acum > 0 ? 1 : -1); acum = 0; espera = performance.now() + 450; }
     }, { passive:false });
-    this.ves(this.i, true);
+    this.centra(); this.marca(true);
   }
-  posa(px){ this.pista.style.transform = `translateX(calc(${-this.i * 100}% + ${px}px))`; }
-  ves(k, inicial){
-    k = Math.max(0, Math.min(this.panes.length - 1, k));
-    this.i = k; this.posa(0);
+  posa(px){ this.pista.style.transform = `translateX(calc(${-this.pos * 100}% + ${px}px))`; }
+  // reordena la pista perquè la pantalla actual quedi al mig, sense que es noti
+  centra(){
+    const ordre = [];
+    for (let k = 0; k < this.n; k++) ordre.push(this.panes[(this.i - this.mig + k + this.n * 2) % this.n]);
+    if (ordre.some((p, k) => this.pista.children[k] !== p)){
+      ordre.forEach(p => this.pista.appendChild(p));
+      if (this.onReordena) this.onReordena();
+    }
+    this.pos = this.mig;
+    this.pista.classList.add('arrossega'); this.posa(0); void this.pista.offsetWidth; this.pista.classList.remove('arrossega');
+  }
+  pas(d){ this.ves((this.i + d + this.n) % this.n, d); }
+  ves(k, dir){
+    if (k === this.i && !dir) return;
+    let d = dir;
+    if (d === undefined){ d = (k - this.i + this.n) % this.n; if (d > this.n / 2) d -= this.n; }
+    if (Math.abs(d) > this.mig) d = Math.sign(d) * this.mig;
+    this.centra();
+    this.i = k; this.pos = this.mig + d; this.posa(0);
+    this.marca(false);
+    clearTimeout(this.tCentra); this.tCentra = setTimeout(() => this.centra(), 420);
+  }
+  marca(inicial){
+    const k = this.i;
     [...this.punts.children].forEach((b, n) => b.setAttribute('aria-current', n === k ? 'true' : 'false'));
     this.panes.forEach((p, n) => p.setAttribute('aria-hidden', n === k ? 'false' : 'true'));
-    this.ant.disabled = k === 0; this.seg.disabled = k === this.panes.length - 1;
     if (!inicial) desa(this.sec.id, k);
     if (this.onCanvi) this.onCanvi(k);
   }
@@ -871,7 +871,8 @@ function refrescaF1(tots){
   if (!preparaGL()) return;
   const ara = new Date();
   COSSOS.forEach((c, k) => {
-    if (!tots && Math.abs(k - idxF1) > 1) return;
+    const dist = Math.min((k - idxF1 + COSSOS.length) % COSSOS.length, (idxF1 - k + COSSOS.length) % COSSOS.length);
+    if (!tots && dist > 1) return;
     if (c.id === 'eei') return;
     const canvas = c.el.querySelector('canvas');
     if (c.id === 'terra'){
@@ -1214,7 +1215,7 @@ function zonaHoraria(d){
   const clau = tz.split('/').pop(), ciutat = CIUTATS_ZONA[clau] || clau.replace(/_/g, ' ');
   const off = -d.getTimezoneOffset(), h = Math.floor(Math.abs(off) / 60), m = Math.abs(off) % 60;
   const utc = 'UTC' + (off < 0 ? '−' : '+') + h + (m ? ':' + dosD(m) : '');
-  return `Hora ${/^[aeiouàèéíòóú]/i.test(ciutat) ? "d'" : 'de '}${ciutat} · ${utc}`;
+  return [`Hora ${/^[aeiouàèéíòóú]/i.test(ciutat) ? "d'" : 'de '}${ciutat}`, utc];
 }
 function faseSVG(f, r){
   // f: fracció del cicle (0 nova, .5 plena). Torna el camí de la part il·luminada.
@@ -1250,7 +1251,7 @@ function mouRellotge(){
   $('mMin').setAttribute('transform', `rotate(${m * 6} 150 150)`);
   $('mHora').setAttribute('transform', `rotate(${(d.getHours() % 12) * 30 + m * .5} 150 150)`);
   sincronitzaSegonera(d);
-  $('rellZona').textContent = zonaHoraria(d);
+  const [zona, utc] = zonaHoraria(d); $('rellZona').textContent = zona; $('rellUtc').textContent = utc;
   $('rellSub').textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][d.getDay()]}, ${d.getDate()} ${/^[aeiou]/.test(MESOS[d.getMonth()]) ? "d'" : 'de '}${MESOS[d.getMonth()]}`;
 }
 
@@ -1373,11 +1374,33 @@ const RADIOS = [
   { id:'rac1', nom:'RAC1', sub:'Generalista', audio:'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC_1.mp3' },
   { id:'catradio', nom:'Catalunya Ràdio', sub:'3Cat', audio:'https://shoutcast.ccma.cat/ccma/catalunyaradioHD.mp3' },
   { id:'catinfo', nom:'Catalunya Informació', sub:'Notícies · 3Cat', audio:'https://shoutcast.ccma.cat/ccma/catalunyainformacioHD.mp3' },
-  { id:'rac105', nom:'RAC105', sub:'Música', audio:'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC105.mp3' }
+  { id:'rac105', nom:'RAC105', sub:'Música', audio:'https://playerservices.streamtheworld.com/api/livestream-redirect/RAC105.mp3' },
+  { id:'catmusica', nom:'Catalunya Música', sub:'Clàssica · 3Cat', audio:'https://shoutcast.ccma.cat/ccma/catalunyamusicaHD.mp3' },
+  { id:'icat', nom:'iCat', sub:'Cultura · 3Cat', audio:'https://shoutcast.ccma.cat/ccma/icatHD.mp3' },
+  { id:'clasica', nom:'Radio Clásica', sub:'Clàssica · RNE', audio:'https://rtvelivestream.rtve.es/rtvesec/rne/rne_r2_main.m3u8' },
+  { id:'bbc', nom:'BBC World Service', sub:'Món · anglès', audio:'https://stream.live.vc.bbcmedia.co.uk/bbc_world_service' }
 ];
+let hls = null;
+function aturaHls(){ if (hls){ try { hls.destroy(); } catch(e){} hls = null; } }
+function carregaHlsJs(){
+  if (window.Hls) return Promise.resolve();
+  return new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = 'https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js'; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); });
+}
 function sona(id, url){
+  aturaHls();
   if (sonaId === id){ player.pause(); player.removeAttribute('src'); player.load(); sonaId = null; pintaSo(); return; }
-  sonaId = id; player.src = url; player.play().catch(() => { sonaId = null; pintaSo(); }); pintaSo();
+  sonaId = id; pintaSo();
+  const falla = () => { if (sonaId === id){ sonaId = null; pintaSo(); } };
+  // les emissores en HLS (.m3u8) les fa sonar Safari directament; els altres navegadors necessiten hls.js
+  if (/\.m3u8/.test(url) && !player.canPlayType('application/vnd.apple.mpegurl')){
+    carregaHlsJs().then(() => {
+      if (sonaId !== id || !window.Hls || !Hls.isSupported()) return falla();
+      hls = new Hls(); hls.loadSource(url); hls.attachMedia(player);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => player.play().catch(falla));
+    }).catch(falla);
+    return;
+  }
+  player.src = url; player.play().catch(falla);
 }
 player.addEventListener('ended', () => { sonaId = null; pintaSo(); });
 player.addEventListener('error', () => { if (sonaId){ sonaId = null; pintaSo(); } });
@@ -1387,8 +1410,14 @@ function pintaSo(){
     b.classList.toggle('sona', on); b.setAttribute('aria-pressed', on);
     b.querySelector('small').textContent = on ? '■ atura' : r.sub;
   });
-  ['podComp', 'podVia'].forEach(id => { const b = $(id); b.classList.toggle('sona', sonaId === id); });
+  document.querySelectorAll('.p-boto').forEach(b => {
+    const on = sonaId === b.dataset.id;
+    b.classList.toggle('sona', on); b.setAttribute('aria-pressed', on);
+  });
+  const t = $('podTitol'), pc = PODS_SONANT[sonaId];
+  t.hidden = !pc; if (pc) t.textContent = '▶ ' + pc;
 }
+const PODS_SONANT = {};
 $('radios').innerHTML = RADIOS.map(r => `<button type="button" class="radio" data-id="${r.id}" aria-pressed="false"><span>${r.nom}</span><small>${r.sub}</small></button>`).join('');
 document.querySelectorAll('.radio').forEach(b => b.addEventListener('click', () => { const r = RADIOS.find(x => x.id === b.dataset.id); sona(r.id, r.audio); }));
 
@@ -1400,7 +1429,8 @@ const PROGRAMES = {
 };
 function clipsOmny(p){
   return demanaJSON(`https://api.omny.fm/orgs/${OMNY_ORG}/programs/${p.omny}/clips?pageSize=${p.n}`, 12000)
-    .then(j => (j.Clips || []).map(c => ({ titol:neteja(c.Title), data:new Date(c.PublishedUtc), audio:c.AudioUrl })));
+    .then(j => (j.Clips || []).map(c => ({ titol:neteja(c.Title), data:new Date(c.PublishedUtc), audio:c.AudioUrl })))
+    .then(l => { if (!l.length) throw new Error('buit'); return l; });
 }
 function clipsApple(p){
   return new Promise((res, rej) => {
@@ -1414,16 +1444,46 @@ function clipsApple(p){
   });
 }
 const clips = p => clipsOmny(p).catch(() => clipsApple(p));
-function darrer(llista){ return llista.filter(c => c.audio && !isNaN(c.data) && c.data <= Date.now()).sort((a, b) => b.data - a.data)[0]; }
-function carregaPodcasts(){
-  [['podComp', PROGRAMES.competencia], ['podVia', PROGRAMES.via]].forEach(([id, p]) => {
-    const b = $(id), sub = b.querySelector('span span');
-    clips(p).then(ll => {
-      const c = darrer(ll); if (!c) throw new Error('buit');
-      sub.textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][c.data.getDay()]} ${c.data.getDate()}/${c.data.getMonth() + 1}`;
-      b.title = c.titol; b.disabled = false; b.onclick = () => sona(id, c.audio);
-    }).catch(() => { sub.textContent = 'No disponible ara'; });
+// Dia i hora d'emissió segons l'hora oficial de casa nostra (zona de París)
+const NUM_DIA = { Sun:0, Mon:1, Tue:2, Wed:3, Thu:4, Fri:5, Sat:6 };
+const fmtLocal = new Intl.DateTimeFormat('en-GB', { timeZone:'Europe/Paris', weekday:'short', day:'numeric', month:'numeric', hour:'2-digit', hourCycle:'h23' });
+function horaLocal(d){ const o = {}; fmtLocal.formatToParts(d).forEach(p => { o[p.type] = p.value; }); return { dow:NUM_DIA[o.weekday], dia:+o.day, mes:+o.month, hora:parseInt(o.hour, 10) % 24 }; }
+// El darrer programa de cada dia indicat, del més antic al més recent
+function darrerPerDia(llista, dies, hora){
+  const ara = Date.now(), perDia = {};
+  llista.forEach(c => {
+    if (!c.audio || isNaN(c.data) || c.data.getTime() > ara) return;
+    const m = horaLocal(c.data);
+    if (!dies.includes(m.dow)) return;
+    if (hora != null && m.hora !== hora) return;
+    if (!perDia[m.dow] || c.data > perDia[m.dow].data){ c.m = m; perDia[m.dow] = c; }
   });
+  return Object.values(perDia).sort((a, b) => a.data - b.data);
+}
+const DIES_NOM = ['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'];
+function pintaPrograma(caixa, llista, prog, curt){
+  caixa.innerHTML = '';
+  llista.forEach((c, k) => {
+    const id = `${prog}-${c.m.dow}`, b = document.createElement('button');
+    b.type = 'button'; b.className = 'p-boto' + (k === llista.length - 1 ? ' darrer' : ''); b.dataset.id = id;
+    b.innerHTML = `<b>${curt ? DIES_CURT[c.m.dow].charAt(0) + DIES_CURT[c.m.dow].charAt(1).toLowerCase() : DIES_NOM[c.m.dow]}</b><small>${c.m.dia}/${c.m.mes}</small>`;
+    b.setAttribute('aria-label', `${prog === 'comp' ? 'La Competència' : 'Via lliure'}, ${DIES_NOM[c.m.dow]} ${c.m.dia}/${c.m.mes}`);
+    b.title = c.titol || '';
+    PODS_SONANT[id] = `${prog === 'comp' ? 'La Competència' : 'Via lliure'} · ${DIES_NOM[c.m.dow]} ${c.m.dia}/${c.m.mes}`;
+    b.addEventListener('click', () => sona(id, c.audio));
+    caixa.appendChild(b);
+  });
+  pintaSo();
+}
+function carregaPodcasts(){
+  clips(PROGRAMES.competencia).then(ll => {
+    const l = darrerPerDia(ll, [1, 2, 3, 4, 5], null); if (!l.length) throw new Error('buit');
+    pintaPrograma($('pComp'), l, 'comp', true);
+  }).catch(() => { if (!$('pComp').querySelector('.p-boto')) $('pComp').innerHTML = '<span class="p-estat">No disponible ara</span>'; });
+  clips(PROGRAMES.via).then(ll => {
+    const l = darrerPerDia(ll, [6, 0], 7); if (!l.length) throw new Error('buit');
+    pintaPrograma($('pVia'), l, 'via', false);
+  }).catch(() => { if (!$('pVia').querySelector('.p-boto')) $('pVia').innerHTML = '<span class="p-estat">No disponible ara</span>'; });
 }
 
 // --- Notícies (ACN) ---
@@ -1462,56 +1522,11 @@ function carregaNoticies(){
   });
 }
 
-// --- Alarmes ---
-const PRESETS = { tots:['Cada dia', [0,1,2,3,4,5,6]], fe:['Dl–Dv', [1,2,3,4,5]], cs:['Ds–Dg', [6,0]] };
-const ORDRE_P = ['fe', 'tots', 'cs'];
-let alarmes = llegeix('alarmes', [{ h:'07:15', dies:'fe', on:false }]);
-let actx = null, sonantInt = null, darrerMinut = '';
-function pintaAlarmes(){
-  $('alLlista').innerHTML = alarmes.map((a, k) => `
-    <div class="lcd al-fila${a.on ? '' : ' off'}">
-      <input type="time" value="${a.h}" data-k="${k}" aria-label="Hora de l'alarma ${k + 1}">
-      <span class="espai"></span>
-      <button type="button" class="al-mini" data-dies="${k}" aria-label="Dies: ${PRESETS[a.dies][0]}">${PRESETS[a.dies][0]}</button>
-      <button type="button" class="al-mini" data-on="${k}" aria-pressed="${a.on}">${a.on ? 'ON' : 'OFF'}</button>
-      <button type="button" class="al-mini" data-treu="${k}" aria-label="Esborra l'alarma ${k + 1}">×</button>
-    </div>`).join('');
-  $('alNova').hidden = alarmes.length >= 3;
-  $('alLlista').querySelectorAll('input[type=time]').forEach(i => i.addEventListener('change', () => { alarmes[+i.dataset.k].h = i.value || '07:00'; alarmes[+i.dataset.k].on = true; desa('alarmes', alarmes); pintaAlarmes(); }));
-  $('alLlista').querySelectorAll('[data-dies]').forEach(b => b.addEventListener('click', () => { const a = alarmes[+b.dataset.dies]; a.dies = ORDRE_P[(ORDRE_P.indexOf(a.dies) + 1) % 3]; desa('alarmes', alarmes); pintaAlarmes(); }));
-  $('alLlista').querySelectorAll('[data-on]').forEach(b => b.addEventListener('click', () => { const a = alarmes[+b.dataset.on]; a.on = !a.on; desbloquejaSo(); desa('alarmes', alarmes); pintaAlarmes(); }));
-  $('alLlista').querySelectorAll('[data-treu]').forEach(b => b.addEventListener('click', () => { alarmes.splice(+b.dataset.treu, 1); desa('alarmes', alarmes); pintaAlarmes(); }));
-}
-$('alNova').addEventListener('click', () => { if (alarmes.length < 3){ alarmes.push({ h:'08:00', dies:'tots', on:true }); desbloquejaSo(); desa('alarmes', alarmes); pintaAlarmes(); } });
-function desbloquejaSo(){
-  try { if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)(); if (actx.state === 'suspended') actx.resume(); } catch(e){}
-}
-document.addEventListener('pointerdown', desbloquejaSo, { once:true });
-function bip(){
-  if (!actx) return;
-  const t = actx.currentTime;
-  [0, .18, .36].forEach(dt => {
-    const o = actx.createOscillator(), g = actx.createGain();
-    o.type = 'square'; o.frequency.value = 2048;
-    g.gain.setValueAtTime(0, t + dt); g.gain.linearRampToValueAtTime(.12, t + dt + .01); g.gain.linearRampToValueAtTime(0, t + dt + .12);
-    o.connect(g).connect(actx.destination); o.start(t + dt); o.stop(t + dt + .14);
-  });
-}
-function comprovaAlarmes(){
-  const d = new Date(), clau = `${dosD(d.getHours())}:${dosD(d.getMinutes())}`;
-  if (clau === darrerMinut) return; darrerMinut = clau;
-  if (alarmes.some(a => a.on && a.h === clau && PRESETS[a.dies][1].includes(d.getDay()))){
-    $('sonant').hidden = false; bip(); clearInterval(sonantInt); sonantInt = setInterval(bip, 1000);
-    setTimeout(aturaAlarma, 5 * 60e3);
-  }
-}
-function aturaAlarma(){ clearInterval(sonantInt); sonantInt = null; $('sonant').hidden = true; }
-$('alAtura').addEventListener('click', aturaAlarma);
-
 /* ==========================================================================
    POSADA EN MARXA
    ========================================================================== */
 const f1 = new Lliscador($('f1')), f2 = new Lliscador($('f2')), f3 = new Lliscador($('f3'));
+f2.onReordena = () => sincronitzaSegonera();
 f1.onCanvi = k => { idxF1 = k; refrescaF1(false); };
 idxF1 = f1.i;
 
@@ -1523,13 +1538,13 @@ function localitza(){
   }, () => { pintaLloc(); geocodifica(); carregaTemps(); }, { enableHighAccuracy:false, timeout:9000, maximumAge:600000 });
 }
 
-pintaLloc(); pintaAra(); pintaCalendari(); pintaAvisos(); creaRellotge(); mouRellotge(); pintaSolLluna(); pintaAlarmes();
+pintaLloc(); pintaAra(); pintaCalendari(); pintaAvisos(); creaRellotge(); mouRellotge(); pintaSolLluna();
 localitza(); pintaSant(); carregaNoticies(); carregaPodcasts();
 if (window.satellite) carregaTLE().then(refrescaEEI);
 requestAnimationFrame(() => refrescaF1(true));
 
 let darrerDia = new Date().getDate();
-setInterval(() => { pintaAra(); mouRellotge(); comprovaAlarmes(); }, 250);
+setInterval(() => { pintaAra(); mouRellotge(); }, 250);
 setInterval(() => { refrescaF1(false); refrescaEEI(); }, 4000);
 setInterval(() => {
   const d = new Date();
