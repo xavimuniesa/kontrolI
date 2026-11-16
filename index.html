@@ -161,7 +161,15 @@
   /* Calendari i avisos */
   .p-cal{gap:clamp(10px,5cqmin,24px); font-size:clamp(9px,3.8cqmin,14px);}
   .cal{flex:0 0 auto; display:flex; flex-direction:column; gap:.4em;}
-  .cal-tit{text-align:center; font-family:var(--font-d); font-size:1.25em; letter-spacing:.08em; color:var(--lume);}
+  .cal{touch-action:none; cursor:ns-resize;}
+  .cal-cap{display:flex; align-items:center; justify-content:center; gap:.3em;}
+  .cal-tit{appearance:none; border:0; background:none; padding:0 .2em; min-height:28px; text-align:center; font-family:var(--font-d); font-size:1.25em; letter-spacing:.08em; color:var(--lume); cursor:pointer;}
+  .cal-tit.fora{color:var(--turq);}
+  .cal-fl{appearance:none; border:0; background:none; color:var(--dim); font:inherit; font-size:1em; width:28px; height:28px; cursor:pointer; border-radius:6px;}
+  .cal-fl:hover{color:var(--turq);}
+  .cal-g.puja{animation:calPuja .28s ease-out;} .cal-g.baixa{animation:calBaixa .28s ease-out;}
+  @keyframes calPuja{from{transform:translateY(18%); opacity:0;} to{transform:none; opacity:1;}}
+  @keyframes calBaixa{from{transform:translateY(-18%); opacity:0;} to{transform:none; opacity:1;}}
   .cal-g{display:grid; grid-template-columns:repeat(7,2.2em); row-gap:2px; text-align:center;}
   .cal-g span{height:1.75em; line-height:1.75em; border-radius:4px;}
   .cal-g .cs{color:var(--dim);}
@@ -275,7 +283,7 @@
     <div class="pista">
       <article class="pane p-rell" aria-label="Rellotge Mondaine">
         <div class="disc" id="mondDisc">
-          <svg viewBox="0 0 300 300" role="img" aria-label="Rellotge Mondaine Stop2Go">
+          <svg viewBox="0 0 300 300" role="img" aria-label="Rellotge Mondaine">
             <defs>
               <radialGradient id="mDial" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="70%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e2e2e2"/></radialGradient>
               <linearGradient id="mBisell" x1="15%" y1="8%" x2="88%" y2="95%"><stop offset="0%" stop-color="#6a6a6a"/><stop offset="14%" stop-color="#1c1c1c"/><stop offset="55%" stop-color="#000000"/><stop offset="100%" stop-color="#000000"/></linearGradient>
@@ -307,8 +315,8 @@
           </div>
         </div>
         <div class="info">
-          <div class="etq">Rellotge</div>
-          <div class="nom">Mondaine Stop2Go</div>
+          <div class="nom">Mondaine</div>
+          <div class="sub" id="rellZona" style="color:var(--lume)">Hora de París</div>
           <div class="sub" id="rellSub">—</div>
         </div>
       </article>
@@ -356,11 +364,15 @@
 
       <article class="pane p-cal" aria-label="Calendari i avisos">
         <div class="cal">
-          <div class="cal-tit" id="calTit">—</div>
+          <div class="cal-cap">
+            <button type="button" class="cal-fl" id="calAnt" aria-label="Mes anterior">▲</button>
+            <button type="button" class="cal-tit" id="calTit" title="Torna al mes actual">—</button>
+            <button type="button" class="cal-fl" id="calSeg" aria-label="Mes següent">▼</button>
+          </div>
           <div class="cal-g" id="calG" role="grid" aria-label="Calendari del mes"></div>
         </div>
         <div class="cal-dreta">
-          <div><div class="etq">Properament</div><ul class="llista" id="calFestes"></ul></div>
+          <div><div class="etq" id="calFestesEtq">Properament</div><ul class="llista" id="calFestes"></ul></div>
           <div><div class="etq">Avisos</div><ul class="llista avisos" id="calAvisos"><li class="cap">Esperant la previsió…</li></ul></div>
         </div>
       </article>
@@ -1105,22 +1117,55 @@ function festiusAny(any){
   ]);
 }
 const festiu = d => festiusAny(d.getFullYear()).get(clauData(d)) || null;
-function pintaCalendari(){
-  const avui = new Date(), any = avui.getFullYear(), mes = avui.getMonth();
+let calDesp = 0;   // mesos de distància respecte del mes actual
+function pintaCalendari(dir){
+  const avui = new Date(), base = new Date(avui.getFullYear(), avui.getMonth() + calDesp, 1), any = base.getFullYear(), mes = base.getMonth();
+  const esAquest = calDesp === 0;
   $('calTit').textContent = `${MESOS_CAP[mes]} ${any}`;
+  $('calTit').classList.toggle('fora', !esAquest);
   const primer = new Date(any, mes, 1), buits = (primer.getDay() + 6) % 7, dies = new Date(any, mes + 1, 0).getDate();
   let h = ['Dl','Dt','Dc','Dj','Dv','Ds','Dg'].map(x => `<span class="cs">${x}</span>`).join('');
   for (let k = 0; k < buits; k++) h += '<span></span>';
   for (let d = 1; d <= dies; d++){
     const dt = new Date(any, mes, d), fe = festiu(dt), dw = dt.getDay();
-    let cls = d === avui.getDate() ? 'avui' : fe || dw === 0 ? 'fe' : dw === 6 ? 'ds' : '';
+    let cls = esAquest && d === avui.getDate() ? 'avui' : fe || dw === 0 ? 'fe' : dw === 6 ? 'ds' : '';
     h += `<span class="${cls}"${fe ? ` title="${esc(fe)}"` : ''}>${d}</span>`;
   }
-  $('calG').innerHTML = h;
-  const prop = [];
-  for (let k = 1; k < 200 && prop.length < 3; k++){ const dt = sumaDies(avui, k), fe = festiu(dt); if (fe) prop.push(`${DIES_MIN[dt.getDay()].replace(/^./, x => x.toUpperCase())} ${dt.getDate()} ${MESOS_CURT[dt.getMonth()].toLowerCase()} · ${esc(fe)}`); }
-  $('calFestes').innerHTML = prop.map(p => `<li>${p}</li>`).join('');
+  const g = $('calG'); g.innerHTML = h;
+  if (dir){ g.classList.remove('puja', 'baixa'); void g.offsetWidth; g.classList.add(dir > 0 ? 'puja' : 'baixa'); }
+  const etDia = dt => `${DIES_MIN[dt.getDay()].replace(/^./, x => x.toUpperCase())} ${dt.getDate()} ${MESOS_CURT[dt.getMonth()].toLowerCase()}`;
+  const ll = [];
+  if (esAquest){
+    for (let k = 1; k < 200 && ll.length < 3; k++){ const dt = sumaDies(avui, k), fe = festiu(dt); if (fe) ll.push(`${etDia(dt)} · ${esc(fe)}`); }
+    $('calFestesEtq').textContent = 'Properament';
+  } else {
+    for (let d = 1; d <= dies; d++){ const dt = new Date(any, mes, d), fe = festiu(dt); if (fe) ll.push(`${etDia(dt)} · ${esc(fe)}`); }
+    $('calFestesEtq').textContent = `Festius ${/^[aeiou]/.test(MESOS[mes]) ? "d'" : 'de '}${MESOS[mes]}`;
+    if (!ll.length) ll.push('<span style="color:var(--dim)">Cap festiu aquest mes</span>');
+  }
+  $('calFestes').innerHTML = ll.slice(0, 4).map(p => `<li>${p}</li>`).join('');
 }
+function mouMes(n){ calDesp += n; pintaCalendari(n); }
+$('calAnt').addEventListener('click', () => mouMes(-1));
+$('calSeg').addEventListener('click', () => mouMes(1));
+$('calTit').addEventListener('click', () => { if (calDesp){ const n = -calDesp; calDesp = 0; pintaCalendari(n); } });
+(() => {
+  // lliscar amunt = mes següent; avall = mes anterior (els lliscaments laterals segueixen canviant de pantalla)
+  const cal = document.querySelector('.cal'); let x0 = 0, y0 = 0, id = null;
+  cal.addEventListener('pointerdown', e => { if (e.target.closest('button')) return; id = e.pointerId; x0 = e.clientX; y0 = e.clientY; });
+  const fi = e => {
+    if (e.pointerId !== id) return; id = null;
+    const dx = e.clientX - x0, dy = e.clientY - y0;
+    if (Math.abs(dy) > 25 && Math.abs(dy) > Math.abs(dx) * 1.2) mouMes(dy < 0 ? 1 : -1);
+  };
+  cal.addEventListener('pointerup', fi); cal.addEventListener('pointercancel', () => { id = null; });
+  let espera = 0;
+  cal.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+    e.preventDefault(); if (performance.now() < espera) return;
+    if (Math.abs(e.deltaY) > 8){ mouMes(e.deltaY > 0 ? 1 : -1); espera = performance.now() + 350; }
+  }, { passive:false });
+})();
 function pintaAvisos(){
   const ll = [];
   if (meteo){
@@ -1155,7 +1200,22 @@ function pintaAvisos(){
 /* ==========================================================================
    FINESTRA 3 · REPÚBLICA
    ========================================================================== */
-// --- Rellotge Mondaine Stop2Go ---
+// --- Rellotge Mondaine (segonera Stop2Go) ---
+// Nom de la zona horària del lloc: mai «Madrid» (la zona d'Espanya peninsular és la de París)
+const CIUTATS_ZONA = { Madrid:'París', Paris:'París', Andorra:"Andorra", London:'Londres', Lisbon:'Lisboa', Rome:'Roma', Berlin:'Berlín',
+  Brussels:'Brussel·les', Zurich:'Zúric', Amsterdam:'Amsterdam', Vienna:'Viena', Athens:'Atenes', Moscow:'Moscou', Canary:'Canàries',
+  Dublin:'Dublín', Prague:'Praga', Warsaw:'Varsòvia', Stockholm:'Estocolm', Copenhagen:'Copenhaguen', Oslo:'Oslo', Helsinki:'Hèlsinki',
+  Istanbul:'Istanbul', New_York:'Nova York', Chicago:'Chicago', Denver:'Denver', Los_Angeles:'Los Angeles', Mexico_City:'Ciutat de Mèxic',
+  Buenos_Aires:'Buenos Aires', Sao_Paulo:'São Paulo', Tokyo:'Tòquio', Shanghai:'Xangai', Hong_Kong:'Hong Kong', Singapore:'Singapur',
+  Kolkata:'Calcuta', Dubai:'Dubai', Cairo:'el Caire', Sydney:'Sydney' };
+function zonaHoraria(d){
+  let tz = 'Europe/Madrid';
+  try { tz = Intl.DateTimeFormat().resolvedOptions().timeZone || tz; } catch(e){}
+  const clau = tz.split('/').pop(), ciutat = CIUTATS_ZONA[clau] || clau.replace(/_/g, ' ');
+  const off = -d.getTimezoneOffset(), h = Math.floor(Math.abs(off) / 60), m = Math.abs(off) % 60;
+  const utc = 'UTC' + (off < 0 ? '−' : '+') + h + (m ? ':' + dosD(m) : '');
+  return `Hora ${/^[aeiouàèéíòóú]/i.test(ciutat) ? "d'" : 'de '}${ciutat} · ${utc}`;
+}
 function faseSVG(f, r){
   // f: fracció del cicle (0 nova, .5 plena). Torna el camí de la part il·luminada.
   const th = 2 * Math.PI * f, rx = Math.abs(Math.cos(th)) * r;
@@ -1190,6 +1250,7 @@ function mouRellotge(){
   $('mMin').setAttribute('transform', `rotate(${m * 6} 150 150)`);
   $('mHora').setAttribute('transform', `rotate(${(d.getHours() % 12) * 30 + m * .5} 150 150)`);
   sincronitzaSegonera(d);
+  $('rellZona').textContent = zonaHoraria(d);
   $('rellSub').textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][d.getDay()]}, ${d.getDate()} ${/^[aeiou]/.test(MESOS[d.getMonth()]) ? "d'" : 'de '}${MESOS[d.getMonth()]}`;
 }
 
@@ -1472,7 +1533,7 @@ setInterval(() => { pintaAra(); mouRellotge(); comprovaAlarmes(); }, 250);
 setInterval(() => { refrescaF1(false); refrescaEEI(); }, 4000);
 setInterval(() => {
   const d = new Date();
-  if (d.getDate() !== darrerDia){ darrerDia = d.getDate(); pintaCalendari(); pintaSant(); }
+  if (d.getDate() !== darrerDia){ darrerDia = d.getDate(); calDesp = 0; pintaCalendari(); pintaSant(); }
   pintaSolLluna(); pintaAvisos();
 }, 60e3);
 setInterval(localitza, 10 * 60e3);
