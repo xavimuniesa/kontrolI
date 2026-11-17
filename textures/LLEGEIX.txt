@@ -4,11 +4,7 @@ foto-*.jpg / foto-*.png (Mercuri, Venus, Mart, Júpiter, Saturn, Urà, Neptú, P
   Fotografies aportades per en Xavier, retallades i centrades en el planeta.
   Saturn i Urà porten el fons transparent perquè es vegin els anells.
 
-lluna.jpg
-  © Solar System Scope (www.solarsystemscope.com/textures)
-  Llicència Creative Commons Reconeixement 4.0 (CC BY 4.0)
-
-terra-dia.jpg, terra-nit.jpg
+lluna.jpg, terra-dia.jpg, terra-nit.jpg
   Exemples de textures planetàries del projecte three.js (llicència MIT).
 
 eei.jpg

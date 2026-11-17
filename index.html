@@ -55,13 +55,8 @@
   .finestres{position:relative; z-index:1; flex:1 1 auto; min-height:0;
     width:100%; max-width:1500px; margin:0 auto;
     display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:12px;
-    padding:calc(env(safe-area-inset-top,0px) + 10px) calc(env(safe-area-inset-right,0px) + 12px) 0 calc(env(safe-area-inset-left,0px) + 12px);}
+    padding:calc(env(safe-area-inset-top,0px) + 10px) calc(env(safe-area-inset-right,0px) + 12px) calc(env(safe-area-inset-bottom,0px) + 10px) calc(env(safe-area-inset-left,0px) + 12px);}
 
-  .peu{position:relative; z-index:1; flex:0 0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px;
-    padding:8px calc(env(safe-area-inset-right,0px) + 16px) calc(env(safe-area-inset-bottom,0px) + 8px) calc(env(safe-area-inset-left,0px) + 16px);
-    font-size:9.5px; letter-spacing:.08em; color:var(--cian-txt); text-transform:uppercase;}
-  .peu .credits{flex:1 1 100%; font-size:8px; letter-spacing:.04em; color:var(--dim); text-transform:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
-  .peu a{color:var(--dim);}
 
   /* ---------- Finestra lliscant ---------- */
   .finestra{position:relative; min-width:0; min-height:0; overflow:hidden;
@@ -80,7 +75,7 @@
   .pista.arrossega{transition:none;}
   .pane{flex:0 0 100%; width:100%; height:100%; min-width:0; overflow:hidden; position:relative;
     display:flex; flex-direction:column;
-    padding:clamp(10px,4cqmin,18px) clamp(16px,5cqw,28px) clamp(20px,7cqmin,30px);
+    padding:clamp(10px,4cqmin,18px) clamp(16px,5cqw,28px) clamp(14px,4.5cqmin,20px);
     font-size:clamp(10px,4.2cqmin,16px);}
 
   /* capçalera de cada pantalla: títol a l'esquerra, dada a la dreta, línia a sota */
@@ -89,9 +84,9 @@
   .capcal .tit{font-family:var(--font-d); font-weight:500; font-size:clamp(12px,5.6cqmin,22px); letter-spacing:.06em; text-transform:uppercase;
     color:var(--cian); text-shadow:0 0 8px rgba(43,228,255,.45); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
   .capcal .val{flex:0 0 auto; font-size:clamp(10px,4.2cqmin,15px); letter-spacing:.06em; color:var(--cian-txt); opacity:.85; white-space:nowrap;}
-  .cos{flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(10px,5cqmin,28px); padding-top:clamp(6px,2.5cqmin,14px);}
+  .cos{flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(10px,5cqmin,28px); padding-top:clamp(4px,1.5cqmin,10px);}
 
-  .punts{position:absolute; left:0; right:0; bottom:3px; z-index:5; display:flex; justify-content:center; gap:0;}
+  .punts{position:absolute; left:0; right:0; bottom:0; z-index:5; display:flex; justify-content:center; gap:0;}
   .punts button{appearance:none; border:0; background:none; padding:6px 3px; cursor:pointer; display:flex; align-items:center;}
   .punts button::after{content:""; display:block; width:5px; height:5px; border-radius:3px; background:#1a3344; transition:width .25s, background .25s;}
   .punts button[aria-current="true"]::after{width:16px; background:linear-gradient(90deg,#14d2f0,var(--verd)); box-shadow:0 0 6px rgba(43,228,255,.6);}
@@ -102,7 +97,7 @@
   @media (hover:hover) and (pointer:fine){ .finestra:hover .fletxa{display:block;} }
 
   /* ---------- Peces comunes ---------- */
-  .disc{position:relative; flex:0 0 auto; width:min(calc(100cqh - 74px),46cqw); aspect-ratio:1/1; border-radius:50%;}
+  .disc{position:relative; flex:0 0 auto; width:min(calc(100cqh - 56px),49cqw); aspect-ratio:1/1; border-radius:50%;}
   .disc canvas,.disc svg{position:absolute; inset:0; width:100%; height:100%; border-radius:50%; display:block;}
   .disc img{position:absolute; inset:4%; width:92%; height:92%; border-radius:50%; object-fit:cover; display:block;
     box-shadow:0 0 0 1.5px var(--vora-hi), 0 0 22px rgba(43,228,255,.25);}
@@ -130,7 +125,7 @@
 
   @container fin (orientation: portrait){
     .cos{flex-direction:column; justify-content:center;}
-    .disc{width:min(72cqw,calc(52cqh - 40px));}
+    .disc{width:min(80cqw,calc(58cqh - 34px));}
     .info{align-items:center; text-align:center;}
     .dades{justify-content:center;}
   }
@@ -138,7 +133,8 @@
   /* Rellotge Mondaine */
   .mond-ombra{filter:drop-shadow(2px 5px 5px rgba(0,0,0,.35));}
   .p-rell .disc svg{border-radius:0; overflow:visible;}
-  .p-rell .disc{filter:drop-shadow(0 0 14px rgba(43,228,255,.18));}
+  .p-rell .disc{width:min(calc(100cqh - 56px),55cqw); filter:drop-shadow(0 0 14px rgba(43,228,255,.18));}
+  @container fin (orientation: portrait){ .p-rell .disc{width:min(84cqw,calc(58cqh - 34px));} }
   .seg-capa{position:absolute; inset:0; pointer-events:none;}
   .seg-agulla{will-change:transform; animation:stop2go 60s linear infinite; animation-delay:var(--sec-delay,0s);}
   .seg-ombra{will-change:transform; animation:stop2goOmbra 60s linear infinite; animation-delay:var(--sec-delay,0s);}
@@ -247,13 +243,11 @@
     .finestres{grid-template-rows:none; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px;}
   }
   @media (orientation: landscape) and (max-height: 500px){
-    .peu{display:none;}
     .finestres{padding-top:calc(env(safe-area-inset-top,0px) + 8px); padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px); gap:8px;}
   }
   @media (orientation: landscape) and (min-height: 501px){
     .finestres{padding-top:16px;}
   }
-  @media (min-width: 900px) and (min-height: 600px){ .peu{font-size:12px;} .peu .credits{font-size:10px;} }
   @media (prefers-reduced-motion: reduce){ .pista{transition:none;} .barra i{transition:none;} }
 </style>
 </head>
@@ -284,8 +278,8 @@
                 <filter id="mMarcaOmbra" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="1.8" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.4"/></filter>
               </defs>
               <circle cx="150" cy="150" r="140" fill="url(#mDial)" stroke="url(#mBisell)" stroke-width="12"/>
-              <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="600" letter-spacing="1.6" fill="#000000" text-anchor="middle">MONDAINE</text>
-              <g transform="translate(150, 110)">
+              <text x="150" y="88" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="600" textLength="98" lengthAdjust="spacing" fill="#000000" text-anchor="middle">MONDAINE</text>
+              <g transform="translate(150, 99)">
                 <circle cx="0" cy="0" r="6.5" fill="#e30613"/>
                 <rect x="-1.3" y="-4.2" width="2.6" height="8.4" fill="#ffffff"/>
                 <rect x="-4.2" y="-1.3" width="8.4" height="2.6" fill="#ffffff"/>
@@ -439,11 +433,6 @@
   </section>
 </main>
 
-<footer class="peu">
-  <span>Centre de Control Orbital © 2026</span>
-  <span id="peuCoord">LAT: -- | LON: --</span>
-  <span class="credits">Textures: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0) · Dades: Open-Meteo, BigDataCloud, Viquipèdia, ACN</span>
-</footer>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -692,17 +681,17 @@ function galileanes(dt){
 const TERRA_DIAM = 12756;
 const COSSOS = [
   { id:'terra' },
-  { id:'lluna', nom:'Lluna', diam:3475, tex:'lluna.jpg', pol:[270, 66.56], rp:.72 },
+  { id:'lluna', nom:'Lluna', diam:3475, tex:'lluna.jpg', pol:[270, 66.56], rp:.88 },
   // Planetes: fotografies tal com es veurien amb telescopi (r = radi del planeta en píxels de la foto)
-  { id:'mercuri', nom:'Mercuri', ord:1, diam:4879, fase:true, rp:.7, foto:{ llumDreta:true, src:'textures/foto-mercuri.jpg', r:223.0, clip:true } },
-  { id:'venus', nom:'Venus', ord:2, diam:12104, fase:true, rp:.7, foto:{ src:'textures/foto-venus.jpg', r:304.6, clip:true } },
-  { id:'mart', nom:'Mart', ord:4, diam:6792, fase:true, rp:.7, foto:{ src:'textures/foto-mart.jpg', r:304.8, clip:true } },
-  { id:'jupiter', nom:'Júpiter', ord:5, diam:142984, rp:.4, llunes:true, foto:{ src:'textures/foto-jupiter.jpg', r:209.0, clip:true } },
-  { id:'saturn', nom:'Saturn', ord:6, diam:120536, pol:[40.59, 83.54], rp:.38, anells:true, foto:{ src:'textures/foto-saturn.png', r:160.9, clip:false } },
-  { id:'ura', nom:'Urà', ord:7, diam:51118, rp:.43, foto:{ src:'textures/foto-ura.png', r:150.9, clip:false } },
-  { id:'neptu', nom:'Neptú', ord:8, diam:49528, rp:.7, foto:{ src:'textures/foto-neptu.jpg', r:272.0, clip:true } },
-  { id:'pluto', nom:'Plutó', etq:'Planeta nan', diam:2377, rp:.66, foto:{ src:'textures/foto-pluto.jpg', r:105.0, clip:true } },
-  { id:'tita', nom:'Tità', diam:5150, rp:.72, foto:{ src:'textures/foto-tita.jpg', r:280.0, clip:true } },
+  { id:'mercuri', nom:'Mercuri', ord:1, diam:4879, fase:true, rp:.9, foto:{ llumDreta:true, src:'textures/foto-mercuri.jpg', r:223.0, clip:true } },
+  { id:'venus', nom:'Venus', ord:2, diam:12104, fase:true, rp:.9, foto:{ src:'textures/foto-venus.jpg', r:304.6, clip:true } },
+  { id:'mart', nom:'Mart', ord:4, diam:6792, fase:true, rp:.9, foto:{ src:'textures/foto-mart.jpg', r:304.8, clip:true } },
+  { id:'jupiter', nom:'Júpiter', ord:5, diam:142984, rp:.5, llunes:true, foto:{ src:'textures/foto-jupiter.jpg', r:209.0, clip:true } },
+  { id:'saturn', nom:'Saturn', ord:6, diam:120536, pol:[40.59, 83.54], rp:.45, anells:true, foto:{ src:'textures/foto-saturn.png', r:160.9, clip:false } },
+  { id:'ura', nom:'Urà', ord:7, diam:51118, rp:.53, foto:{ src:'textures/foto-ura.png', r:150.9, clip:false } },
+  { id:'neptu', nom:'Neptú', ord:8, diam:49528, rp:.9, foto:{ src:'textures/foto-neptu.jpg', r:272.0, clip:true } },
+  { id:'pluto', nom:'Plutó', etq:'Planeta nan', diam:2377, rp:.88, foto:{ src:'textures/foto-pluto.jpg', r:105.0, clip:true } },
+  { id:'tita', nom:'Tità', diam:5150, rp:.9, foto:{ src:'textures/foto-tita.jpg', r:280.0, clip:true } },
   { id:'eei' }
 ];
 const pistaF1 = $('pista1');
@@ -1108,7 +1097,6 @@ function pintaLloc(){
   $('llCoord').textContent = `${la} · ${lo}`;
   $('terraCoord').textContent = `${la}, ${lo}`;
   $('llMapa').href = `https://www.google.com/maps?q=${pos.lat.toFixed(5)},${pos.lon.toFixed(5)}`;
-  $('peuCoord').textContent = `LAT: ${la} | LON: ${lo}`;
 }
 
 // --- Temps (Open-Meteo) ---
