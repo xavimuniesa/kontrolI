@@ -606,7 +606,8 @@ const ELEM = {
   jupiter:[5.20288700,0.04838624,1.30439695,34.39644051,14.72847983,100.47390909, -0.00011607,-0.00013253,-0.00183714,3034.74612775,0.21252668,0.20469106],
   saturn:[9.53667594,0.05386179,2.48599187,49.95424423,92.59887831,113.66242448, -0.00125060,-0.00050991,0.00193609,1222.49362201,-0.41897216,-0.28867794],
   ura:[19.18916464,0.04725744,0.77263783,313.23810451,170.95427630,74.01692503, -0.00196176,-0.00004397,-0.00242939,428.48202785,0.40805281,0.04240589],
-  neptu:[30.06992276,0.00859048,1.77004347,-55.12002969,44.96476227,131.78422574, 0.00026291,0.00005105,0.00035372,218.45945325,-0.32241464,-0.00508664]
+  neptu:[30.06992276,0.00859048,1.77004347,-55.12002969,44.96476227,131.78422574, 0.00026291,0.00005105,0.00035372,218.45945325,-0.32241464,-0.00508664],
+  pluto:[39.48211675,0.24882730,17.14001206,238.92903833,224.06891629,110.30393684, -0.00031596,0.00005170,0.00004818,145.20780515,-0.04062942,-0.01183482]
 };
 function helio(id, d){
   const T = (jd(d) - 2451545) / 36525, el = ELEM[id];
@@ -692,14 +693,16 @@ const TERRA_DIAM = 12756;
 const COSSOS = [
   { id:'terra' },
   { id:'lluna', nom:'Lluna', diam:3475, tex:'lluna.jpg', pol:[270, 66.56], rp:.72 },
-  { id:'mercuri', nom:'Mercuri', ord:1, diam:4879, tex:'mercuri.jpg', pol:[281.01, 61.45], W:[329.5469, 6.1385025], fase:true, rp:.66 },
-  { id:'venus', nom:'Venus', ord:2, diam:12104, proc:'venus', pol:[272.76, 67.16], W:[160.20, -1.4813688], fase:true, limb:.35, rp:.66 },
-  { id:'mart', nom:'Mart', ord:4, diam:6792, tex:'mart.jpg', pol:[317.68, 52.89], W:[176.63, 350.89198226], fase:true, limb:.08, rp:.62 },
-  { id:'jupiter', nom:'Júpiter', ord:5, diam:142984, tex:'jupiter.jpg', pol:[268.06, 64.50], W:[284.95, 870.536], obl:.935, limb:.45, rp:.34, llunes:true },
-  { id:'saturn', nom:'Saturn', ord:6, diam:120536, tex:'saturn.jpg', pol:[40.59, 83.54], W:[38.90, 810.7939024], obl:.902, limb:.45, rp:.38, anells:true },
-  { id:'ura', nom:'Urà', ord:7, diam:51118, tex:'ura.jpg', pol:[257.31, -15.18], W:[203.81, -501.1600928], obl:.977, limb:.5, rp:.6 },
-  { id:'neptu', nom:'Neptú', ord:8, diam:49528, tex:'neptu.jpg', pol:[299.36, 43.46], W:[249.978, 541.1397757], obl:.983, limb:.5, rp:.6 },
-  { id:'tita', nom:'Tità', diam:5150, proc:'tita', pol:[40.59, 83.54], W:[0, 22.5769768], limb:.25, rp:.6, atm:true },
+  // Planetes: fotografies tal com es veurien amb telescopi (r = radi del planeta en píxels de la foto)
+  { id:'mercuri', nom:'Mercuri', ord:1, diam:4879, fase:true, rp:.7, foto:{ llumDreta:true, src:'textures/foto-mercuri.jpg', r:223.0, clip:true } },
+  { id:'venus', nom:'Venus', ord:2, diam:12104, fase:true, rp:.7, foto:{ src:'textures/foto-venus.jpg', r:304.6, clip:true } },
+  { id:'mart', nom:'Mart', ord:4, diam:6792, fase:true, rp:.7, foto:{ src:'textures/foto-mart.jpg', r:304.8, clip:true } },
+  { id:'jupiter', nom:'Júpiter', ord:5, diam:142984, rp:.4, llunes:true, foto:{ src:'textures/foto-jupiter.jpg', r:209.0, clip:true } },
+  { id:'saturn', nom:'Saturn', ord:6, diam:120536, pol:[40.59, 83.54], rp:.38, anells:true, foto:{ src:'textures/foto-saturn.png', r:160.9, clip:false } },
+  { id:'ura', nom:'Urà', ord:7, diam:51118, rp:.43, foto:{ src:'textures/foto-ura.png', r:150.9, clip:false } },
+  { id:'neptu', nom:'Neptú', ord:8, diam:49528, rp:.7, foto:{ src:'textures/foto-neptu.jpg', r:272.0, clip:true } },
+  { id:'pluto', nom:'Plutó', etq:'Planeta nan', diam:2377, rp:.66, foto:{ src:'textures/foto-pluto.jpg', r:105.0, clip:true } },
+  { id:'tita', nom:'Tità', diam:5150, rp:.72, foto:{ src:'textures/foto-tita.jpg', r:280.0, clip:true } },
   { id:'eei' }
 ];
 const pistaF1 = $('pista1');
@@ -719,7 +722,7 @@ COSSOS.forEach(c => {
       <div class="info"><span class="pindola" id="terraAlt">ALTITUD: -- m</span></div></div>`;
   } else {
     a.setAttribute('aria-label', c.nom);
-    const val = c.id === 'lluna' ? '—' : c.id === 'tita' ? 'Satèl·lit de Saturn' : `Planeta ${c.ord}`;
+    const val = c.id === 'lluna' ? '—' : c.id === 'tita' ? 'Satèl·lit de Saturn' : c.etq || `Planeta ${c.ord}`;
     a.innerHTML = `${capcal(c.nom, val)}
       <div class="cos"><div class="disc" role="img" aria-label="${c.nom} tal com es veuria amb un telescopi"><canvas></canvas></div>
       <div class="info"><span class="pindola" data-k="pill">—</span><dl class="dades"></dl></div></div>`;
@@ -902,8 +905,8 @@ function refrescaF1(tots){
       pintaCanvas(canvas, es.sc, es.cam);
       return;
     }
-    const es = escenaCos(c);
-    let v, sol, rows = [];
+    const es = c.foto ? null : escenaCos(c);
+    let v, sol, rows = [], fase = 1;
     if (c.id === 'lluna'){
       const L = lluna(ara); v = L.g; sol = L.sol;
       orienta(es, c, ara, [-v[0], -v[1], -v[2]]);
@@ -913,9 +916,9 @@ function refrescaF1(tots){
     } else {
       const pid = c.id === 'tita' ? 'saturn' : c.id, P = planeta(pid, ara);
       v = nrm(P.g); sol = P.sol;
-      orienta(es, c, ara);
       const km = P.dist * UA, ap = c.diam / km / RAD * 3600;
       posa(c, 'pill', 'DIST. ' + distTxt(km));
+      fase = P.fase;
       if (c.fase) rows.push(['Fase', Math.round(P.fase * 100) + '%']);
       rows.push(['Mida', midaTxt(c.diam)], ['Aparent', num(ap, ap < 10 ? 1 : 0) + '″']);
       if (c.anells) rows.push(['Anells', 'obertura ' + num(Math.asin(Math.abs(dot(quatPol(c.pol[0], c.pol[1]), v))) / RAD, 1) + '°']);
@@ -923,12 +926,48 @@ function refrescaF1(tots){
       else if (!c.fase) rows.push(['Llum', llumTxt(P.dist)]);
       if (c.llunes) pintaGalileanes(c, ara, c.rp);
     }
-    es.mat.uniforms.solDir.value.set(...sol);
-    camaraA(es, c, v, c.rp);
-    pintaCanvas(canvas, es.sc, es.cam);
+    if (c.foto) pintaFoto(canvas, c, v, sol, fase);
+    else {
+      es.mat.uniforms.solDir.value.set(...sol);
+      camaraA(es, c, v, c.rp);
+      pintaCanvas(canvas, es.sc, es.cam);
+    }
     const dl = c.el.querySelector('.dades'), h = dadesHTML(rows);
     if (dl.innerHTML !== h) dl.innerHTML = h;
   });
+}
+// Fotografia del planeta en el visor; als que tenen fase (Mercuri, Venus, Mart) s'hi aplica l'ombra del dia
+function pintaFoto(canvas, c, v, sol, fase){
+  const w = canvas.clientWidth; if (!w) return;
+  if (!c.img){ c.img = new Image(); c.img.decoding = 'async'; c.img.onload = () => refrescaF1(true); c.img.src = c.foto.src; }
+  if (!c.img.complete || !c.img.naturalWidth) return;
+  const px = Math.round(w * Math.min(window.devicePixelRatio || 1, 2));
+  if (canvas.width !== px){ canvas.width = canvas.height = px; }
+  const x = canvas.getContext('2d'), R = c.rp * px / 2, s = R / c.foto.r, iw = c.img.naturalWidth * s, ih = c.img.naturalHeight * s;
+  x.save(); x.clearRect(0, 0, px, px); x.translate(px / 2, px / 2);
+  // direcció del Sol vista des de la Terra, amb el nord del cel amunt i l'oest a la dreta
+  const z = [0, 0, 1], up = nrm(sub(z, v.map(k => k * dot(z, v)))),
+        dreta = [v[1] * up[2] - v[2] * up[1], v[2] * up[0] - v[0] * up[2], v[0] * up[1] - v[1] * up[0]];
+  const th = Math.atan2(dot(sol, up), dot(sol, dreta));
+  if (c.foto.clip){ x.beginPath(); x.arc(0, 0, R * 1.005, 0, 2 * Math.PI); x.clip(); }
+  // si la foto ja té la cara il·luminada a la dreta i avui el Sol li ve per l'esquerra, s'emmiralla
+  const gira = c.foto.llumDreta && Math.cos(th) < 0;
+  if (gira) x.scale(-1, 1);
+  x.drawImage(c.img, -iw / 2, -ih / 2, iw, ih);
+  if (gira) x.scale(-1, 1);
+  if (c.fase && fase < .985){
+    // màscara de la part il·luminada, dibuixada petita i ampliada perquè el terminador quedi difuminat
+    const m = Math.max(24, Math.round(px / 10)), mc = document.createElement('canvas'); mc.width = mc.height = m;
+    const mx = mc.getContext('2d'), r = R * 1.01 * m / px, rx = r * Math.abs(1 - 2 * fase);
+    mx.translate(m / 2, m / 2); mx.rotate(-th);
+    mx.beginPath(); mx.arc(0, 0, r, -Math.PI / 2, Math.PI / 2, false);
+    if (fase >= .5) mx.ellipse(0, 0, rx, r, 0, Math.PI / 2, 3 * Math.PI / 2, false);
+    else mx.ellipse(0, 0, rx, r, 0, Math.PI / 2, -Math.PI / 2, true);
+    mx.fillStyle = '#fff'; mx.fill();
+    x.globalCompositeOperation = 'destination-in'; x.imageSmoothingEnabled = true;
+    x.drawImage(mc, -px / 2, -px / 2, px, px);
+  }
+  x.restore();
 }
 function pintaGalileanes(c, d, rp){
   const disc = c.el.querySelector('.disc'), w = disc.clientWidth;
