@@ -3,35 +3,35 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#04060a">
+<meta name="theme-color" content="#03070d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>Centre de Control Orbital</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Oswald:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg-0:#04060a;
-    --panel:#10161f;
-    --panel-2:#0c1119;
-    --bezel:#1e2731;
-    --bezel-hi:#2c3a48;
-    --turq:#2fd9c4;
-    --turq-dim:rgba(47,217,196,.22);
-    --lume:#e9dfc2;
-    --text:#d7dee6;
-    --dim:#8b98a8;
-    --lcd:#8fae86;
-    --lcd-dim:#7f9a77;
-    --calor:#ff8a5b;
-    --fred:#5bc8ff;
-    --sensa:#c084fc;
-    --dissabte:#6fd39a;
-    --festiu:#ff8a8a;
-    --font-d:'Oswald',sans-serif;
+    --bg-0:#03070d;
+    --panel:#081320;
+    --panel-2:#050b14;
+    --vora:#11394d;
+    --vora-hi:#1d5a70;
+    --cian:#2be4ff;
+    --cian-txt:#7fe3f5;
+    --brill:#cffbff;
+    --verd:#24e07c;
+    --text:#cfe6ee;
+    --dim:#6c8ea2;
+    --calor:#ffb36b;
+    --fred:#6bd5ff;
+    --sensa:#c9a2ff;
+    --dissabte:#3fe39a;
+    --festiu:#ff7a8f;
+    --glow:0 0 6px rgba(43,228,255,.85), 0 0 18px rgba(43,228,255,.45);
+    --font-d:'Orbitron',sans-serif;
     --font-m:'Share Tech Mono',monospace;
-    --r:14px;
+    --r:16px;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{margin:0; height:100%; overflow:hidden;}
@@ -39,230 +39,229 @@
     height:100dvh;
     display:flex; flex-direction:column;
     background:
-      radial-gradient(ellipse at 30% -10%, #0d1b22 0%, transparent 55%),
-      radial-gradient(ellipse at 90% 110%, #150d22 0%, transparent 50%),
+      radial-gradient(ellipse at 20% -10%, #0a1f2c 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 110%, #0b1426 0%, transparent 50%),
       var(--bg-0);
     color:var(--text); font-family:var(--font-m);
     -webkit-user-select:none; user-select:none;
   }
-  .estels{position:fixed; inset:0; pointer-events:none; opacity:.5; z-index:0;
+  .estels{position:fixed; inset:0; pointer-events:none; opacity:.35; z-index:0;
     background-image:
       radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 70% 65%, #fff, transparent),
       radial-gradient(1px 1px at 40% 80%, #fff, transparent), radial-gradient(1.5px 1.5px at 85% 20%, #fff, transparent),
       radial-gradient(1px 1px at 55% 10%, #fff, transparent), radial-gradient(1.5px 1.5px at 10% 60%, #fff, transparent),
       radial-gradient(1px 1px at 92% 85%, #fff, transparent), radial-gradient(1px 1px at 30% 50%, #fff, transparent);}
 
-  .cap{position:relative; z-index:1; flex:0 0 auto; text-align:center;
-    padding:calc(env(safe-area-inset-top,0px) + 10px) 16px 8px;}
-  .cap h1{margin:0; font-family:var(--font-d); font-weight:600; letter-spacing:.06em;
-    font-size:clamp(16px,2.6vw,30px); color:var(--lume);}
-
   .finestres{position:relative; z-index:1; flex:1 1 auto; min-height:0;
     width:100%; max-width:1500px; margin:0 auto;
-    display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:10px;
-    padding:0 calc(env(safe-area-inset-right,0px) + 10px) 0 calc(env(safe-area-inset-left,0px) + 10px);}
+    display:grid; grid-template-rows:repeat(3,minmax(0,1fr)); gap:12px;
+    padding:calc(env(safe-area-inset-top,0px) + 10px) calc(env(safe-area-inset-right,0px) + 12px) 0 calc(env(safe-area-inset-left,0px) + 12px);}
 
-  .peu{position:relative; z-index:1; flex:0 0 auto; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    padding:6px 12px calc(env(safe-area-inset-bottom,0px) + 6px);
-    font-size:9px; letter-spacing:.06em; color:var(--dim); line-height:1.5;}
+  .peu{position:relative; z-index:1; flex:0 0 auto; display:flex; flex-wrap:wrap; justify-content:space-between; gap:2px 12px;
+    padding:8px calc(env(safe-area-inset-right,0px) + 16px) calc(env(safe-area-inset-bottom,0px) + 8px) calc(env(safe-area-inset-left,0px) + 16px);
+    font-size:9.5px; letter-spacing:.08em; color:var(--cian-txt); text-transform:uppercase;}
+  .peu .credits{flex:1 1 100%; font-size:8px; letter-spacing:.04em; color:var(--dim); text-transform:none; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
   .peu a{color:var(--dim);}
-  .peu .punt{color:var(--turq);}
 
   /* ---------- Finestra lliscant ---------- */
   .finestra{position:relative; min-width:0; min-height:0; overflow:hidden;
     container-type:size; container-name:fin;
-    border-radius:var(--r); border:1px solid var(--bezel);
-    background:linear-gradient(160deg,var(--panel),var(--panel-2));
-    box-shadow:0 0 0 1px rgba(255,255,255,.02) inset, 0 10px 30px rgba(0,0,0,.35);
+    border-radius:var(--r); border:1.5px solid var(--vora);
+    background:linear-gradient(180deg,var(--panel),var(--panel-2));
+    box-shadow:inset 0 0 30px rgba(43,228,255,.04), 0 10px 30px rgba(0,0,0,.45);
     outline:none;}
-  .finestra:focus-visible{border-color:var(--turq);}
-  .finestra::before,.finestra::after{content:""; position:absolute; width:13px; height:13px; pointer-events:none; opacity:.6; z-index:4;}
-  .finestra::before{top:9px; left:9px; border-top:2px solid var(--turq); border-left:2px solid var(--turq);}
-  .finestra::after{bottom:9px; right:9px; border-bottom:2px solid var(--turq); border-right:2px solid var(--turq);}
+  .finestra:focus-visible{border-color:var(--cian);}
+  .finestra::before,.finestra::after{content:""; position:absolute; width:16px; height:16px; pointer-events:none; z-index:4;
+    filter:drop-shadow(0 0 3px rgba(43,228,255,.7));}
+  .finestra::before{top:8px; left:8px; border-top:3px solid var(--cian); border-left:3px solid var(--cian);}
+  .finestra::after{bottom:8px; right:8px; border-bottom:3px solid var(--cian); border-right:3px solid var(--cian);}
   .pista{display:flex; height:100%; touch-action:pan-y; will-change:transform;
     transition:transform .38s cubic-bezier(.2,.8,.2,1);}
   .pista.arrossega{transition:none;}
   .pane{flex:0 0 100%; width:100%; height:100%; min-width:0; overflow:hidden; position:relative;
-    display:flex; align-items:center; justify-content:center;
-    gap:clamp(10px,5cqmin,26px);
-    padding:clamp(12px,5cqmin,26px) clamp(14px,5cqw,30px) clamp(22px,7cqmin,34px);}
+    display:flex; flex-direction:column;
+    padding:clamp(10px,4cqmin,18px) clamp(16px,5cqw,28px) clamp(20px,7cqmin,30px);
+    font-size:clamp(10px,4.2cqmin,16px);}
 
-  .punts{position:absolute; left:0; right:0; bottom:4px; z-index:5; display:flex; justify-content:center; gap:0;}
+  /* capçalera de cada pantalla: títol a l'esquerra, dada a la dreta, línia a sota */
+  .capcal{flex:0 0 auto; display:flex; justify-content:space-between; align-items:baseline; gap:10px;
+    padding:0 0 .45em 16px; border-bottom:1px solid var(--vora); min-width:0;}
+  .capcal .tit{font-family:var(--font-d); font-weight:500; font-size:clamp(12px,5.6cqmin,22px); letter-spacing:.06em; text-transform:uppercase;
+    color:var(--cian); text-shadow:0 0 8px rgba(43,228,255,.45); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; min-width:0;}
+  .capcal .val{flex:0 0 auto; font-size:clamp(10px,4.2cqmin,15px); letter-spacing:.06em; color:var(--cian-txt); opacity:.85; white-space:nowrap;}
+  .cos{flex:1 1 auto; min-height:0; display:flex; align-items:center; justify-content:center; gap:clamp(10px,5cqmin,28px); padding-top:clamp(6px,2.5cqmin,14px);}
+
+  .punts{position:absolute; left:0; right:0; bottom:3px; z-index:5; display:flex; justify-content:center; gap:0;}
   .punts button{appearance:none; border:0; background:none; padding:6px 3px; cursor:pointer; display:flex; align-items:center;}
-  .punts button::after{content:""; display:block; width:5px; height:5px; border-radius:3px; background:var(--bezel-hi); transition:width .25s, background .25s;}
-  .punts button[aria-current="true"]::after{width:14px; background:var(--turq);}
+  .punts button::after{content:""; display:block; width:5px; height:5px; border-radius:3px; background:#1a3344; transition:width .25s, background .25s;}
+  .punts button[aria-current="true"]::after{width:16px; background:linear-gradient(90deg,#14d2f0,var(--verd)); box-shadow:0 0 6px rgba(43,228,255,.6);}
   .fletxa{position:absolute; top:50%; z-index:5; transform:translateY(-50%);
-    width:34px; height:54px; border:0; border-radius:10px; background:rgba(12,17,25,.7);
-    color:var(--turq); font:24px/1 var(--font-d); cursor:pointer; display:none;}
+    width:34px; height:54px; border:1px solid var(--vora); border-radius:10px; background:rgba(5,11,20,.8);
+    color:var(--cian); font:22px/1 var(--font-d); cursor:pointer; display:none;}
   .fletxa.ant{left:6px;} .fletxa.seg{right:6px;}
-  @media (hover:hover) and (pointer:fine){ .finestra:hover .fletxa{display:block;} .fletxa[disabled]{opacity:.25; cursor:default;} }
+  @media (hover:hover) and (pointer:fine){ .finestra:hover .fletxa{display:block;} }
 
-  /* ---------- Contingut comú ---------- */
-  .disc{position:relative; flex:0 0 auto; width:min(76cqh,44cqw); aspect-ratio:1/1; border-radius:50%;
-    background:#000;
-    box-shadow:0 0 0 2px var(--bezel-hi), 0 0 0 8px var(--panel-2), 0 0 26px 4px var(--turq-dim), inset 0 0 40px rgba(0,0,0,.6);}
+  /* ---------- Peces comunes ---------- */
+  .disc{position:relative; flex:0 0 auto; width:min(calc(100cqh - 74px),46cqw); aspect-ratio:1/1; border-radius:50%;}
   .disc canvas,.disc svg{position:absolute; inset:0; width:100%; height:100%; border-radius:50%; display:block;}
+  .disc img{position:absolute; inset:4%; width:92%; height:92%; border-radius:50%; object-fit:cover; display:block;
+    box-shadow:0 0 0 1.5px var(--vora-hi), 0 0 22px rgba(43,228,255,.25);}
   .gal{position:absolute; width:4px; height:4px; margin:-2px 0 0 -2px; border-radius:50%; background:#efe9d6; box-shadow:0 0 3px rgba(255,250,230,.7);}
-  .gal i{position:absolute; top:6px;}
+  .gal i{position:absolute; top:6px; left:50%; transform:translateX(-50%); font:normal 8px/1 var(--font-m); color:var(--dim);}
   .gal.dalt i{top:auto; bottom:6px;}
-  .gal i{ left:50%; transform:translateX(-50%); font:normal 8px/1 var(--font-m); color:var(--dim);}
-  .info{display:flex; flex-direction:column; gap:.35em; min-width:0; font-size:clamp(10px,4.4cqmin,15px);}
-  .etq{font-size:.82em; letter-spacing:.18em; text-transform:uppercase; color:var(--dim);}
-  .nom{font-family:var(--font-d); font-weight:500; font-size:clamp(16px,8cqmin,32px); color:var(--lume); line-height:1.1;}
-  .nom.petit{font-size:clamp(14px,6.4cqmin,26px);}
-  .sub{color:var(--dim);}
-  .dades{display:grid; grid-template-columns:auto auto; column-gap:1.1em; row-gap:.22em; margin:.35em 0 0;}
-  .dades dt{color:var(--dim); white-space:nowrap;} .dades dd{margin:0; color:var(--lume); text-align:right; white-space:nowrap;}
+  .info{display:flex; flex-direction:column; align-items:flex-start; gap:.7em; min-width:0;}
+  .pindola{display:inline-block; max-width:100%; border:2px solid var(--cian); border-radius:999px; padding:.38em .95em;
+    font:500 clamp(9px,3.9cqmin,17px)/1.1 var(--font-d); letter-spacing:.07em; color:#e9fdff; background:rgba(4,12,20,.85);
+    box-shadow:0 0 10px rgba(43,228,255,.35), inset 0 0 8px rgba(43,228,255,.15); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .dades{display:grid; grid-template-columns:auto auto; column-gap:1.2em; row-gap:.25em; margin:0;}
+  .dades dt{color:var(--dim); white-space:nowrap; text-transform:uppercase; letter-spacing:.08em; font-size:.85em; align-self:center;}
+  .dades dd{margin:0; color:var(--brill); text-align:right; white-space:nowrap; text-shadow:0 0 6px rgba(43,228,255,.35);}
+  .etq{font-size:.8em; letter-spacing:.16em; text-transform:uppercase; color:var(--dim);}
+  .brilla{color:var(--brill); text-shadow:var(--glow);}
+
+  /* indicador gran: valor lluminós, barra i peu */
+  .ind{width:100%; max-width:560px; display:flex; flex-direction:column; align-items:center; gap:clamp(6px,3cqmin,14px);}
+  .ind-valor{display:flex; align-items:baseline; justify-content:center; gap:.15em; line-height:1; font-family:var(--font-m);
+    font-size:clamp(28px,min(16cqmin,13cqw),84px); letter-spacing:.06em;}
+  .ind-unit{font-size:.42em; letter-spacing:0;}
+  .barra{width:100%; height:clamp(5px,1.6cqmin,8px); border-radius:4px; background:#14202c; overflow:hidden;}
+  .barra i{display:block; height:100%; width:0; border-radius:4px; background:linear-gradient(90deg,#14d2f0,var(--verd)); box-shadow:0 0 8px rgba(43,228,255,.5); transition:width .6s;}
+  .ind-peu{font-size:clamp(9px,3.8cqmin,15px); letter-spacing:.16em; text-transform:uppercase; color:var(--cian-txt); text-align:center;}
 
   @container fin (orientation: portrait){
-    .pane{flex-direction:column; text-align:center;}
-    .disc{width:min(74cqw,50cqh);}
-    .info{align-items:center;}
+    .cos{flex-direction:column; justify-content:center;}
+    .disc{width:min(72cqw,calc(52cqh - 40px));}
+    .info{align-items:center; text-align:center;}
     .dades{justify-content:center;}
   }
 
-  .lcd{border-radius:8px; border:1px solid #06110a; background:linear-gradient(180deg,#2c3830,#1c251f);
-    box-shadow:inset 0 2px 6px rgba(0,0,0,.6), inset 0 -1px 0 rgba(255,255,255,.04); color:var(--lcd);}
-  .brilla{text-shadow:0 0 6px rgba(143,174,134,.6);}
-
-  /* Ara */
-  .p-ara{flex-direction:column; gap:clamp(6px,3cqmin,14px);}
-  .p-ara .lcd{width:100%; max-width:560px; padding:clamp(12px,6cqmin,34px) 10px; display:flex; flex-direction:column; align-items:center; gap:clamp(6px,3cqmin,14px);}
-  .lcd-hora{font-size:clamp(24px,min(17cqmin,13.5cqw),80px); line-height:1; letter-spacing:.05em;}
-  .lcd-hora .dp{transition:opacity .15s;}
-  .lcd-data{font-size:clamp(11px,5cqmin,22px); letter-spacing:.16em;}
-  .lcd-extra{font-size:clamp(9px,4cqmin,16px); letter-spacing:.12em; color:var(--lcd-dim);}
-
-  /* On som */
-  .p-lloc{flex-direction:column; align-items:flex-start; justify-content:center; gap:.4em; font-size:clamp(10px,4.4cqmin,16px);}
-  .p-lloc .nom{font-size:clamp(20px,10cqmin,40px);}
-  .graella2{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1em; margin-top:.5em; width:100%;}
-  .graella2 span{display:block; color:var(--dim);} .graella2 b{display:block; font-weight:400; color:var(--lume); margin-top:.15em;}
-  .graella2 b.gran{font-family:var(--font-d); font-size:1.4em;}
-  .boto{appearance:none; min-height:44px; padding:0 16px; display:inline-flex; align-items:center; gap:8px;
-    border-radius:10px; border:1px solid var(--turq); background:transparent; color:var(--turq);
-    font:inherit; font-size:.9em; letter-spacing:.06em; text-decoration:none; cursor:pointer;}
-  .boto:hover{background:rgba(47,217,196,.08);}
-  @container fin (orientation: portrait){ .p-lloc{align-items:center; text-align:center;} }
-
-  /* Temps */
-  .p-temps{flex-direction:column; gap:clamp(6px,3cqmin,14px); font-size:clamp(10px,4.2cqmin,15px);}
-  .p-temps .lcd{width:100%; max-width:520px; padding:clamp(8px,4cqmin,20px) 14px; display:flex; align-items:center; justify-content:center; gap:14px;}
-  .t-ic{width:clamp(30px,15cqmin,70px); height:clamp(30px,15cqmin,70px); color:var(--lcd); flex:0 0 auto;}
-  .t-gran{font-size:clamp(26px,13cqmin,60px); line-height:1;}
-  .t-desc{font-size:.8em; letter-spacing:.12em; text-transform:uppercase; margin-top:.3em;}
-  .t-4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; width:100%; max-width:520px; text-align:center;}
-  .t-4 span{display:block; color:var(--dim); font-size:.85em;} .t-4 b{display:block; font-weight:400; font-size:1.2em; margin-top:.1em;}
-  .t-hores{display:none; width:100%; max-width:520px; grid-template-columns:repeat(6,minmax(0,1fr)); gap:4px; text-align:center; font-size:.85em;}
-  .t-hores div{display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--dim);}
-  .t-hores svg{width:22px; height:22px; color:var(--lume);} .t-hores b{font-weight:400; color:var(--lume);}
-  @container fin (orientation: portrait) and (min-height: 420px){ .t-hores{display:grid;} }
-
-  /* Calendari i avisos */
-  .p-cal{gap:clamp(10px,5cqmin,24px); font-size:clamp(9px,3.8cqmin,14px);}
-  .cal{flex:0 0 auto; display:flex; flex-direction:column; gap:.4em;}
-  .cal{touch-action:none; cursor:ns-resize;}
-  .cal-cap{display:flex; align-items:center; justify-content:center; gap:.3em;}
-  .cal-tit{appearance:none; border:0; background:none; padding:0 .2em; min-height:28px; text-align:center; font-family:var(--font-d); font-size:1.25em; letter-spacing:.08em; color:var(--lume); cursor:pointer;}
-  .cal-tit.fora{color:var(--turq);}
-  .cal-fl{appearance:none; border:0; background:none; color:var(--dim); font:inherit; font-size:1em; width:28px; height:28px; cursor:pointer; border-radius:6px;}
-  .cal-fl:hover{color:var(--turq);}
-  .cal-g.puja{animation:calPuja .28s ease-out;} .cal-g.baixa{animation:calBaixa .28s ease-out;}
-  @keyframes calPuja{from{transform:translateY(18%); opacity:0;} to{transform:none; opacity:1;}}
-  @keyframes calBaixa{from{transform:translateY(-18%); opacity:0;} to{transform:none; opacity:1;}}
-  .cal-g{display:grid; grid-template-columns:repeat(7,2.2em); row-gap:2px; text-align:center;}
-  .cal-g span{height:1.75em; line-height:1.75em; border-radius:4px;}
-  .cal-g .cs{color:var(--dim);}
-  .cal-g .ds{color:var(--dissabte);} .cal-g .fe{color:var(--festiu);}
-  .cal-g .avui{background:var(--turq); color:#04060a; font-weight:700;}
-  .cal-dreta{display:flex; flex-direction:column; gap:.9em; min-width:0;}
-  .llista{list-style:none; margin:.3em 0 0; padding:0; display:flex; flex-direction:column; gap:.3em;}
-  .llista li{color:var(--lume);}
-  .avisos li{display:flex; gap:.5em; align-items:flex-start;}
-  .avisos li::before{content:""; flex:0 0 auto; width:.55em; height:.55em; margin-top:.35em; border-radius:50%; background:var(--lcd);}
-  .avisos li.groc::before{background:#ffd34d;} .avisos li.taronja::before{background:#ff9b3d;} .avisos li.vermell::before{background:#ff5b4d;} .avisos li.info::before{background:var(--turq);}
-  .avisos li.cap{color:var(--lcd);}
-  @container fin (orientation: portrait){ .p-cal{flex-direction:column;} .cal-dreta{align-items:center; text-align:center;} .avisos li{justify-content:center;} }
-
-  /* Rellotge Mondaine Stop2Go */
-  .p-rell .disc{background:none; box-shadow:0 0 26px 4px rgba(47,217,196,.16);}
-  .p-rell .disc svg{border-radius:0; overflow:visible;}
+  /* Rellotge Mondaine */
   .mond-ombra{filter:drop-shadow(2px 5px 5px rgba(0,0,0,.35));}
+  .p-rell .disc svg{border-radius:0; overflow:visible;}
+  .p-rell .disc{filter:drop-shadow(0 0 14px rgba(43,228,255,.18));}
   .seg-capa{position:absolute; inset:0; pointer-events:none;}
   .seg-agulla{will-change:transform; animation:stop2go 60s linear infinite; animation-delay:var(--sec-delay,0s);}
   .seg-ombra{will-change:transform; animation:stop2goOmbra 60s linear infinite; animation-delay:var(--sec-delay,0s);}
   @keyframes stop2go{0%{transform:rotate(0deg);} 96.6667%{transform:rotate(360deg);} 100%{transform:rotate(360deg);}}
   @keyframes stop2goOmbra{0%{transform:translate(.667%,1.667%) rotate(0deg);} 96.6667%{transform:translate(.667%,1.667%) rotate(360deg);} 100%{transform:translate(.667%,1.667%) rotate(360deg);}}
-  /* Estació Espacial: fotografia */
-  .disc img{position:absolute; inset:0; width:100%; height:100%; border-radius:50%; object-fit:cover; display:block;}
+
+  /* On som */
+  .p-lloc .cos{flex-direction:column; gap:clamp(6px,3cqmin,14px); text-align:center;}
+  .lloc-nom{font-family:var(--font-d); font-weight:700; font-size:clamp(20px,10cqmin,44px); letter-spacing:.06em; text-transform:uppercase; line-height:1.05;}
+  .lloc-regio{color:var(--cian-txt); letter-spacing:.12em; text-transform:uppercase; font-size:.9em;}
+  .fila{display:flex; flex-wrap:wrap; justify-content:center; gap:10px;}
+  .boto{appearance:none; min-height:40px; padding:0 16px; display:inline-flex; align-items:center; gap:8px;
+    border-radius:999px; border:1.5px solid var(--vora-hi); background:rgba(4,12,20,.85); color:var(--cian-txt);
+    font:500 clamp(9px,3.6cqmin,14px) var(--font-d); letter-spacing:.08em; text-transform:uppercase; text-decoration:none; cursor:pointer;}
+  .boto:hover{border-color:var(--cian); color:var(--cian);}
+
+  /* Temps */
+  .p-temps .cos{flex-direction:column; gap:clamp(6px,2.6cqmin,14px);}
+  .t-cap{display:flex; align-items:center; justify-content:center; gap:.4em;}
+  .t-ic{width:clamp(26px,12cqmin,62px); height:clamp(26px,12cqmin,62px); color:var(--cian); filter:drop-shadow(0 0 6px rgba(43,228,255,.6)); flex:0 0 auto;}
+  .t-4{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:6px; width:100%; max-width:560px; text-align:center;}
+  .t-4 span{display:block; color:var(--dim); font-size:.75em; letter-spacing:.12em; text-transform:uppercase;}
+  .t-4 b{display:block; font-weight:400; font-size:1.15em; margin-top:.15em;}
+  .t-hores{display:none; width:100%; max-width:560px; grid-template-columns:repeat(6,minmax(0,1fr)); gap:4px; text-align:center; font-size:.85em;}
+  .t-hores div{display:flex; flex-direction:column; align-items:center; gap:3px; color:var(--dim);}
+  .t-hores svg{width:22px; height:22px; color:var(--cian);} .t-hores b{font-weight:400; color:var(--brill);}
+  @container fin (orientation: portrait) and (min-height: 460px){ .t-hores{display:grid;} }
+
+  /* Calendari i avisos */
+  .p-cal .cos{gap:clamp(10px,5cqmin,26px); font-size:clamp(9px,3.7cqmin,14px); align-items:center;}
+  .cal{flex:0 0 auto; display:flex; flex-direction:column; gap:.35em; touch-action:none; cursor:ns-resize;}
+  .cal-cap{display:flex; align-items:center; justify-content:center; gap:.3em;}
+  .cal-tit{appearance:none; border:0; background:none; padding:0 .2em; min-height:26px; text-align:center;
+    font:500 1.05em var(--font-d); letter-spacing:.08em; text-transform:uppercase; color:var(--brill); cursor:pointer;}
+  .cal-tit.fora{color:var(--cian); text-shadow:0 0 8px rgba(43,228,255,.5);}
+  .cal-fl{appearance:none; border:0; background:none; color:var(--dim); font:inherit; width:26px; height:26px; cursor:pointer; border-radius:6px;}
+  .cal-fl:hover{color:var(--cian);}
+  .cal-g.puja{animation:calPuja .28s ease-out;} .cal-g.baixa{animation:calBaixa .28s ease-out;}
+  @keyframes calPuja{from{transform:translateY(18%); opacity:0;} to{transform:none; opacity:1;}}
+  @keyframes calBaixa{from{transform:translateY(-18%); opacity:0;} to{transform:none; opacity:1;}}
+  .cal-g{display:grid; grid-template-columns:repeat(7,2.2em); row-gap:2px; text-align:center;}
+  .cal-g span{height:1.7em; line-height:1.7em; border-radius:5px; color:var(--text);}
+  .cal-g .cs{color:var(--dim); font-size:.85em;}
+  .cal-g .ds{color:var(--dissabte);} .cal-g .fe{color:var(--festiu);}
+  .cal-g .avui{background:var(--cian); color:#03101a; font-weight:700; box-shadow:0 0 10px rgba(43,228,255,.6);}
+  .cal-dreta{display:flex; flex-direction:column; gap:.9em; min-width:0;}
+  .llista{list-style:none; margin:.35em 0 0; padding:0; display:flex; flex-direction:column; gap:.3em;}
+  .llista li{color:var(--text);}
+  .avisos li{display:flex; gap:.5em; align-items:flex-start;}
+  .avisos li::before{content:""; flex:0 0 auto; width:.55em; height:.55em; margin-top:.35em; border-radius:50%; background:var(--verd); box-shadow:0 0 6px currentColor;}
+  .avisos li.groc::before{background:#ffd34d;} .avisos li.taronja::before{background:#ff9b3d;} .avisos li.vermell::before{background:#ff5b4d;} .avisos li.info::before{background:var(--cian);}
+  .avisos li.cap{color:var(--verd);}
+  @container fin (orientation: portrait){ .p-cal .cos{flex-direction:column;} .cal-dreta{align-items:center; text-align:center;} .avisos li{justify-content:center;} }
 
   /* Sol i Lluna */
-  .p-sl{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:clamp(10px,5cqmin,30px); font-size:clamp(10px,4.4cqmin,16px);}
-  .sl-col{display:flex; flex-direction:column; align-items:center; gap:.35em; text-align:center;}
-  .sl-col svg{width:clamp(28px,14cqmin,64px); height:clamp(28px,14cqmin,64px);}
-  .sl-col .nom{font-size:clamp(15px,7cqmin,28px);}
-  .sl-fila{display:flex; gap:.8em;} .sl-fila span{color:var(--dim);} .sl-fila b{font-weight:400; color:var(--lume);}
+  .p-sl .cos{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); align-items:center;}
+  .sl-col{display:flex; flex-direction:column; align-items:center; gap:.4em; text-align:center; min-width:0;}
+  .sl-col svg{width:clamp(26px,12cqmin,60px); height:clamp(26px,12cqmin,60px);}
+  .sl-nom{font:500 clamp(12px,5.2cqmin,22px) var(--font-d); letter-spacing:.08em; color:var(--cian); text-transform:uppercase;}
+  .sl-fila{display:flex; align-items:baseline; gap:.7em;} .sl-fila span{color:var(--dim); font-size:.8em; letter-spacing:.1em; text-transform:uppercase;}
+  .sl-fila b{font-weight:400; font-size:1.35em;}
+  .sl-fase{grid-column:1 / -1; justify-self:center;}
 
   /* Sant */
-  .p-sant{flex-direction:column; align-items:stretch; justify-content:center; gap:1em; font-size:clamp(10px,4.2cqmin,16px);}
-  .p-sant .nom{font-size:clamp(15px,7.4cqmin,28px);}
-  .efem{line-height:1.5; color:var(--text);} .efem b{color:var(--turq); font-weight:400;}
+  .p-sant .cos{flex-direction:column; align-items:stretch; justify-content:center; gap:1em;}
+  .sant-nom{font:500 clamp(14px,6.4cqmin,26px)/1.25 var(--font-d); letter-spacing:.04em;}
+  .efem{line-height:1.5; color:var(--text);} .efem b{color:var(--cian); font-weight:400;}
 
   /* Ràdio */
-  .p-radio{flex-direction:column; gap:.6em; font-size:clamp(10px,4cqmin,15px);}
-  .p-radio{padding-top:clamp(14px,5cqmin,24px);}
-  .radios{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:6px; width:100%; max-width:560px;}
-  .radio{appearance:none; min-height:0; border-radius:10px; border:1px solid var(--bezel-hi); background:var(--panel-2);
-    color:var(--lume); font-family:var(--font-d); font-size:1.15em; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; padding:4px;}
-  .radio small{font-family:var(--font-m); font-size:.62em; color:var(--dim);}
-  .radio.sona{border-color:var(--turq);} .radio.sona small{color:var(--turq);}
-  .radio span{font-size:clamp(11px,5cqmin,20px); line-height:1.1; text-align:center;} .radio small{font-size:clamp(8px,3.2cqmin,12px);}
+  .p-radio .cos{align-items:stretch;}
+  .radios{flex:1 1 auto; min-height:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); grid-auto-rows:1fr; gap:6px; width:100%; max-width:600px;}
+  .radio{appearance:none; min-height:0; min-width:0; border-radius:12px; border:1.5px solid var(--vora); background:rgba(4,12,20,.7);
+    color:var(--text); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:3px 4px;}
+  .radio span{font:500 clamp(9px,3.9cqmin,16px)/1.15 var(--font-d); letter-spacing:.04em; text-align:center;}
+  .radio small{font:clamp(8px,3cqmin,12px) var(--font-m); color:var(--dim); letter-spacing:.06em;}
+  .radio:hover{border-color:var(--vora-hi);}
+  .radio.sona{border-color:var(--cian); box-shadow:0 0 12px rgba(43,228,255,.35), inset 0 0 10px rgba(43,228,255,.12);}
+  .radio.sona span{color:var(--brill); text-shadow:var(--glow);} .radio.sona small{color:var(--cian);}
 
   /* Podcasts */
-  .p-pod{flex-direction:column; gap:clamp(6px,3.4cqmin,16px); font-size:clamp(10px,4cqmin,15px);}
-  .p-seccio{width:100%; max-width:560px; display:flex; flex-direction:column; align-items:center; gap:.45em;}
-  .p-cap{font-family:var(--font-d); font-weight:500; font-size:1.15em; letter-spacing:.06em; color:var(--lume);}
-  .p-cap small{font-family:var(--font-m); font-weight:400; font-size:.7em; color:var(--dim);}
+  .p-pod .cos{flex-direction:column; gap:clamp(6px,3.2cqmin,16px);}
+  .p-seccio{width:100%; max-width:600px; display:flex; flex-direction:column; align-items:center; gap:.45em;}
+  .p-cap{font:500 1em var(--font-d); letter-spacing:.08em; text-transform:uppercase; color:var(--cian);}
+  .p-cap small{font-family:var(--font-m); font-weight:400; font-size:.8em; color:var(--dim); text-transform:none;}
   .p-fila{width:100%; display:flex; justify-content:center; gap:6px;}
-  .p-boto{appearance:none; flex:1 1 0; max-width:96px; min-width:0; min-height:clamp(40px,17cqmin,70px); border-radius:8px; border:1px solid var(--bezel-hi); background:var(--panel-2);
-    color:var(--lume); font:inherit; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:2px;}
-  .p-boto b{font-family:var(--font-d); font-weight:500; font-size:1.05em;}
+  .p-boto{appearance:none; flex:1 1 0; max-width:100px; min-width:0; min-height:clamp(38px,16cqmin,68px); border-radius:12px; border:1.5px solid var(--vora); background:rgba(4,12,20,.7);
+    color:var(--text); font:inherit; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; cursor:pointer; padding:2px;}
+  .p-boto b{font:500 .95em var(--font-d); letter-spacing:.04em;}
   .p-boto small{color:var(--dim); font-size:.75em;}
-  .p-boto.darrer{border-color:rgba(47,217,196,.45);}
-  .p-boto.sona{border-color:var(--turq); background:rgba(47,217,196,.1);} .p-boto.sona small{color:var(--turq);}
+  .p-boto.darrer{border-color:var(--vora-hi);}
+  .p-boto.sona{border-color:var(--cian); box-shadow:0 0 12px rgba(43,228,255,.35);} .p-boto.sona b{color:var(--brill); text-shadow:var(--glow);} .p-boto.sona small{color:var(--cian);}
   .p-estat{color:var(--dim); font-size:.85em;}
-  .p-titol{width:100%; max-width:560px; color:var(--turq); font-size:.82em; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+  .p-titol{width:100%; max-width:600px; color:var(--cian); font-size:.82em; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
 
   /* Notícies */
-  .p-not{flex-direction:column; align-items:stretch; justify-content:flex-start; gap:.5em; font-size:clamp(10px,3.9cqmin,15px); padding-top:clamp(14px,5cqmin,26px);}
+  .p-not .cos{align-items:stretch;}
   .not-llista{flex:1 1 auto; min-height:0; overflow-y:auto; margin:0; padding:0 4px 0 0; list-style:none; display:flex; flex-direction:column; gap:.55em;
-    scrollbar-width:thin; scrollbar-color:var(--bezel-hi) transparent; -webkit-user-select:text; user-select:text;}
+    scrollbar-width:thin; scrollbar-color:var(--vora-hi) transparent; -webkit-user-select:text; user-select:text; font-size:.95em;}
   .not-llista a{display:flex; gap:.6em; color:var(--text); text-decoration:none; line-height:1.35;}
-  .not-llista a:hover{color:var(--lume);}
-  .not-llista a span:first-child{flex:0 0 1.4em; color:var(--turq);}
-  .not-peu{color:var(--dim); font-size:.8em; text-align:center;}
+  .not-llista a:hover{color:var(--brill);}
+  .not-llista a span:first-child{flex:0 0 1.4em; color:var(--cian); text-shadow:0 0 6px rgba(43,228,255,.5);}
+  .not-peu{color:var(--dim); font-size:.85em; text-align:center;}
 
-
-  /* Horitzontal: tres columnes */
+  /* Horitzontal i escriptori: tres columnes */
   @media (orientation: landscape){
-    .finestres{grid-template-rows:none; grid-template-columns:repeat(3,minmax(0,1fr)); padding-bottom:4px;}
+    .finestres{grid-template-rows:none; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px;}
   }
   @media (orientation: landscape) and (max-height: 500px){
-    .cap,.peu{display:none;}
+    .peu{display:none;}
     .finestres{padding-top:calc(env(safe-area-inset-top,0px) + 8px); padding-bottom:calc(env(safe-area-inset-bottom,0px) + 8px); gap:8px;}
   }
   @media (orientation: landscape) and (min-height: 501px){
-    .finestres{padding-bottom:6px; gap:16px;}
+    .finestres{padding-top:16px;}
   }
-  @media (prefers-reduced-motion: reduce){ .pista{transition:none;} }
+  @media (min-width: 900px) and (min-height: 600px){ .peu{font-size:12px;} .peu .credits{font-size:10px;} }
+  @media (prefers-reduced-motion: reduce){ .pista{transition:none;} .barra i{transition:none;} }
 </style>
 </head>
 <body>
 <div class="estels" aria-hidden="true"></div>
 
-<header class="cap"><h1>Centre de Control Orbital</h1></header>
-
 <main class="finestres">
+  <h1 style="position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0);">Centre de Control Orbital</h1>
   <!-- ===================== FINESTRA 1 · COSSOS CELESTES ===================== -->
   <section class="finestra" id="f1" tabindex="0" aria-roledescription="carrusel" aria-label="Cossos celestes">
     <div class="pista" id="pista1"></div>
@@ -274,99 +273,107 @@
   <!-- ===================== FINESTRA 2 · AQUÍ I ARA ===================== -->
   <section class="finestra" id="f2" tabindex="0" aria-roledescription="carrusel" aria-label="Aquí i ara">
     <div class="pista">
-      <article class="pane p-rell" aria-label="Rellotge Mondaine">
-        <div class="disc" id="mondDisc">
-          <svg viewBox="0 0 300 300" role="img" aria-label="Rellotge Mondaine">
-            <defs>
-              <radialGradient id="mDial" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="70%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e2e2e2"/></radialGradient>
-              <linearGradient id="mBisell" x1="15%" y1="8%" x2="88%" y2="95%"><stop offset="0%" stop-color="#6a6a6a"/><stop offset="14%" stop-color="#1c1c1c"/><stop offset="55%" stop-color="#000000"/><stop offset="100%" stop-color="#000000"/></linearGradient>
-              <filter id="mMarcaOmbra" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="1.8" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.4"/></filter>
-            </defs>
-            <circle cx="150" cy="150" r="140" fill="url(#mDial)" stroke="url(#mBisell)" stroke-width="12"/>
-            <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="600" letter-spacing="1.6" fill="#000000" text-anchor="middle">MONDAINE</text>
-            <g transform="translate(150, 110)">
-              <circle cx="0" cy="0" r="6.5" fill="#e30613"/>
-              <rect x="-1.3" y="-4.2" width="2.6" height="8.4" fill="#ffffff"/>
-              <rect x="-4.2" y="-1.3" width="8.4" height="2.6" fill="#ffffff"/>
-              <text x="-8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="end" dominant-baseline="middle" letter-spacing="0.2">Swiss</text>
-              <text x="8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="start" dominant-baseline="middle" letter-spacing="0.2">Watch</text>
-            </g>
-            <g id="mMarques" filter="url(#mMarcaOmbra)"></g>
-            <line id="mHora" class="mond-ombra" x1="150" y1="175" x2="150" y2="68" stroke="#000000" stroke-width="14" stroke-linecap="butt"/>
-            <line id="mMin" class="mond-ombra" x1="150" y1="175" x2="150" y2="26" stroke="#000000" stroke-width="12" stroke-linecap="butt"/>
-          </svg>
-          <div class="seg-capa" id="mSegCapa" aria-hidden="true">
-            <svg class="seg-ombra" viewBox="0 0 300 300">
-              <filter id="mSegDifus" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
-              <g filter="url(#mSegDifus)" fill="rgba(0,0,0,0.35)" stroke="rgba(0,0,0,0.35)"><line x1="150" y1="172" x2="150" y2="69" stroke-width="3.5"/><circle cx="150" cy="63" r="9" stroke="none"/></g>
+      <article class="pane p-rell" aria-label="Rellotge">
+        <div class="capcal"><span class="tit" id="rellZona">Hora de París</span><span class="val" id="rellUtc">UTC+1</span></div>
+        <div class="cos">
+          <div class="disc" id="mondDisc">
+            <svg viewBox="0 0 300 300" role="img" aria-label="Rellotge Mondaine">
+              <defs>
+                <radialGradient id="mDial" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#ffffff"/><stop offset="70%" stop-color="#ffffff"/><stop offset="100%" stop-color="#e2e2e2"/></radialGradient>
+                <linearGradient id="mBisell" x1="15%" y1="8%" x2="88%" y2="95%"><stop offset="0%" stop-color="#6a6a6a"/><stop offset="14%" stop-color="#1c1c1c"/><stop offset="55%" stop-color="#000000"/><stop offset="100%" stop-color="#000000"/></linearGradient>
+                <filter id="mMarcaOmbra" x="-50%" y="-50%" width="200%" height="200%"><feDropShadow dx="1" dy="1.8" stdDeviation="1.1" flood-color="#000000" flood-opacity="0.4"/></filter>
+              </defs>
+              <circle cx="150" cy="150" r="140" fill="url(#mDial)" stroke="url(#mBisell)" stroke-width="12"/>
+              <text x="150" y="97" font-family="'Montserrat', -apple-system, sans-serif" font-size="16" font-weight="600" letter-spacing="1.6" fill="#000000" text-anchor="middle">MONDAINE</text>
+              <g transform="translate(150, 110)">
+                <circle cx="0" cy="0" r="6.5" fill="#e30613"/>
+                <rect x="-1.3" y="-4.2" width="2.6" height="8.4" fill="#ffffff"/>
+                <rect x="-4.2" y="-1.3" width="8.4" height="2.6" fill="#ffffff"/>
+                <text x="-8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="end" dominant-baseline="middle" letter-spacing="0.2">Swiss</text>
+                <text x="8" y="0.5" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="8.5" fill="#000000" text-anchor="start" dominant-baseline="middle" letter-spacing="0.2">Watch</text>
+              </g>
+              <g id="mMarques" filter="url(#mMarcaOmbra)"></g>
+              <line id="mHora" class="mond-ombra" x1="150" y1="175" x2="150" y2="68" stroke="#000000" stroke-width="14" stroke-linecap="butt"/>
+              <line id="mMin" class="mond-ombra" x1="150" y1="175" x2="150" y2="26" stroke="#000000" stroke-width="12" stroke-linecap="butt"/>
             </svg>
-            <svg class="seg-agulla" viewBox="0 0 300 300">
-              <line x1="150" y1="172" x2="150" y2="69" stroke="#e30613" stroke-width="3.5" stroke-linecap="butt"/>
-              <circle cx="150" cy="63" r="9" fill="#e30613"/>
-            </svg>
-            <svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="5" fill="#e30613"/></svg>
+            <div class="seg-capa" id="mSegCapa" aria-hidden="true">
+              <svg class="seg-ombra" viewBox="0 0 300 300">
+                <filter id="mSegDifus" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.5"/></filter>
+                <g filter="url(#mSegDifus)" fill="rgba(0,0,0,0.35)" stroke="rgba(0,0,0,0.35)"><line x1="150" y1="172" x2="150" y2="69" stroke-width="3.5"/><circle cx="150" cy="63" r="9" stroke="none"/></g>
+              </svg>
+              <svg class="seg-agulla" viewBox="0 0 300 300">
+                <line x1="150" y1="172" x2="150" y2="69" stroke="#e30613" stroke-width="3.5" stroke-linecap="butt"/>
+                <circle cx="150" cy="63" r="9" fill="#e30613"/>
+              </svg>
+              <svg viewBox="0 0 300 300"><circle cx="150" cy="150" r="5" fill="#e30613"/></svg>
+            </div>
           </div>
-        </div>
-        <div class="info">
-          <div class="nom petit" id="rellZona">Hora de París</div>
-          <div class="sub" id="rellUtc" style="color:var(--lume)">UTC+1</div>
-          <div class="sub" id="rellSub">—</div>
+          <div class="info"><span class="pindola" id="rellSub">—</span></div>
         </div>
       </article>
 
-      <article class="pane p-ara" aria-label="Ara">
-        <div class="etq">Ara</div>
-        <div class="lcd">
-          <div class="lcd-hora brilla" id="lcdHora">--:--:--</div>
-          <div class="lcd-data" id="lcdData">--- -- --- ----</div>
-          <div class="lcd-extra" id="lcdExtra">SETMANA -- · DIA ---</div>
+      <article class="pane p-ara" aria-label="Hora local">
+        <div class="capcal"><span class="tit">Hora local</span><span class="val" id="lcdExtra">SETMANA --</span></div>
+        <div class="cos">
+          <div class="ind">
+            <div class="ind-valor brilla" id="lcdHora">--:--:--</div>
+            <div class="barra" title="Part del dia transcorreguda"><i id="araBarra"></i></div>
+            <div class="ind-peu" id="lcdData">--- -- ---</div>
+          </div>
         </div>
       </article>
 
       <article class="pane p-lloc" aria-label="On som">
-        <div class="etq">On som</div>
-        <div class="nom" id="llNom">Barcelona</div>
-        <div class="sub" id="llRegio">—</div>
-        <div class="graella2">
-          <div><span>Altitud</span><b class="gran" id="llAlt">-- m</b></div>
-          <div><span>Coordenades</span><b id="llCoord">—</b></div>
-        </div>
-        <a class="boto" id="llMapa" href="https://www.google.com/maps?q=41.3874,2.1686" target="_blank" rel="noopener">
-          <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
-          Obre a Google Maps
-        </a>
-      </article>
-
-      <article class="pane p-temps" aria-label="El temps">
-        <div class="etq">El temps</div>
-        <div class="lcd">
-          <svg class="t-ic" id="tIc" viewBox="0 0 24 24" aria-hidden="true"></svg>
-          <div>
-            <div class="t-gran brilla" id="tTemp">--°</div>
-            <div class="t-desc" id="tDesc">Esperant dades…</div>
+        <div class="capcal"><span class="tit">On som</span><span class="val" id="llCoord">—</span></div>
+        <div class="cos">
+          <div class="lloc-nom brilla" id="llNom">Barcelona</div>
+          <div class="lloc-regio" id="llRegio">—</div>
+          <div class="fila">
+            <span class="pindola" id="llAlt">ALTITUD: -- m</span>
+            <a class="boto" id="llMapa" href="https://www.google.com/maps?q=41.3874,2.1686" target="_blank" rel="noopener">
+              <svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>
+              Google Maps
+            </a>
           </div>
         </div>
-        <div class="t-4">
-          <div><span>Màx</span><b id="tMax" style="color:var(--calor)">--°</b></div>
-          <div><span>Mín</span><b id="tMin" style="color:var(--fred)">--°</b></div>
-          <div><span>Sensació</span><b id="tSens" style="color:var(--sensa)">--°</b></div>
-          <div><span>Humitat</span><b id="tHum" style="color:var(--lume)">--%</b></div>
+      </article>
+
+      <article class="pane p-temps" aria-label="Temperatura local">
+        <div class="capcal"><span class="tit">Temp. local</span><span class="val" id="tDesc">Esperant dades…</span></div>
+        <div class="cos">
+          <div class="ind">
+            <div class="t-cap">
+              <svg class="t-ic" id="tIc" viewBox="0 0 24 24" aria-hidden="true"></svg>
+              <div class="ind-valor brilla"><span id="tTemp">--</span><span class="ind-unit">°C</span></div>
+            </div>
+            <div class="barra" title="Escala de −10 °C a 45 °C"><i id="tBarra"></i></div>
+            <div class="ind-peu">Meteo en directe</div>
+          </div>
+          <div class="t-4">
+            <div><span>Màx</span><b id="tMax" style="color:var(--calor)">--°</b></div>
+            <div><span>Mín</span><b id="tMin" style="color:var(--fred)">--°</b></div>
+            <div><span>Sensació</span><b id="tSens" style="color:var(--sensa)">--°</b></div>
+            <div><span>Humitat</span><b id="tHum" class="brilla">--%</b></div>
+          </div>
+          <div class="t-hores" id="tHores"></div>
         </div>
-        <div class="t-hores" id="tHores"></div>
       </article>
 
       <article class="pane p-cal" aria-label="Calendari i avisos">
-        <div class="cal">
-          <div class="cal-cap">
-            <button type="button" class="cal-fl" id="calAnt" aria-label="Mes anterior">▲</button>
-            <button type="button" class="cal-tit" id="calTit" title="Torna al mes actual">—</button>
-            <button type="button" class="cal-fl" id="calSeg" aria-label="Mes següent">▼</button>
+        <div class="capcal"><span class="tit">Calendari</span><span class="val">Festius de Barcelona</span></div>
+        <div class="cos">
+          <div class="cal">
+            <div class="cal-cap">
+              <button type="button" class="cal-fl" id="calAnt" aria-label="Mes anterior">▲</button>
+              <button type="button" class="cal-tit" id="calTit" title="Torna al mes actual">—</button>
+              <button type="button" class="cal-fl" id="calSeg" aria-label="Mes següent">▼</button>
+            </div>
+            <div class="cal-g" id="calG" role="grid" aria-label="Calendari del mes"></div>
           </div>
-          <div class="cal-g" id="calG" role="grid" aria-label="Calendari del mes"></div>
-        </div>
-        <div class="cal-dreta">
-          <div><div class="etq" id="calFestesEtq">Properament</div><ul class="llista" id="calFestes"></ul></div>
-          <div><div class="etq">Avisos</div><ul class="llista avisos" id="calAvisos"><li class="cap">Esperant la previsió…</li></ul></div>
+          <div class="cal-dreta">
+            <div><div class="etq" id="calFestesEtq">Properament</div><ul class="llista" id="calFestes"></ul></div>
+            <div><div class="etq">Avisos</div><ul class="llista avisos" id="calAvisos"><li class="cap">Esperant la previsió…</li></ul></div>
+          </div>
         </div>
       </article>
     </div>
@@ -380,42 +387,49 @@
     <div class="pista">
 
       <article class="pane p-sl" aria-label="Sol i Lluna">
-        <div class="sl-col">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ffb454" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-          <div class="nom">Sol</div>
-          <div class="sl-fila"><span>Surt</span><b id="slSolS">--:--</b></div>
-          <div class="sl-fila"><span>Es pon</span><b id="slSolP">--:--</b></div>
-          <div class="sub" id="slLlum">—</div>
-        </div>
-        <div class="sl-col">
-          <svg viewBox="-12 -12 24 24" aria-hidden="true" id="slLlunaIc"></svg>
-          <div class="nom">Lluna</div>
-          <div class="sl-fila"><span>Surt</span><b id="slLlS">--:--</b></div>
-          <div class="sl-fila"><span>Es pon</span><b id="slLlP">--:--</b></div>
-          <div class="sub" id="slFase">—</div>
+        <div class="capcal"><span class="tit">Sol i Lluna</span><span class="val" id="slLlum">—</span></div>
+        <div class="cos">
+          <div class="sl-col">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffc46b" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" style="filter:drop-shadow(0 0 6px rgba(255,190,90,.6))"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+            <div class="sl-nom">Sol</div>
+            <div class="sl-fila"><span>Surt</span><b class="brilla" id="slSolS">--:--</b></div>
+            <div class="sl-fila"><span>Es pon</span><b class="brilla" id="slSolP">--:--</b></div>
+          </div>
+          <div class="sl-col">
+            <svg viewBox="-12 -12 24 24" aria-hidden="true" id="slLlunaIc"></svg>
+            <div class="sl-nom">Lluna</div>
+            <div class="sl-fila"><span>Surt</span><b class="brilla" id="slLlS">--:--</b></div>
+            <div class="sl-fila"><span>Es pon</span><b class="brilla" id="slLlP">--:--</b></div>
+          </div>
+          <span class="pindola sl-fase" id="slFase">—</span>
         </div>
       </article>
 
       <article class="pane p-sant" aria-label="Sant del dia i efemèride">
-        <div><div class="etq">Sant del dia</div><div class="nom" id="santNom">—</div></div>
-        <div><div class="etq" id="efemEtq">Efemèride</div><div class="efem" id="efemText">Carregant…</div></div>
+        <div class="capcal"><span class="tit">Sant del dia</span><span class="val" id="santData">—</span></div>
+        <div class="cos">
+          <div class="sant-nom brilla" id="santNom">—</div>
+          <div><div class="etq" id="efemEtq">Efemèride</div><div class="efem" id="efemText">Carregant…</div></div>
+        </div>
       </article>
 
       <article class="pane p-radio" aria-label="Ràdio">
-        <div class="etq">Ràdio en directe</div>
-        <div class="radios" id="radios"></div>
+        <div class="capcal"><span class="tit">Ràdio</span><span class="val">En directe</span></div>
+        <div class="cos"><div class="radios" id="radios"></div></div>
       </article>
 
       <article class="pane p-pod" aria-label="Podcasts de RAC1">
-        <div class="p-seccio"><div class="p-cap">La Competència <small>· RAC1</small></div><div class="p-fila" id="pComp"><span class="p-estat">Carregant…</span></div></div>
-        <div class="p-seccio"><div class="p-cap">Via lliure <small>· RAC1 · 1a hora</small></div><div class="p-fila" id="pVia"><span class="p-estat">Carregant…</span></div></div>
-        <div class="p-titol" id="podTitol" hidden></div>
+        <div class="capcal"><span class="tit">Podcasts</span><span class="val">RAC1</span></div>
+        <div class="cos">
+          <div class="p-seccio"><div class="p-cap">La Competència</div><div class="p-fila" id="pComp"><span class="p-estat">Carregant…</span></div></div>
+          <div class="p-seccio"><div class="p-cap">Via lliure <small>· 1a hora</small></div><div class="p-fila" id="pVia"><span class="p-estat">Carregant…</span></div></div>
+          <div class="p-titol" id="podTitol" hidden></div>
+        </div>
       </article>
 
       <article class="pane p-not" aria-label="Notícies">
-        <div class="etq" style="text-align:center">Notícies</div>
-        <ol class="not-llista" id="notLlista"><li class="not-peu">Carregant…</li></ol>
-        <div class="not-peu" id="notPeu"></div>
+        <div class="capcal"><span class="tit">Notícies</span><span class="val" id="notPeu">ACN</span></div>
+        <div class="cos"><ol class="not-llista" id="notLlista"><li class="not-peu">Carregant…</li></ol></div>
       </article>
 
     </div>
@@ -426,7 +440,9 @@
 </main>
 
 <footer class="peu">
-  <span id="peuLloc">localitzant…</span><span class="punt"> · </span><span id="peuDades">dades pendents</span><span class="punt"> · </span>textures <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0)
+  <span>Centre de Control Orbital © 2026</span>
+  <span id="peuCoord">LAT: -- | LON: --</span>
+  <span class="credits">Textures: <a href="https://www.solarsystemscope.com/textures/" target="_blank" rel="noopener">Solar System Scope</a> (CC BY 4.0) · Dades: Open-Meteo, BigDataCloud, Viquipèdia, ACN</span>
 </footer>
 
 
@@ -689,20 +705,24 @@ const COSSOS = [
 const pistaF1 = $('pista1');
 COSSOS.forEach(c => {
   const a = document.createElement('article'); a.className = 'pane'; c.el = a;
+  const capcal = (tit, val, idT = '', idV = '') => `<div class="capcal"><span class="tit"${idT ? ` id="${idT}"` : ''}>${tit}</span><span class="val"${idV ? ` id="${idV}"` : ''} data-k="cap">${val}</span></div>`;
   if (c.id === 'eei'){
     a.setAttribute('aria-label', 'Estació Espacial Internacional');
-    a.innerHTML = `<div class="disc"><img src="textures/eei.jpg" alt="L'Estació Espacial Internacional sobre la Terra" decoding="async"></div>
-      <div class="info"><div class="etq">Satèl·lit artificial</div><div class="nom petit">Estació Espacial</div>
-      <dl class="dades"><dt>Distància</dt><dd data-k="dist">—</dd><dt>Alçada</dt><dd data-k="alt">—</dd><dt>Velocitat</dt><dd data-k="vel">—</dd><dt data-k="pasEtq">Pròxim pas</dt><dd data-k="pas">calculant…</dd></dl></div>`;
+    a.innerHTML = `${capcal('Estació Espacial', 'EEI · ISS')}
+      <div class="cos"><div class="disc"><img src="textures/eei.jpg" alt="L'Estació Espacial Internacional sobre la Terra" decoding="async"></div>
+      <div class="info"><span class="pindola" data-k="pill">ALÇADA: — km</span>
+      <dl class="dades"><dt>Distància</dt><dd data-k="dist">—</dd><dt>Velocitat</dt><dd data-k="vel">—</dd><dt data-k="pasEtq">Pròxim pas</dt><dd data-k="pas">calculant…</dd></dl></div></div>`;
   } else if (c.id === 'terra'){
     a.setAttribute('aria-label', 'Terra');
-    a.innerHTML = `<div class="disc" role="img" aria-label="La Terra vista des de la vertical de Barcelona"><canvas></canvas></div>
-      <div class="info"><div class="etq">Terra</div><div class="nom"><span id="terraNom">Barcelona</span><span id="terraAlt"></span></div></div>`;
+    a.innerHTML = `${capcal('Barcelona', '—', 'terraNom', 'terraCoord')}
+      <div class="cos"><div class="disc" role="img" aria-label="La Terra vista des de la vertical de Barcelona"><canvas></canvas></div>
+      <div class="info"><span class="pindola" id="terraAlt">ALTITUD: -- m</span></div></div>`;
   } else {
     a.setAttribute('aria-label', c.nom);
-    const etq = c.id === 'lluna' ? 'Lluna' : c.id === 'tita' ? 'Satèl·lit de Saturn' : `Planeta ${c.ord}`;
-    a.innerHTML = `<div class="disc" role="img" aria-label="${c.nom} tal com es veuria amb un telescopi"><canvas></canvas></div>
-      <div class="info"><div class="etq">${etq}</div><div class="nom">${c.nom}</div><dl class="dades"></dl></div>`;
+    const val = c.id === 'lluna' ? '—' : c.id === 'tita' ? 'Satèl·lit de Saturn' : `Planeta ${c.ord}`;
+    a.innerHTML = `${capcal(c.nom, val)}
+      <div class="cos"><div class="disc" role="img" aria-label="${c.nom} tal com es veuria amb un telescopi"><canvas></canvas></div>
+      <div class="info"><span class="pindola" data-k="pill">—</span><dl class="dades"></dl></div></div>`;
     if (c.llunes) ['I','E','G','C'].forEach(n => { const g = document.createElement('span'); g.className = 'gal'; g.innerHTML = `<i>${n}</i>`; g.dataset.n = n; a.querySelector('.disc').appendChild(g); });
   }
   pistaF1.appendChild(a);
@@ -716,7 +736,7 @@ function preparaGL(){
   if (gl || !window.THREE) return !!gl;
   try {
     gl = new THREE.WebGLRenderer({ antialias:true, alpha:true, preserveDrawingBuffer:true });
-    gl.setClearColor(0x000000, 1);
+    gl.setClearColor(0x000000, 0);
     carregador = new THREE.TextureLoader();
   } catch(e){ gl = null; }
   return !!gl;
@@ -867,6 +887,7 @@ function llumTxt(ua){ const s = ua * 499.005; const h = Math.floor(s / 3600), m 
 function midaTxt(diam){ const r = diam / TERRA_DIAM; return num(r, r < 1 ? 2 : r < 10 ? 2 : 1) + ' × Terra'; }
 
 let idxF1 = 0;
+function posa(c, k, t){ const e = c.el.querySelector(`[data-k="${k}"]`); if (e && e.textContent !== t) e.textContent = t; }
 function refrescaF1(tots){
   if (!preparaGL()) return;
   const ara = new Date();
@@ -886,15 +907,17 @@ function refrescaF1(tots){
     if (c.id === 'lluna'){
       const L = lluna(ara); v = L.g; sol = L.sol;
       orienta(es, c, ara, [-v[0], -v[1], -v[2]]);
-      c.el.querySelector('.nom').textContent = nomFase(L.elong);
-      rows = [['Il·luminació', Math.round(L.illum * 100) + '%'], ['Distància', distTxt(L.dist)], ['Edat', num(L.edat, 1) + ' dies'], ['Mida', midaTxt(c.diam)]];
+      posa(c, 'pill', nomFase(L.elong).toUpperCase());
+      posa(c, 'cap', num(L.illum * 100, 1) + '%');
+      rows = [['Distància', distTxt(L.dist)], ['Edat', num(L.edat, 1) + ' dies'], ['Mida', midaTxt(c.diam)]];
     } else {
       const pid = c.id === 'tita' ? 'saturn' : c.id, P = planeta(pid, ara);
       v = nrm(P.g); sol = P.sol;
       orienta(es, c, ara);
       const km = P.dist * UA, ap = c.diam / km / RAD * 3600;
+      posa(c, 'pill', 'DIST. ' + distTxt(km));
       if (c.fase) rows.push(['Fase', Math.round(P.fase * 100) + '%']);
-      rows.push(['Distància', distTxt(km)], ['Mida', midaTxt(c.diam)], ['Aparent', num(ap, ap < 10 ? 1 : 0) + '″']);
+      rows.push(['Mida', midaTxt(c.diam)], ['Aparent', num(ap, ap < 10 ? 1 : 0) + '″']);
       if (c.anells) rows.push(['Anells', 'obertura ' + num(Math.asin(Math.abs(dot(quatPol(c.pol[0], c.pol[1]), v))) / RAD, 1) + '°']);
       else if (c.id === 'tita') rows.push(['Òrbita', '15,9 dies']);
       else if (!c.fase) rows.push(['Llum', llumTxt(P.dist)]);
@@ -975,7 +998,7 @@ function refrescaEEI(){
   if (!window.satellite || !satrec) return;
   const e = estatEEI(new Date()); if (!e) return;
   dd('dist').textContent = num(Math.round(e.dist)) + ' km';
-  dd('alt').textContent = num(Math.round(e.h)) + ' km';
+  dd('pill').textContent = 'ALÇADA: ' + num(Math.round(e.h)) + ' km';
   dd('vel').textContent = num(Math.round(e.vel / 10) * 10) + ' km/h';
   if (!passos || Date.now() - darrerPas > 20 * 60e3) calculaPassos();
   const vis = passos.find(p => p.vis), prox = passos[0];
@@ -997,8 +1020,9 @@ function setmanaISO(d){
 function pintaAra(){
   const d = new Date();
   $('lcdHora').innerHTML = `${dosD(d.getHours())}<span class="dp" style="opacity:${d.getMilliseconds() < 500 ? 1 : .25}">:</span>${dosD(d.getMinutes())}:${dosD(d.getSeconds())}`;
-  $('lcdData').textContent = `${DIES_CURT[d.getDay()]} ${dosD(d.getDate())} ${MESOS_CURT[d.getMonth()]} ${d.getFullYear()}`;
-  $('lcdExtra').textContent = `SETMANA ${setmanaISO(d)} · DIA ${diaAny(d)}`;
+  $('lcdData').textContent = `${DIES_CURT[d.getDay()]} ${dosD(d.getDate())} ${MESOS_CURT[d.getMonth()]} ${d.getFullYear()} · DIA ${diaAny(d)}`;
+  $('lcdExtra').textContent = `SETMANA ${setmanaISO(d)}`;
+  $('araBarra').style.width = ((d.getHours() * 3600 + d.getMinutes() * 60 + d.getSeconds()) / 864) + '%';
 }
 
 // --- Lloc (BigDataCloud) ---
@@ -1038,13 +1062,14 @@ function pintaLloc(){
   $('llNom').textContent = pos.nom || 'Barcelona';
   $('terraNom').textContent = pos.nom || 'Barcelona';
   $('llRegio').textContent = pos.regio || '—';
-  const alt = pos.alt != null ? num(Math.round(pos.alt)) + ' m' : '-- m';
-  $('llAlt').textContent = alt;
-  $('terraAlt').textContent = pos.alt != null ? ' · ' + alt : '';
+  const alt = 'ALTITUD: ' + (pos.alt != null ? num(Math.round(pos.alt)) : '--') + ' m';
+  $('llAlt').textContent = alt; $('terraAlt').textContent = alt;
   const ns = pos.lat >= 0 ? 'N' : 'S', eo = pos.lon >= 0 ? 'E' : 'O';
-  $('llCoord').innerHTML = `${num(Math.abs(pos.lat), 4)}° ${ns}<br>${num(Math.abs(pos.lon), 4)}° ${eo}`;
+  const la = `${num(Math.abs(pos.lat), 2)}° ${ns}`, lo = `${num(Math.abs(pos.lon), 2)}° ${eo}`;
+  $('llCoord').textContent = `${la} · ${lo}`;
+  $('terraCoord').textContent = `${la}, ${lo}`;
   $('llMapa').href = `https://www.google.com/maps?q=${pos.lat.toFixed(5)},${pos.lon.toFixed(5)}`;
-  $('peuLloc').textContent = `${pos.nom || 'Barcelona'} · ${pos.lat.toFixed(3)}, ${pos.lon.toFixed(3)}`;
+  $('peuCoord').textContent = `LAT: ${la} | LON: ${lo}`;
 }
 
 // --- Temps (Open-Meteo) ---
@@ -1075,14 +1100,14 @@ function carregaTemps(){
       meteo = m;
       if (m.elevation != null){ pos.alt = m.elevation; desa('pos', pos); pintaLloc(); }
       pintaTemps(); pintaAvisos();
-      $('peuDades').textContent = 'dades actualitzades ' + hm(new Date());
-    }).catch(() => { $('peuDades').textContent = 'sense connexió amb Open-Meteo'; });
+    }).catch(() => { if (!meteo) $('tDesc').textContent = 'Sense connexió'; });
 }
 function pintaTemps(){
   if (!meteo || !meteo.current) return;
   const c = meteo.current, dd = meteo.daily || {}, h = meteo.hourly || {};
   $('tIc').innerHTML = iconaTemps(c.weather_code, c.is_day);
-  $('tTemp').textContent = graus(c.temperature_2m);
+  $('tTemp').textContent = num(c.temperature_2m, 1);
+  $('tBarra').style.width = Math.max(0, Math.min(100, (c.temperature_2m + 10) / 55 * 100)) + '%';
   $('tDesc').textContent = descCel(c.weather_code);
   if (dd.temperature_2m_max) $('tMax').textContent = graus(dd.temperature_2m_max[0]);
   if (dd.temperature_2m_min) $('tMin').textContent = graus(dd.temperature_2m_min[0]);
@@ -1252,7 +1277,7 @@ function mouRellotge(){
   $('mHora').setAttribute('transform', `rotate(${(d.getHours() % 12) * 30 + m * .5} 150 150)`);
   sincronitzaSegonera(d);
   const [zona, utc] = zonaHoraria(d); $('rellZona').textContent = zona; $('rellUtc').textContent = utc;
-  $('rellSub').textContent = `${['Diumenge','Dilluns','Dimarts','Dimecres','Dijous','Divendres','Dissabte'][d.getDay()]}, ${d.getDate()} ${/^[aeiou]/.test(MESOS[d.getMonth()]) ? "d'" : 'de '}${MESOS[d.getMonth()]}`;
+  $('rellSub').textContent = `${DIES_CURT[d.getDay()]} ${d.getDate()} ${MESOS_CURT[d.getMonth()]}`;
 }
 
 // --- Sol i Lluna (sortida i posta) ---
@@ -1300,11 +1325,11 @@ function pintaSolLluna(){
   const d = new Date(), s = horesSol(d, pos.lat, pos.lon), l = horesLluna(d, pos.lat, pos.lon), L = lluna(d);
   $('slSolS').textContent = hm(s.surt); $('slSolP').textContent = hm(s.pon);
   const min = Math.round((s.pon - s.surt) / 6e4);
-  $('slLlum').textContent = isFinite(min) ? `${Math.floor(min / 60)} h ${min % 60} min de llum` : '—';
+  $('slLlum').textContent = isFinite(min) ? `☀ ${Math.floor(min / 60)} h ${min % 60} min` : '—';
   $('slLlS').textContent = l.surt ? hm(l.surt) : 'avui no';
   $('slLlP').textContent = l.pon ? hm(l.pon) : 'avui no';
-  $('slFase').textContent = `${nomFase(L.elong)} · ${Math.round(L.illum * 100)}%`;
-  $('slLlunaIc').innerHTML = `<circle r="10" fill="#1a2230"/><g fill="#e6e3da">${faseSVG(L.elong / 360, 10)}</g>`;
+  $('slFase').textContent = `${nomFase(L.elong).toUpperCase()} · ${Math.round(L.illum * 100)}%`;
+  $('slLlunaIc').innerHTML = `<circle r="10" fill="#132233"/><g fill="#e6f6ff" style="filter:drop-shadow(0 0 2px rgba(200,240,255,.7))">${faseSVG(L.elong / 360, 10)}</g>`;
 }
 
 // --- Sant del dia i efemèride (Viquipèdia) ---
@@ -1357,6 +1382,7 @@ function pintaSant(){
   const d = new Date(), clau = clauData(d); if (santDia === clau) return; santDia = clau;
   const m = MESOS[d.getMonth()], titol = `${d.getDate()} ${/^[aeiou]/.test(m) ? "d'" : 'de '}${m}`;
   $('efemEtq').textContent = `Efemèride · ${titol}`;
+  $('santData').textContent = `${DIES_CURT[d.getDay()]} ${d.getDate()} ${MESOS_CURT[d.getMonth()]}`;
   demanaJSON(`https://ca.wikipedia.org/w/api.php?action=parse&page=${encodeURIComponent(titol)}&prop=wikitext&redirects=1&format=json&formatversion=2&origin=*`, 12000)
     .then(j => extreu((j && j.parse && j.parse.wikitext) || '', d))
     .then(r => {
@@ -1516,7 +1542,7 @@ function carregaNoticies(){
   acn().catch(() => googleACN()).then(ll => {
     ll = ll.filter(n => /^https?:\/\//i.test(n.url));
     $('notLlista').innerHTML = ll.map((n, k) => `<li><a href="${esc(n.url)}" target="_blank" rel="noopener"><span>${k + 1}</span><span>${esc(n.titol)}</span></a></li>`).join('');
-    $('notPeu').textContent = `Agència Catalana de Notícies · ${hm(new Date())}`;
+    $('notPeu').textContent = `ACN · ${hm(new Date())}`;
   }).catch(() => {
     $('notLlista').innerHTML = '<li class="not-peu">No s\'han pogut carregar les notícies. <a href="https://www.acn.cat/" target="_blank" rel="noopener" style="color:var(--turq)">Obre l\'ACN</a></li>';
   });
